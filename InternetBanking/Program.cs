@@ -2,6 +2,7 @@ using InternetBanking.Core.Application;
 using InternetBanking.Infraestructure.Persistence;
 using InternetBanking.Infraestructure.Identity;
 using InternetBanking.Infraestructure.Shared;
+using WebApp.InternetBanking.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,9 @@ builder.Services.AddApplicationLayer();
 builder.Services.AddPersistenceInfraestructure(builder.Configuration);
 builder.Services.AddSharedInfraestructure(builder.Configuration);
 builder.Services.AddIdentityInfraestructure(builder.Configuration);
+builder.Services.AddScoped<LoginAuthorize>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<ValidateUserSession, ValidateUserSession>();
 
 var app = builder.Build();
 
@@ -22,11 +26,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
