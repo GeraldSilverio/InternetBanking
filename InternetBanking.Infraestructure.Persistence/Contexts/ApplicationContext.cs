@@ -13,14 +13,19 @@ namespace InternetBanking.Infraestructure.Persistence.Contexts
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new BeneficiaryConfiguration());
             modelBuilder.ApplyConfiguration(new CreditsCardConfiguration());
+            modelBuilder.ApplyConfiguration(new MoneyLoanConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentConfiguration());
+            modelBuilder.ApplyConfiguration(new SavingAccountConfiguration());
         }
 
         #region DbSets
-
-
-        #endregion
-
         public DbSet<Beneficiary> Beneficiaries { get; set; }
         public DbSet<CreditsCard> CreditsCards { get; set; }
+        public DbSet<MoneyLoan> MoneyLoans { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<SavingAccount> SavingAccounts { get; set; }
+        #endregion
+
+
     }
 }

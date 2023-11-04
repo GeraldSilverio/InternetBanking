@@ -14,7 +14,6 @@ namespace InternetBanking.Infraestructure.Persistence.EntityConfigurations
             builder.Property(x => x.CreditLimited).HasColumnType("Decimal").HasPrecision(12, 2);
             builder.Property(x => x.Available).HasColumnType("Decimal").HasPrecision(12, 2);
             builder.Property(x => x.Spent).HasColumnType("Decimal").HasPrecision(12, 2);
-
             builder.Property(x => x.LastModifiedBy).IsRequired(false);
             builder.Property(x => x.CreatedBy).IsRequired(false);
         }

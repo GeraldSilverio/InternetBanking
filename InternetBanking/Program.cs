@@ -40,3 +40,8 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+/* 
+Russel Brian 2021-1742
+Cristopher Alexis 2022-1024
+Gerald Silverio 2022-1068*/
