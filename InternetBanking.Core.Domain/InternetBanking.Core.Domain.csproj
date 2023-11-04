@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Commons\" />
+    <Folder Include="Entities\" />
   </ItemGroup>
 
 </Project>
