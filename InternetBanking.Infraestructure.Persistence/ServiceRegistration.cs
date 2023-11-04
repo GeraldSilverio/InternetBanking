@@ -1,4 +1,6 @@
-﻿using InternetBanking.Infraestructure.Persistence.Contexts;
+﻿using InternetBanking.Core.Application.Interfaces.Repositories;
+using InternetBanking.Infraestructure.Persistence.Contexts;
+using InternetBanking.Infraestructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +22,15 @@ namespace InternetBanking.Infraestructure.Persistence
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                 m => m.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName)));
             }
+            #endregion
+
+            #region Repositories
+            services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddTransient<IBeneficiaryRepository, BeneficiaryRepository>();
+            services.AddTransient<ICreditsCardRepository, CreditsCardRepository>();
+            services.AddTransient<IMoneyLoanRepository, MoneyLoanRepository>();
+            services.AddTransient<IPaymentRepository, PaymentRepository>();
+            services.AddTransient<ISavingAccountRepository, SavingAccountRepository>();
             #endregion
         }
     }

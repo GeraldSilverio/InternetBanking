@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\Repositories\" />
     <Folder Include="Mappings\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Services\" />
