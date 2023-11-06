@@ -13,7 +13,7 @@ namespace InternetBanking.Infraestructure.Identity.Seeds
                 UserName = "adminuser",
                 Email = "adminuser@gmail.com",
                 FirstName = "Usuario",
-                LastName = "Admin",
+                LastName = "Admin",                
                 IdentityCard = "406-6560680-6",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true

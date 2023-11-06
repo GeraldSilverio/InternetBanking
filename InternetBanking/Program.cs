@@ -3,6 +3,9 @@ using InternetBanking.Infraestructure.Persistence;
 using InternetBanking.Infraestructure.Identity;
 using InternetBanking.Infraestructure.Shared;
 using WebApp.InternetBanking.Middlewares;
+using Microsoft.AspNetCore.Identity;
+using InternetBanking.Infraestructure.Identity.Entities;
+using InternetBanking.Infraestructure.Identity.Seeds;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,13 +21,33 @@ builder.Services.AddScoped<ValidateUserSession, ValidateUserSession>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        await DefaultRoles.SeedAsync(userManager, rolesManager);
+        await DefaultAdminUser.SeedAsync(userManager, rolesManager);
+        await DefaultClientUser.SeedAsync(userManager, rolesManager);
+    }
+    catch (Exception ex)
+    {
+
+        throw new Exception(ex.Message);
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+    {
+        app.UseExceptionHandler("/Home/Error");
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+        app.UseHsts();
+    }
 
 app.UseSession();
 app.UseHttpsRedirection();
@@ -37,7 +60,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=User}/{action=Index}/{id?}");
 
 app.Run();
 

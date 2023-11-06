@@ -1,0 +1,80 @@
+﻿@using InternetBanking.Core.Application.ViewModels.User
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Inicio de Sesion";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+            <div class="col-5">
+                <div class="card border-cards">
+
+                    <div class="card-header bg-dark text-light text-center">
+                        <h4>GeX</h4>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.HasError)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <p>@Model.Error</p>
+                                <button type="button" class=" btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+                        <form class="form-floating mb-3" method="post" asp-controller="User" asp-action="Index">
+
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" asp-for="Email" placeholder="Ingrese su correo electrónico" autocomplete="on">
+                                <label for="floatingInput">Correo Electrónico</label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" asp-for="Password" placeholder="Ingrese su contraseña">
+                                <label for="floatingInput">Contraseña</label>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+
+                            </div>                           
+
+                            <div class="mb-2">
+                                <span class="text-dark">Aun no tienes cuenta? <a class="text-primary" asp-controller="User" asp-action="Register">Registrate</a> </span>
+                            </div>
+
+                            <div>
+                                <span class="text-dark">Olvidates tu contraseña? <a class="text-primary" asp-controller="User" asp-action="ForgotPassword">Olvide mi contraseña</a> </span>
+                            </div>
+
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-outline-primary float-end ms-2" style="border-radius:50px; width:420px;">Iniciar Sesión</button>
+
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+/* 
+    .btn-purple-white {
+        background-color: #7A17D1;
+        box-shadow: 0 0 2px #CDA710;
+        color: white;
+    } */
+
+    .bg-blue {
+        background: #0C0D12;
+    }
+
+    .card {
+        border: 0.1px solid #;
+        border-radius: 20px;
+    }
+
+</style>

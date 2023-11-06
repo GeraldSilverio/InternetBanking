@@ -1,5 +1,5 @@
-﻿using InternetBanking.Controllers;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
+using WebApp.InternetBanking.Controllers;
 
 namespace WebApp.InternetBanking.Middlewares
 {
@@ -12,11 +12,10 @@ namespace WebApp.InternetBanking.Middlewares
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-        {
-            //Aunque este puesto el home controller, no quiere decir que sea el controlador correspondiente
+        {            
             if (_validateUserSession.HasUser())
             {
-                var controller = (HomeController)context.Controller;
+                var controller = (UserController)context.Controller;
                 context.Result = controller.RedirectToAction("index", "home");
             }
             else

@@ -1,0 +1,71 @@
+﻿@using InternetBanking.Core.Application.ViewModels.User
+@model SaveUserViewModel
+@{
+    ViewData["Title"] = "Registro Usuario";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+            <div class="col-6">
+                <div class="card">
+                    @if (Model.HasError)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <p>@Model.Error</p>
+                            <button type="button" class=" btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <form class="form-floating mb-3" method="post" asp-controller="User" asp-action="Register" enctype="multipart/form-data">
+
+
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" asp-for="FirstName" placeholder="Ingrese su nombre" autocomplete="off" maxlength="40">
+                                <label for="floatingInput">Nombre</label>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" asp-for="LastName" placeholder="Ingrese su apellido" autocomplete="off">
+                                <label for="floatingInput">Apellidos</label>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" asp-for="Email" placeholder="email@gmail.com" autocomplete="off">
+                                <label for="floatingInput">Correo Electronico</label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" asp-for="Phone" placeholder="809-000-0000" autocomplete="off" maxlength="10">
+                                <label>Numero Telefonico(REPUBLICA DOMINICANA)</label>
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" asp-for="Password" placeholder="Ingrese su contraseña Ej: 1Password!" autocomplete="off">
+                                <label for="floatingPassword">Contraseña</label>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" asp-for="ConfirmPassword" placeholder="Las contraseñas deben coincidir" autocomplete="off">
+                                <label>Confirmar Contraseña</label>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+
+                            <button type="submit" class="btn btn-outline-dark float-end ms-2">Crear cuenta</button>
+                            <span class="text-dark">¿Ya tienes una cuenta? <a class="text-primary" asp-controller="User" asp-action="Index"> Iniciar sesión</a></span>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

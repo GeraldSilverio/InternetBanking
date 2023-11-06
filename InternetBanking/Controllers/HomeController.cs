@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace InternetBanking.Controllers
+namespace WebApp.InternetBanking.Controllers
 {
     public class HomeController : Controller
     {

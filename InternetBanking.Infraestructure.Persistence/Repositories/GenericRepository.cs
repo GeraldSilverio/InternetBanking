@@ -1,18 +1,13 @@
 ﻿using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Infraestructure.Persistence.Contexts;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace InternetBanking.Infraestructure.Persistence.Repositories
 {
     public class GenericRepository<Entity> : IGenericRepository<Entity> where Entity : class
     {
         private readonly ApplicationContext _dbContext;
-
+        protected DbSet<Entity> Entities => _dbContext.Set<Entity>();
         public GenericRepository(ApplicationContext dbContext)
         {
             _dbContext = dbContext;
@@ -20,32 +15,32 @@ namespace InternetBanking.Infraestructure.Persistence.Repositories
 
         public virtual async Task<Entity> AddAsync(Entity entity)
         {
-            await _dbContext.Set<Entity>().AddAsync(entity);
+            await Entities.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
             return entity;
         }
 
         public virtual async Task UpdateAsync(Entity entity, int id)
         {
-            var entry = await _dbContext.Set<Entity>().FindAsync(id);
+            var entry = await Entities.FindAsync(id);
             _dbContext.Entry(entry).CurrentValues.SetValues(entity);
             await _dbContext.SaveChangesAsync();
         }
 
         public virtual async Task DeleteAsync(Entity entity)
         {
-            _dbContext.Set<Entity>().Remove(entity);
+            Entities.Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
 
         public virtual async Task<List<Entity>> GetAllAsync()
         {
-            return await _dbContext.Set<Entity>().ToListAsync();
+            return await Entities.ToListAsync();
         }
 
         public virtual async Task<List<Entity>> GetAllWithIncludeAsync(List<string> properties)
         {
-            var query = _dbContext.Set<Entity>().AsQueryable();
+            var query = Entities.AsQueryable();
 
             foreach (string property in properties)
             {
@@ -57,7 +52,7 @@ namespace InternetBanking.Infraestructure.Persistence.Repositories
 
         public virtual async Task<Entity> GetByIdAsync(int id)
         {
-            return await _dbContext.Set<Entity>().FindAsync(id);
+            return await Entities.FindAsync(id);
         }
     }
 }
