@@ -30,6 +30,9 @@ namespace InternetBanking.Core.Application.ViewModels.User
         [DataType(DataType.Text)]
         public string Phone { get; set; }
 
+        [Required(ErrorMessage = "Debe seleccionar un rol")]
+        public string SelectedRole { get; set; }
+
         public bool HasError { get; set; }
         public string? Error { get; set; }
     }

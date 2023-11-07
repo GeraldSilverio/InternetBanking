@@ -108,7 +108,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             if (!user.EmailConfirmed)
             {
                 response.HasError = true;
-                response.Error = $"El correo '{request.Email}' no se encuntra confirmado";
+                response.Error = $"El correo '{request.Email}' no se encuentra registrado";
                 return response;
             }
 

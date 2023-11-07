@@ -11,8 +11,8 @@
             <div class="col-5">
                 <div class="card border-cards">
 
-                    <div class="card-header bg-dark text-light text-center">
-                        <h4>GeX</h4>
+                    <div class="card-header bg-blue-card-header text-light text-center">
+                        <h4>Un banquillo</h4>
                     </div>
                     <div class="card-body">
                         @if (Model.HasError)
@@ -41,12 +41,12 @@
                                 <span class="text-dark">Aun no tienes cuenta? <a class="text-primary" asp-controller="User" asp-action="Register">Registrate</a> </span>
                             </div>
 
-                            <div>
+                            <div class ="mb-3">
                                 <span class="text-dark">Olvidates tu contraseña? <a class="text-primary" asp-controller="User" asp-action="ForgotPassword">Olvide mi contraseña</a> </span>
                             </div>
 
-                            <div class="mb-3">
-                                <button type="submit" class="btn btn-outline-primary float-end ms-2" style="border-radius:50px; width:420px;">Iniciar Sesión</button>
+                            <div class="d-flex justify-content-center mt-2">
+                                <button type="submit" class="btn btn-outline-primary ms-2" style="border-radius:50px; width:420px;">Iniciar Sesión</button>
 
                             </div>
 
@@ -61,20 +61,20 @@
 
 
 <style>
-/* 
-    .btn-purple-white {
-        background-color: #7A17D1;
-        box-shadow: 0 0 2px #CDA710;
+
+    .bg-blue-card-header {
+        background-color: #09385B;
         color: white;
-    } */
+    }
 
     .bg-blue {
-        background: #0C0D12;
+        background: #B7E1FF;
     }
 
     .card {
-        border: 0.1px solid #;
-        border-radius: 20px;
+        border: 0.2px solid #09385B;
+        border-radius: 4px 4px 10px 10px;
+        box-shadow: 8px 8px 16px #6BA2CD;
     }
 
 </style>

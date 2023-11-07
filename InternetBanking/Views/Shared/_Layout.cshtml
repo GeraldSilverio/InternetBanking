@@ -5,6 +5,8 @@
 @inject IHttpContextAccessor httpContextAccesor
 @{
     var User = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    var isAdmin = User != null ? User.Roles.Any(u => u == "Admin") : false;
+    var isClient = User != null ? User.Roles.Any(u => u == "Client") : false;
 }
 
 <!DOCTYPE html>
@@ -23,18 +25,28 @@
         <header>
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div class="container-fluid">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">InternetBanking</a>
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">InternetBanking</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
+                            @if(isAdmin){
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="HomeAdmin" asp-action="Index">Home</a>
+                                </li>
+                            }
+
+                            @if (isClient)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="HomeClient" asp-action="Index">Home</a>
+                                </li>
+                            }
+                            
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Cerrar sesión</a>
+                                <a class="nav-link text-dark" asp-controller="User" asp-action="LogOut">Cerrar sesión</a>
                             </li>
                         </ul>
                     </div>
@@ -60,3 +72,11 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<style>
+
+    body {
+        background: #D3D9DE;
+    }
+
+</style>
