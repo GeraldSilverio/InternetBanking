@@ -86,11 +86,14 @@ namespace WebApp.InternetBanking.Controllers
             return View("ConfirmEmail", response);
         }
 
-
-
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        public async Task<ActionResult> UserAdministrator()
+        {
+            return View(await _userService.GetAllUsers());
         }
     }
 }

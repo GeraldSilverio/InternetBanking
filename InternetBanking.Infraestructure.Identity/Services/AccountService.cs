@@ -6,6 +6,8 @@ using System.Text;
 using InternetBanking.Infraestructure.Identity.Entities;
 using InternetBanking.Core.Application.Dtos.Email;
 using InternetBanking.Core.Application.Interfaces.Services;
+using Microsoft.EntityFrameworkCore;
+using InternetBanking.Infraestructure.Identity.Contexts;
 
 namespace InternetBanking.Infraestructure.Identity.Services
 {
@@ -14,12 +16,14 @@ namespace InternetBanking.Infraestructure.Identity.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailService _emailService;
+        public readonly IdentityContext _identityContext;
 
-        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService emailService)
+        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService emailService, IdentityContext identityContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
+            _identityContext = identityContext;
         }
 
         #region Register User
@@ -233,5 +237,21 @@ namespace InternetBanking.Infraestructure.Identity.Services
         }
         #endregion
 
+        #region Users 
+            public async Task<List<AuthenticationResponse>>  GetAllUsersAsync()
+            {
+                var user = _userManager.Users.Select(u => new AuthenticationResponse {
+                    Id = u.Id,
+                    FirstName = u.FirstName, 
+                    LastName = u.LastName, 
+                    Email = u.Email,
+                    IdentityCard = u.IdentityCard,
+                    Roles = _userManager.GetRolesAsync(u).Result.ToList(),
+                    IsVerified = u.EmailConfirmed                
+                }).ToListAsync();
+
+                return await user;               
+            }
+        #endregion
     }
 }

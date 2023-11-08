@@ -1,0 +1,64 @@
+﻿@using InternetBanking.Core.Application.Dtos.Account
+@model List<AuthenticationResponse>
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<div class="container-fluid">
+    <div class="row mb-1">
+        <div class="text-center">
+            <h2 class="text-black">ADMINISTRADOR DE USUARIOS</h2>
+        </div>
+    </div>
+    <div class="row mb-2 mt-4">
+        <div class="col-6 text-start">
+            <h4>Total de usuarios registrados: @Model.Count()</h4>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="User" asp-action="Register" class="btn btn-outline-dark bg-gradient">Registrar nuevo usuario</a>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="container-fluid">
+            <table class="table bg-white">
+                <thead class="bg-dark text-white table-responsive">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Cédula</th>
+                        <th>Correo</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th>Opci&oacute;n</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.FirstName</td>
+                                <td>@item.LastName</td>
+                                <td>@item.IdentityCard</td>
+                                <td>@item.Email</td>
+                                <td>@item.Roles.FirstOrDefault()</td>
+                                <td>@(item.IsVerified == true ? "Activo" : "Inactivo")</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a asp-controller="" asp-action="" title="Activar" class="btn btn-sm btn-success p-2 text-white m-md-1"><i class="fa-regular fa-thumbs-up"></i></a>
+                                        <a asp-controller="" asp-action="" title="Desactivar" class="btn btn-sm btn-danger p-2 text-white m-md-1"><i class="fa-regular fa-thumbs-down"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
