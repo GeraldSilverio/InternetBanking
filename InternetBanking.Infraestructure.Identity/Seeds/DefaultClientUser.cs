@@ -19,9 +19,10 @@ namespace InternetBanking.Infraestructure.Identity.Seeds
                 Email = "clientuser@gmail.com",
                 FirstName = "Usuario",
                 LastName = "Cliente",
-                IdentityCard = "406-6560680-6",
+                IdentityCard = "408-6560680-8",
                 EmailConfirmed = true,
-                PhoneNumberConfirmed = true
+                PhoneNumberConfirmed = true,
+                IsActive = true
             };
 
             if (userManager.Users.All(u => u.Id != defaultUser.Id))

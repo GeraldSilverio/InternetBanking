@@ -5,6 +5,8 @@
 @inject IHttpContextAccessor httpContextAccesor
 @{
     var User = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    var isAdmin = User != null ? User.Roles.Any(u => u == "Admin") : false;
+    var isClient = User != null ? User.Roles.Any(u => u == "Client") : false;
 }
 
 <!DOCTYPE html>
@@ -23,18 +25,77 @@
         <header>
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div class="container-fluid">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">InternetBanking</a>
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">InternetBanking</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Cerrar sesión</a>
+                            @if(isAdmin){
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="HomeAdmin" asp-action="Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="User" asp-action="UserAdministrator">Administrador de usuarios</a>
+                                </li>
+                            }
+
+                            @if (isClient)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="HomeClient" asp-action="Index">Home</a>
+                                </li>
+                                <li class="navbar-nav">
+                                    <div class="dropdown text-end">
+
+                                        <a class="nav-link dropdown-toggle text-black" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Pagos
+                                        </a>
+
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownuser">
+                                            <li>
+                                                <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Expresos</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Tarjeta de credito</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Prestamo</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Beneficiarios</a>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">Avance de efectivo</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">Beneficiarios</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">Transferencias</a>
+                                </li>
+
+                            }
+
+                            <li class="navbar-nav flex-grow-1 justify-content-end me-4">
+                                <div class="dropdown text-end">
+                                    <a class="nav-link dropdown-toggle text-black" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <b>@User.FirstName @User.LastName</b>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownuser">
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="LogOut">Cerrar sesión</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -57,6 +118,18 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @* Font Awesome Icons *@
+    <script src="https://kit.fontawesome.com/1438bae15e.js" crossorigin="anonymous"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<style>
+
+    body {
+        background: #D3D9DE;
+    }
+
+</style>

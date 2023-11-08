@@ -6,6 +6,8 @@ using System.Text;
 using InternetBanking.Infraestructure.Identity.Entities;
 using InternetBanking.Core.Application.Dtos.Email;
 using InternetBanking.Core.Application.Interfaces.Services;
+using Microsoft.EntityFrameworkCore;
+using InternetBanking.Infraestructure.Identity.Contexts;
 
 namespace InternetBanking.Infraestructure.Identity.Services
 {
@@ -14,12 +16,14 @@ namespace InternetBanking.Infraestructure.Identity.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailService _emailService;
+        public readonly IdentityContext _identityContext;
 
-        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService emailService)
+        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService emailService, IdentityContext identityContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
+            _identityContext = identityContext;
         }
 
         #region Register User
@@ -39,18 +43,21 @@ namespace InternetBanking.Infraestructure.Identity.Services
             }
 
             var user = new ApplicationUser
-            {                
+            {  
+                UserName = request.UserName,
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 PhoneNumber = request.Phone,
-                IdentityCard = request.IdentityCard
+                IdentityCard = request.IdentityCard,
+                IsActive = true
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, Roles.Client.ToString());
+
+                await _userManager.AddToRoleAsync(user, Roles.Client.ToString());          
                 var verificationUrl = await VerificationEmailUrl(user, origin);
                 await _emailService.SendAsync(new EmailRequest
                 {
@@ -90,11 +97,11 @@ namespace InternetBanking.Infraestructure.Identity.Services
         {
             AuthenticationResponse response = new();
 
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null)
             {
                 response.HasError = true;
-                response.Error = $"No hay cuentas registradas con '{request.Email}'";
+                response.Error = $"No hay cuentas registradas con '{request.UserName}'";
                 return response;
             }
 
@@ -102,17 +109,18 @@ namespace InternetBanking.Infraestructure.Identity.Services
             if (!result.Succeeded)
             {
                 response.HasError = true;
-                response.Error = $"Credenciales incorrectas para '{request.Email}'";
+                response.Error = $"Credenciales incorrectas para '{request.UserName}'";
                 return response;
             }
             if (!user.EmailConfirmed)
             {
                 response.HasError = true;
-                response.Error = $"El correo '{request.Email}' no se encuntra confirmado";
+                response.Error = $"El nombre de usuario '{request.UserName}' no se encuentra registrado";
                 return response;
             }
 
             response.Id = user.Id;
+            response.UserName = user.UserName;
             response.Email = user.Email;
             response.IdentityCard = user.IdentityCard;
             response.FirstName = user.FirstName;
@@ -233,5 +241,21 @@ namespace InternetBanking.Infraestructure.Identity.Services
         }
         #endregion
 
+        #region Users 
+            public async Task<List<AuthenticationResponse>>  GetAllUsersAsync()
+            {
+                var user = _userManager.Users.Select(u => new AuthenticationResponse {
+                    Id = u.Id,
+                    FirstName = u.FirstName, 
+                    LastName = u.LastName, 
+                    Email = u.Email,
+                    IdentityCard = u.IdentityCard,
+                    Roles = _userManager.GetRolesAsync(u).Result.ToList(),
+                    IsVerified = u.EmailConfirmed                
+                }).ToListAsync();
+
+                return await user;               
+            }
+        #endregion
     }
 }

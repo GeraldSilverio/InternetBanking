@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-12 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
             <div class="col-6">
-                <div class="card">
+                <div class="card mt-3">
                     @if (Model.HasError)
                     {
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -17,48 +17,85 @@
                             <button type="button" class=" btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     }
-                    <div class="card-body">
-                        <form class="form-floating mb-3" method="post" asp-controller="User" asp-action="Register" enctype="multipart/form-data">
+                    <div class="card-body mt-3">
+                        <form class=" mb-3" method="post" asp-controller="User" asp-action="Register">
 
+                            <div class="row mb-3">
 
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" asp-for="FirstName" placeholder="Ingrese su nombre" autocomplete="off" maxlength="40">
-                                <label for="floatingInput">Nombre</label>
-                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                                <div class="col">
+                                    <label>Nombre</label>
+                                    <input type="text" class="form-control" asp-for="FirstName" placeholder="Ingrese su nombre" autocomplete="off" maxlength="40">
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+
+                                <div class="col">
+                                    <label>Apellidos</label>
+                                    <input type="text" class="form-control" asp-for="LastName" placeholder="Ingrese su apellido" autocomplete="off">
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </div>
+
                             </div>
-
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" asp-for="LastName" placeholder="Ingrese su apellido" autocomplete="off">
-                                <label for="floatingInput">Apellidos</label>
-                                <span asp-validation-for="LastName" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-floating mb-3">
-                                <input type="email" class="form-control" asp-for="Email" placeholder="email@gmail.com" autocomplete="off">
-                                <label for="floatingInput">Correo Electronico</label>
+               
+                            <div class="input-group mb-3">
+                                <input type="email" class="form-control" asp-for="Email" placeholder="Correo Electronico" autocomplete="off">
+                                <div class="input-group-append">
+                                    <span class="input-group-text input-blue" id="basic-addon2">email@gmail.com</span>
+                                </div>
                                 <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
 
 
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" asp-for="Phone" placeholder="809-000-0000" autocomplete="off" maxlength="10">
+                            <div class="mb-3">
                                 <label>Numero Telefonico(REPUBLICA DOMINICANA)</label>
+                                <input type="text" class="form-control" asp-for="Phone" placeholder="809-000-0000" autocomplete="off" maxlength="12">
                                 <span asp-validation-for="Phone" class="text-danger"></span>
+                                <small class="form-text text-muted">
+                                    Su número de telefono debe iniciar con uno de los siguientes combinacione: 809 - 829 - 849
+                                </small>
                             </div>
 
-                            <div class="form-floating mb-3">
-                                <input type="password" class="form-control" asp-for="Password" placeholder="Ingrese su contraseña Ej: 1Password!" autocomplete="off">
-                                <label for="floatingPassword">Contraseña</label>
-                                <span asp-validation-for="Password" class="text-danger"></span>
+                            <div class="mb-3">
+                                <label>Cedula</label>
+                                <input type="text" class="form-control" asp-for="IdentityCard" autocomplete="off" maxlength="12">
+                                <span asp-validation-for="IdentityCard" class="text-danger"></span>
+                                <small class="form-text text-muted">
+                                    Su número de telefono debe iniciar con uno de los siguientes combinacione: 809 - 829 - 849
+                                </small>
                             </div>
 
-                            <div class="form-floating mb-3">
-                                <input type="password" class="form-control" asp-for="ConfirmPassword" placeholder="Las contraseñas deben coincidir" autocomplete="off">
-                                <label>Confirmar Contraseña</label>
-                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label>Contraseña</label>
+                                    <input type="password" class="form-control" asp-for="Password" placeholder="Ingrese su contraseña Ej: 1Password!" autocomplete="off">
+                                    
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <div class="col">
+                                    <label>Confirmar Contraseña</label>
+                                    <input type="password" class="form-control" asp-for="ConfirmPassword" placeholder="Las contraseñas deben coincidir" autocomplete="off">
+                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                </div>
+
+                                <small class="form-text text-muted">
+                                    La contraseña debe contener al menos 8 digitos entre ellas: Números, letras y caracteres especiales!!!
+                                </small>
                             </div>
 
-                            <button type="submit" class="btn btn-outline-dark float-end ms-2">Crear cuenta</button>
+                            <div class="mb-3">
+                                <label>Rol</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="SelectedRole" value="Admin" />
+                                    <label class="form-check-label">Administrador</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="SelectedRole" value="Client" />
+                                    <label class="form-check-label">Cliente</label>
+                                </div>
+                                <span asp-validation-for="SelectedRole" class="text-danger"></span>
+                            </div>
+
+
+                            <button type="submit" class="btn btn-outline-primary float-end ms-2">Crear cuenta</button>
                             <span class="text-dark">¿Ya tienes una cuenta? <a class="text-primary" asp-controller="User" asp-action="Index"> Iniciar sesión</a></span>
                         </form>
                     </div>
@@ -69,3 +106,24 @@
 </div>
 
 
+<style>
+
+    .card {
+        border: 0.2px solid #09385B;
+        border-radius: 4px 4px 10px 10px;
+        box-shadow: 0 0 10px #6BA2CD;
+    }
+
+    label{
+        color: #1B4A6F;
+        font-size: 18px;   
+        font-weight: bold;
+    }
+
+    .input-blue{
+        color: #1B4A6F;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+</style>
