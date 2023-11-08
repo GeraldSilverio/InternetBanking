@@ -98,7 +98,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 return response;
             }
 
-            var result = await _signInManager.PasswordSignInAsync(user.Email, request.Password, false, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
             if (!result.Succeeded)
             {
                 response.HasError = true;
