@@ -32,7 +32,7 @@ using (var scope = app.Services.CreateScope())
         var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
         await DefaultRoles.SeedAsync(userManager, rolesManager);
-       // await DefaultAdminUser.SeedAsync(userManager, rolesManager);
+        await DefaultAdminUser.SeedAsync(userManager, rolesManager);
         await DefaultClientUser.SeedAsync(userManager, rolesManager);
     }
     catch (Exception ex)
@@ -60,7 +60,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();
 

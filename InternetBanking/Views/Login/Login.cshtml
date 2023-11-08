@@ -22,12 +22,12 @@
                                 <button type="button" class=" btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         }
-                        <form class="form-floating mb-3" method="post" asp-controller="User" asp-action="Index">
+                        <form class="form-floating mb-3" method="post" asp-controller="Login" asp-action="Index">
 
                             <div class="form-floating mb-3">
-                                <input type="email" class="form-control" asp-for="Email" placeholder="Ingrese su correo electrónico" autocomplete="on">
-                                <label for="floatingInput">Correo Electrónico</label>
-                                <span asp-validation-for="Email" class="text-danger"></span>
+                                <input type="text" class="form-control" asp-for="UserName" placeholder="Ingrese su nombre de usuario" autocomplete="on">
+                                <label for="floatingInput">Nombre de usuario</label>
+                                <span asp-validation-for="UserName" class="text-danger"></span>
                             </div>
 
                             <div class="form-floating mb-3">
@@ -38,11 +38,11 @@
                             </div>                           
 
                             <div class="mb-2">
-                                <span class="text-dark">Aun no tienes cuenta? <a class="text-primary" asp-controller="User" asp-action="Register">Registrate</a> </span>
+                                <span class="text-dark">Aun no tienes cuenta? <a class="text-primary" asp-controller="Login" asp-action="Register">Registrate</a> </span>
                             </div>
 
                             <div class ="mb-3">
-                                <span class="text-dark">Olvidates tu contraseña? <a class="text-primary" asp-controller="User" asp-action="ForgotPassword">Olvide mi contraseña</a> </span>
+                                <span class="text-dark">Olvidates tu contraseña? <a class="text-primary" asp-controller="Login" asp-action="ForgotPassword">Olvide mi contraseña</a> </span>
                             </div>
 
                             <div class="d-flex justify-content-center mt-2">

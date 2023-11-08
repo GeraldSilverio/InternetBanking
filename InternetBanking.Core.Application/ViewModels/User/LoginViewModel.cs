@@ -4,9 +4,9 @@ namespace InternetBanking.Core.Application.ViewModels.User
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessage = "Debe ingresar un correo electrónico")]
+        [Required(ErrorMessage = "Debe ingresar un nombre de usuario")]
         [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
+        public string UserName { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar una contraseña con caracteres especiales, numeros y al menos una mayúscula")]
         [DataType(DataType.Password)]

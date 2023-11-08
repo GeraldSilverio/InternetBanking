@@ -82,7 +82,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
             //User = se refiere al controlador
-            var path = "User/ConfirmEmail";
+            var path = "Login/ConfirmEmail";
             var url = new Uri(string.Concat($"{origin}/", path));
 
             var verificationUrl = QueryHelpers.AddQueryString(url.ToString(), "userId", user.Id);
@@ -149,7 +149,9 @@ namespace InternetBanking.Infraestructure.Identity.Services
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
-                return $"Cuenta confirmada con el correo '{user.Email}' - Ahora puedes disfrutar de la App";
+                user.IsActive = true;
+                return $"Cuenta confirmada con el correo '{user.Email}' - Ahora puedes disfrutar de la App El Banquillo";
+               
             }
             else
             {
