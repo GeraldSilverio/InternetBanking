@@ -30,6 +30,11 @@ namespace InternetBanking.Core.Application.ViewModels.User
         [DataType(DataType.Text)]
         public string Phone { get; set; }
 
+        [Required(ErrorMessage = "Debe ingresar una cedula")]
+        //[RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "El formato del teléfono debe ser 809-400-0050")]
+        [DataType(DataType.Text)]
+        public string IdentityCard { get; set; }
+
         [Required(ErrorMessage = "Debe seleccionar un rol")]
         public string SelectedRole { get; set; }
 

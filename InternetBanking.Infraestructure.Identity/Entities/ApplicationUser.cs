@@ -7,5 +7,6 @@ namespace InternetBanking.Infraestructure.Identity.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string IdentityCard { get ; set; }
+        public bool IsActive { get; set; }
     }
 }

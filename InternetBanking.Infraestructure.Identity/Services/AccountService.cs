@@ -43,18 +43,21 @@ namespace InternetBanking.Infraestructure.Identity.Services
             }
 
             var user = new ApplicationUser
-            {                
+            {  
+                UserName = request.UserName,
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 PhoneNumber = request.Phone,
-                IdentityCard = request.IdentityCard
+                IdentityCard = request.IdentityCard,
+                IsActive = true
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, Roles.Client.ToString());
+
+                await _userManager.AddToRoleAsync(user, Roles.Client.ToString());          
                 var verificationUrl = await VerificationEmailUrl(user, origin);
                 await _emailService.SendAsync(new EmailRequest
                 {
@@ -94,29 +97,30 @@ namespace InternetBanking.Infraestructure.Identity.Services
         {
             AuthenticationResponse response = new();
 
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null)
             {
                 response.HasError = true;
-                response.Error = $"No hay cuentas registradas con '{request.Email}'";
+                response.Error = $"No hay cuentas registradas con '{request.UserName}'";
                 return response;
             }
 
-            var result = await _signInManager.PasswordSignInAsync(user.Email, request.Password, false, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
             if (!result.Succeeded)
             {
                 response.HasError = true;
-                response.Error = $"Credenciales incorrectas para '{request.Email}'";
+                response.Error = $"Credenciales incorrectas para '{request.UserName}'";
                 return response;
             }
             if (!user.EmailConfirmed)
             {
                 response.HasError = true;
-                response.Error = $"El correo '{request.Email}' no se encuentra registrado";
+                response.Error = $"El nombre de usuario '{request.UserName}' no se encuentra registrado";
                 return response;
             }
 
             response.Id = user.Id;
+            response.UserName = user.UserName;
             response.Email = user.Email;
             response.IdentityCard = user.IdentityCard;
             response.FirstName = user.FirstName;

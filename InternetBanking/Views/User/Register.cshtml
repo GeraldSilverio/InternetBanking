@@ -54,6 +54,15 @@
                                 </small>
                             </div>
 
+                            <div class="mb-3">
+                                <label>Cedula</label>
+                                <input type="text" class="form-control" asp-for="IdentityCard" autocomplete="off" maxlength="12">
+                                <span asp-validation-for="IdentityCard" class="text-danger"></span>
+                                <small class="form-text text-muted">
+                                    Su número de telefono debe iniciar con uno de los siguientes combinacione: 809 - 829 - 849
+                                </small>
+                            </div>
+
                             <div class="row mb-3">
                                 <div class="col">
                                     <label>Contraseña</label>

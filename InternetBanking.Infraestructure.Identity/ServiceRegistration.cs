@@ -44,8 +44,6 @@ namespace InternetBanking.Infraestructure.Identity
 
             #endregion
 
-            services.AddScoped<SignInManager<ApplicationUser>, SingInManagerEmail>();
-
             #region Identity Service
             services.AddScoped<IAccountService, AccountService>();
             #endregion

@@ -16,15 +16,15 @@ namespace InternetBanking.Infraestructure.Identity.Seeds
                 LastName = "Admin",                
                 IdentityCard = "406-6560680-6",
                 EmailConfirmed = true,
-                PhoneNumberConfirmed = true
+                PhoneNumberConfirmed = true,
+                IsActive =  true
             };
 
             if (userManager.Users.All(u => u.Id != defaultUser.Id))
             {
                 var user = await userManager.FindByEmailAsync(defaultUser.Email);
                 if (user == null)
-                {
-                    await userManager.CreateAsync(defaultUser, "123AdminC#.");
+                {                
                     await userManager.AddToRoleAsync(defaultUser, Roles.Admin.ToString());
                 }
             }
