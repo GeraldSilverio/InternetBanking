@@ -23,7 +23,7 @@ namespace WebApp.InternetBanking.Controllers
         [ServiceFilter(typeof(LoginAuthorize))]
         public IActionResult Index()
         {
-            return View("Login", new LoginViewModel());
+            return View("Index", new LoginViewModel());
         }
         [ServiceFilter(typeof(LoginAuthorize))]
         [HttpPost]
@@ -31,7 +31,7 @@ namespace WebApp.InternetBanking.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("Login", vm);
+                return View("Index", vm);
             }
 
             AuthenticationResponse authenticationResponse = await _loginService.LoginAsync(vm);
@@ -44,7 +44,7 @@ namespace WebApp.InternetBanking.Controllers
             {
                 vm.HasError = authenticationResponse.HasError;
                 vm.Error = authenticationResponse.Error;
-                return View("Login", vm);
+                return View("Index", vm);
             }
         }
 
