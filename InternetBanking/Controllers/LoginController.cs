@@ -4,6 +4,7 @@ using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.ViewModels.Login;
 using InternetBanking.Core.Application.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Crypto.Operators;
 using WebApp.InternetBanking.Middlewares;
 
 namespace WebApp.InternetBanking.Controllers
@@ -38,7 +39,15 @@ namespace WebApp.InternetBanking.Controllers
             if (authenticationResponse != null && authenticationResponse.HasError == false)
             {
                 HttpContext.Session.Set("user", authenticationResponse);
-                return RedirectToRoute(new { controller = "Home", action = "Index" });
+                if (authenticationResponse.Roles.Contains("Admin"))
+                {
+                    return RedirectToRoute(new { controller = "Home", action = "Index" });
+                }
+                else
+                {
+                    return RedirectToRoute(new { controller = "Home", action = "IndexClient" });
+                }
+                
             }
             else
             {
@@ -83,7 +92,7 @@ namespace WebApp.InternetBanking.Controllers
             return RedirectToRoute(new { controller = "Login", action = "Index" });
         }
 
-        //[ServiceFilter(typeof(LoginAuthorize))]
+        [ServiceFilter(typeof(LoginAuthorize))]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             string response = await _loginService.ConfirmEmailAsync(userId, token);
@@ -119,7 +128,7 @@ namespace WebApp.InternetBanking.Controllers
         #endregion
         public IActionResult AccessDenied()
         {
-            return View();
+            return View("AccessDenied");
         }
     }
 }

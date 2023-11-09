@@ -1,0 +1,29 @@
+﻿@using Microsoft.AspNetCore.Http
+@using InternetBanking.Core.Application.Helpers
+@using InternetBanking.Core.Application.Dtos.Account
+@using InternetBanking.Core.Application.ViewModels.User
+@model string
+@{
+    ViewData["Title"] = "Acceso Denegado";
+}
+@inject IHttpContextAccessor httpContextAccesor
+@{
+    var User = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    var isAdmin = User != null && User.Roles != null ? User.Roles.Any(u => u == "Admin") : false;
+    bool isUserAdmin = isAdmin == true ? true : false;
+}
+
+<div class="row mt-5">
+    <div class="col-6 offset-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                    <h2>No tiene permiso para acceder a esta sección - <a class="btn btn-dark" asp-controller="Home" asp-action="@(isUserAdmin ? "Index" : "IndexClient")">Volver al inicio</a></h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

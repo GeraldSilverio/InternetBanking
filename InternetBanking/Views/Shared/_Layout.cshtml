@@ -7,6 +7,7 @@
     var User = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
     var isAdmin = User != null && User.Roles != null ? User.Roles.Any(u => u == "Admin") : false;
     var isClient = User != null && User.Roles != null ? User.Roles.Any(u => u == "Client") : false;
+    bool isUserAdmin = isAdmin == true ? true : false;
 }
 
 <!DOCTYPE html>
@@ -23,9 +24,10 @@
     @if (User != null)
     {
         <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-nav-bar  border-bottom box-shadow mb-3">
                 <div class="container-fluid">
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">InternetBanking</a>
+
+                    <a class="navbar-brand text-white" asp-controller="Home" asp-action="@(isUserAdmin ? "Index" : "IndexClient")">InternetBanking</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -35,22 +37,22 @@
                             @if (isAdmin)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="HomeAdmin" asp-action="Index">Home</a>
+                                    <a class="nav-link text-white" asp-controller="Home" asp-action="Index">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="User" asp-action="UserAdministrator">Administrador de usuarios</a>
+                                    <a class="nav-link text-white" asp-controller="User" asp-action="UserAdministrator">Administrador de usuarios</a>
                                 </li>
                             }
 
                             @if (isClient)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="HomeClient" asp-action="Index">Home</a>
+                                    <a class="nav-link text-white" asp-controller="Client" asp-action="Index">Home</a>
                                 </li>
                                 <li class="navbar-nav">
                                     <div class="dropdown text-end">
 
-                                        <a class="nav-link dropdown-toggle text-black" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                             Pagos
                                         </a>
 
@@ -73,29 +75,30 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">Avance de efectivo</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="" asp-action="">Avance de efectivo</a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">Beneficiarios</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="" asp-action="">Beneficiarios</a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">Transferencias</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="" asp-action="">Transferencias</a>
                                 </li>
 
                             }
 
                             <li class="navbar-nav flex-grow-1 justify-content-end me-4">
                                 <div class="dropdown text-end">
-                                    <a class="nav-link dropdown-toggle text-black" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                         <b>@User.FirstName @User.LastName</b>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownuser">
-                                        <li>
-                                            <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="ResetPassword">Cambiar Contraseña</a>
-                                        </li>
-
+                                        @if(isAdmin){
+                                            <li>
+                                                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="ResetPassword">Cambiar Contraseña</a>
+                                            </li>
+                                        }                                       
                                         <li>
                                             <a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="LogOut">Cerrar sesión</a>
                                         </li>
@@ -136,5 +139,10 @@
     body {
         background: #D3D9DE;
     }
+
+    .bg-nav-bar {
+        background-color: #09385B;
+    }
+
 
 </style>

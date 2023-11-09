@@ -23,4 +23,9 @@
     <ProjectReference Include="..\InternetBanking.Infraestructure.Shared\InternetBanking.Infraestructure.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Admin\" />
+    <Folder Include="Views\Client\" />
+  </ItemGroup>
+
 </Project>
