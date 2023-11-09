@@ -11,7 +11,7 @@
         public string Phone { get; set; }
         public string IdentityCard { get; set; }
         public bool IsActive { get; set; }
-        public string SelectRole {  get; set; }
+        public int SelectRole {  get; set; }
 
     }
 }

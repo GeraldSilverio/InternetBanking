@@ -1,5 +1,5 @@
-﻿@using InternetBanking.Core.Application.Dtos.Account
-@model List<AuthenticationResponse>
+﻿@using InternetBanking.Core.Application.ViewModels.User;
+@model List<UsersViewModel>
 @{
     ViewData["Title"] = "Usuarios";
 }
@@ -15,7 +15,7 @@
             <h4>Total de usuarios registrados: @Model.Count()</h4>
         </div>
         <div class="col-6 text-end">
-            <a asp-controller="User" asp-action="Register" class="btn btn-outline-dark bg-gradient">Registrar nuevo usuario</a>
+            <a asp-controller="User" asp-action="AddUser" class="btn btn-outline-primary bg-gradient" style="border-radius:50px;">Registrar nuevo usuario</a>
         </div>
     </div>
 

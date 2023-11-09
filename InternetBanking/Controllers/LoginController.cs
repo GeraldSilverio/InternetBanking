@@ -1,6 +1,7 @@
 ﻿using InternetBanking.Core.Application.Dtos.Account;
 using InternetBanking.Core.Application.Helpers;
 using InternetBanking.Core.Application.Interfaces.Services;
+using InternetBanking.Core.Application.ViewModels.Login;
 using InternetBanking.Core.Application.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.InternetBanking.Middlewares;
@@ -9,9 +10,9 @@ namespace WebApp.InternetBanking.Controllers
 {
     public class LoginController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly ILoginService _userService;
 
-        public LoginController(IUserService userService)
+        public LoginController(ILoginService userService)
         {
             _userService = userService;
         }
@@ -87,6 +88,13 @@ namespace WebApp.InternetBanking.Controllers
             return View("ConfirmEmail", response);
         }
 
+        #region ForgotPassword
+        public IActionResult ForgotPassword()
+        {
+            return View(new ForgotPasswordRequest());
+        }
+
+        #endregion
         public IActionResult AccessDenied()
         {
             return View();

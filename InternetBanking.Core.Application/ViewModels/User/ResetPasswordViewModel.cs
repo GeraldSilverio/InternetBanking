@@ -4,8 +4,6 @@ namespace InternetBanking.Core.Application.ViewModels.User
 {
     public class ResetPasswordViewModel
     {
-        public string Token { get; set; }
-
         [Required(ErrorMessage = "Debe ingresar un correo electrónico")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }

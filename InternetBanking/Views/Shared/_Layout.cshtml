@@ -5,8 +5,8 @@
 @inject IHttpContextAccessor httpContextAccesor
 @{
     var User = httpContextAccesor.HttpContext.Session.Get<AuthenticationResponse>("user");
-    var isAdmin = User != null ? User.Roles.Any(u => u == "Admin") : false;
-    var isClient = User != null ? User.Roles.Any(u => u == "Client") : false;
+    var isAdmin = User != null && User.Roles != null ? User.Roles.Any(u => u == "Admin") : false;
+    var isClient = User != null && User.Roles != null ? User.Roles.Any(u => u == "Client") : false;
 }
 
 <!DOCTYPE html>
@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="~/InternetBanking.styles.css" asp-append-version="true" />
 </head>
 <body>
-    @if(User != null)
+    @if (User != null)
     {
         <header>
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -32,7 +32,8 @@
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
-                            @if(isAdmin){
+                            @if (isAdmin)
+                            {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-controller="HomeAdmin" asp-action="Index">Home</a>
                                 </li>
@@ -91,6 +92,10 @@
                                         <b>@User.FirstName @User.LastName</b>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownuser">
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="ResetPassword">Cambiar Contraseña</a>
+                                        </li>
+
                                         <li>
                                             <a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="LogOut">Cerrar sesión</a>
                                         </li>

@@ -4,6 +4,7 @@ namespace InternetBanking.Core.Application.ViewModels.User
 {
     public class SaveUserViewModel
     {
+        public string? Id { get; set; }
         [Required(ErrorMessage = "Debe ingresar su nombre")]
         [DataType(DataType.Text)]
         public string FirstName { get; set; }
@@ -37,6 +38,7 @@ namespace InternetBanking.Core.Application.ViewModels.User
         //[RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "El formato de la  debe ser 809-400-0050")]
         [DataType(DataType.Text)]
         public string IdentityCard { get; set; }
+        public int SelectRole { get; set; }
         public bool HasError { get; set; }
         public string? Error { get; set; }
     }

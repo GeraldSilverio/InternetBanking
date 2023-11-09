@@ -1,10 +1,11 @@
 ﻿
 using InternetBanking.Core.Application.Dtos.Account;
+using InternetBanking.Core.Application.ViewModels.Login;
 using InternetBanking.Core.Application.ViewModels.User;
 
 namespace InternetBanking.Core.Application.Interfaces.Services
 {
-    public interface IUserService
+    public interface ILoginService
     {
         Task<RegisterResponse> RegisterAsync(SaveUserViewModel saveViewModel, string origin);
         Task<AuthenticationResponse> LoginAsync(LoginViewModel viewModel);

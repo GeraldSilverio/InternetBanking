@@ -12,7 +12,8 @@ namespace InternetBanking.Core.Application
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             #region Services
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<IUserServices, UserServices>();
             #endregion
         }
     }

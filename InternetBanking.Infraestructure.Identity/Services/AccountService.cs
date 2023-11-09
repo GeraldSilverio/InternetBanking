@@ -43,7 +43,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             }
 
             var user = new ApplicationUser
-            {  
+            {
                 UserName = request.UserName,
                 Email = request.Email,
                 FirstName = request.FirstName,
@@ -56,8 +56,15 @@ namespace InternetBanking.Infraestructure.Identity.Services
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-
-                await _userManager.AddToRoleAsync(user, Roles.Client.ToString());          
+                //Asignando el rol dependiendo el tipo del cliente.
+                if(request.SelectRole == ((int)Roles.Admin))
+                {
+                    await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(user, Roles.Client.ToString());
+                }
                 var verificationUrl = await VerificationEmailUrl(user, origin);
                 await _emailService.SendAsync(new EmailRequest
                 {
@@ -151,7 +158,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             {
                 user.IsActive = true;
                 return $"Cuenta confirmada con el correo '{user.Email}' - Ahora puedes disfrutar de la App El Banquillo";
-               
+
             }
             else
             {
@@ -220,8 +227,8 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 return response;
             }
 
-            request.Token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
-            var result = await _userManager.ResetPasswordAsync(user, request.Token, request.Password);
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, request.Password);
 
             if (!result.Succeeded)
             {
@@ -232,32 +239,31 @@ namespace InternetBanking.Infraestructure.Identity.Services
 
             return response;
         }
-
-        #endregion
-
-        #region Sign Out
-
         public async Task SignOutAsync()
         {
             await _signInManager.SignOutAsync();
         }
-        #endregion
-
-        #region Users 
-            public async Task<List<AuthenticationResponse>>  GetAllUsersAsync()
+        public async Task<List<AuthenticationResponse>> GetAllUsersAsync()
+        {
+            var user = await _userManager.Users.Select(u => new AuthenticationResponse
             {
-                var user = _userManager.Users.Select(u => new AuthenticationResponse {
-                    Id = u.Id,
-                    FirstName = u.FirstName, 
-                    LastName = u.LastName, 
-                    Email = u.Email,
-                    IdentityCard = u.IdentityCard,
-                    Roles = _userManager.GetRolesAsync(u).Result.ToList(),
-                    IsVerified = u.EmailConfirmed                
-                }).ToListAsync();
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                IdentityCard = u.IdentityCard,
+                Roles = _userManager.GetRolesAsync(u).Result.ToList(),
+                IsVerified = u.EmailConfirmed
+            }).ToListAsync();
 
-                return await user;               
-            }
+            return user;
+        }
+
         #endregion
+
+
+
+
     }
+
 }

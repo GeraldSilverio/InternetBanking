@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace InternetBanking.Core.Application.ViewModels.User
+namespace InternetBanking.Core.Application.ViewModels.Login
 {
     public class LoginViewModel
     {

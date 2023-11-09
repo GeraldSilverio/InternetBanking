@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using InternetBanking.Core.Application.Dtos.Account;
 using InternetBanking.Core.Application.Interfaces.Services;
+using InternetBanking.Core.Application.ViewModels.Login;
 using InternetBanking.Core.Application.ViewModels.User;
 
 namespace InternetBanking.Core.Application.Services
 {
-    public class UserService : IUserService
+    public class LoginService : ILoginService
     {
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
-        public UserService(IAccountService accountService, IMapper mapper)
+        public LoginService(IAccountService accountService, IMapper mapper)
         {
             _accountService = accountService;
             _mapper = mapper;
