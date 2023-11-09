@@ -1,11 +1,6 @@
 ﻿using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Domain.Entities;
 using InternetBanking.Infraestructure.Persistence.Contexts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InternetBanking.Infraestructure.Persistence.Repositories
 {
@@ -16,6 +11,12 @@ namespace InternetBanking.Infraestructure.Persistence.Repositories
         public SavingAccountRepository(ApplicationContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public bool HaveAccount(string idUser)
+        {
+            var haveAccount = _dbContext.SavingAccounts.Any(x=> x.IdUser == idUser); 
+            return haveAccount;
         }
     }
 }

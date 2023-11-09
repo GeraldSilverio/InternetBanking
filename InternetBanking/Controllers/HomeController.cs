@@ -20,11 +20,9 @@ namespace WebApp.InternetBanking.Controllers
         public async Task<IActionResult> Index()
         {
             var users = await _userServices.GetAllAsync();
-            var homeView = new HomeView()
-            {
-                ActiveUser = users.Where(x => x.IsActive = true).Count(),
-                InActiveUser = users.Where(x => x.IsActive = false).Count(),
-            };
+            var homeView = new HomeView();
+            homeView.ActiveUser = users.Where(x => x.IsActive == true).Count();
+            homeView.InActiveUser = users.Where(x => x.IsActive == false).Count();
             return View(homeView);
         }
 

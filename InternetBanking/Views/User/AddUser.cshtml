@@ -88,13 +88,18 @@
                             </div>
 
                             <div class="mb-3">
-                                <select class="form-select" asp-for="SelectRole">
-                                    <option selected>Seleccione el rol de este usuario</option>
+                                <select class="form-select" asp-for="SelectRole" id="selectRole">
                                     <option value="0">Administrador</option>
                                     <option value="1">Cliente</option>
                                 </select>
                             </div>
-                             
+
+                            <div class="mb-3">
+                                <label>BALANCE DE LA CUENTA</label>
+                                <input type="number" class="form-control" asp-for="BalanceAccount" autocomplete="off" disabled id="balancecliente">
+                            </div>
+
+                           
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Crear cuenta</button>
                             <a class="btn btn-secondary float-end" asp-controller="User" asp-action="UserAdministrator">Volver</a>
                         </form>
@@ -127,3 +132,19 @@
     }
 
 </style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var selectRole = document.getElementById("selectRole");
+        var balanceCliente = document.getElementById("balancecliente");
+
+        var originalBalanceValue = balanceCliente.value;
+
+        selectRole.addEventListener("change", function () {
+            if (selectRole.value === "0") {
+                balanceCliente.value = originalBalanceValue;
+            }
+            balanceCliente.disabled = (selectRole.value !== "1");
+        });
+    });
+</script>

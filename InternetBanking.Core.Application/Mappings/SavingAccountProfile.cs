@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using InternetBanking.Core.Application.ViewModels.SavingAccount;
+using InternetBanking.Core.Domain.Entities;
 
 namespace InternetBanking.Core.Application.Mappings
 {
@@ -6,7 +8,8 @@ namespace InternetBanking.Core.Application.Mappings
     {
         public SavingAccountProfile()
         {
-            
+            CreateMap<SavingAccount, CreateSavingAccountViewModel>()
+                .ReverseMap();
         }
     }
 }
