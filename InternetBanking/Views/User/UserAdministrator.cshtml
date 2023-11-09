@@ -39,7 +39,7 @@
                                     <td>@item.IdentityCard</td>
                                     <td>@item.Email</td>
                                     <td>@item.Roles.FirstOrDefault()</td>
-                                    <td>@(item.IsVerified == true ? "Activo" : "Inactivo")</td>
+                                    <td>@(item.IsActive == true ? "Activo" : "Inactivo")</td>
                                     <td>
                                         <div class="btn-group">
                                             <a asp-controller="" asp-action="" title="Activar" class="btn btn-sm btn-success p-2 text-white m-md-1"><i class="fa-regular fa-thumbs-up"></i></a>

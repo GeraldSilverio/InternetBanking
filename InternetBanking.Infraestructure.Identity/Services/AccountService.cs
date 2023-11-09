@@ -33,6 +33,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
         {
             RegisterResponse response = new()
             {
+                
                 HasError = false
             };
 
@@ -52,19 +53,24 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 LastName = request.LastName,
                 PhoneNumber = request.Phone,
                 IdentityCard = request.IdentityCard,
-                IsActive = true
+                IsActive = false
+
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
+            response.IdUser = user.Id;
             if (result.Succeeded)
             {
                 //Asignando el rol dependiendo el tipo del cliente.
                 if (request.SelectRole == ((int)Roles.Admin))
                 {
+                    user.IsActive = true;
                     await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
+
                 }
                 else
                 {
+                    
                     await _userManager.AddToRoleAsync(user, Roles.Client.ToString());
                 }
                 var verificationUrl = await VerificationEmailUrl(user, origin);
@@ -81,7 +87,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 response.Error = $"Error al registrar al usuario";
                 return response;
             }
-
+            
             return response;
         }
 
@@ -166,21 +172,21 @@ namespace InternetBanking.Infraestructure.Identity.Services
             {
                 return $"ha ocurrido un error confirmando '{user.Email}'";
             }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
         #endregion
 
         #region Password
@@ -265,7 +271,9 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 Email = u.Email,
                 IdentityCard = u.IdentityCard,
                 Roles = _userManager.GetRolesAsync(u).Result.ToList(),
-                IsVerified = u.EmailConfirmed
+                IsVerified = u.EmailConfirmed,
+                IsActive = u.IsActive,
+                
             }).ToListAsync();
 
             return user;
