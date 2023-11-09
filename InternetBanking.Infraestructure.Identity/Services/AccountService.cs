@@ -8,6 +8,8 @@ using InternetBanking.Core.Application.Dtos.Email;
 using InternetBanking.Core.Application.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
 using InternetBanking.Infraestructure.Identity.Contexts;
+using Azure;
+using InternetBanking.Core.Application.Helpers;
 
 namespace InternetBanking.Infraestructure.Identity.Services
 {
@@ -172,43 +174,39 @@ namespace InternetBanking.Infraestructure.Identity.Services
         #region Forgot Password
         public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordRequest request, string origin)
         {
-            ForgotPasswordResponse response = new()
-            {
-                HasError = false
-            };
+            ForgotPasswordResponse response = new();
+            response.HasError = false;
 
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var account = await _userManager.FindByEmailAsync(request.Email);
 
-            if (user == null)
+            if (account == null)
             {
                 response.HasError = true;
-                response.Error = $"No hay cuentas registradas con el correo '{request.Email}'";
+                response.Error = $"NO EXISTE UNA CUENTA CON ESTE CORREO:{request.Email}";
+                return response;
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(account);
+            var password = GeneratePassword.Generate();
+            var responseChange = await _userManager.ResetPasswordAsync(account, token, password);
+            if (!responseChange.Succeeded)
+            {
+                response.HasError = true;
+                response.Error = "OCURRIO UN ERROR RESTABLECIENDO LA CONTRASEÑA";
                 return response;
             }
 
-            var verificationUrl = await ForgotPasswordUrl(user, origin);
-
             await _emailService.SendAsync(new EmailRequest()
             {
-                To = user.Email,
-                Body = $"¡Por favor, resete su cuenta visitando esta URL! {verificationUrl}",
-                Subject = "Reset password"
-            });
+                To = account.Email,
+                Body = $"Hemos restablecido tu contraseña.Esta es tu nueva contraseña: {password}, por favor cambiarla cuando vuelvas a ingresar",
+                Subject = "New Password"
 
+            });
 
             return response;
         }
 
-        private async Task<string> ForgotPasswordUrl(ApplicationUser user, string origin)
-        {
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
-            var route = "User/ResetPassword";
-            var url = new Uri(string.Concat($"{origin}/", route));
-            var verificationUrl = QueryHelpers.AddQueryString(url.ToString(), "token", token);
-
-            return verificationUrl;
-        }
+        
         #endregion
 
         public async Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordRequest request)

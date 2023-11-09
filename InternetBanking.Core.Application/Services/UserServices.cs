@@ -28,9 +28,10 @@ namespace InternetBanking.Core.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordViewModel model, string origin)
+        public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordViewModel model, string origin)
         {
-            throw new NotImplementedException();
+            ForgotPasswordRequest forgotRequest = _mapper.Map<ForgotPasswordRequest>(model);
+            return await _accountService.ForgotPasswordAsync(forgotRequest, origin);
         }
 
         public async Task<List<UsersViewModel>> GetAllAsync()

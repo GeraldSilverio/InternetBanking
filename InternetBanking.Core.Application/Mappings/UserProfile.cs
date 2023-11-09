@@ -28,6 +28,11 @@ namespace InternetBanking.Core.Application.Mappings
                .ForMember(x => x.Error, opt => opt.Ignore())
                .ReverseMap();
 
+            CreateMap<ForgotPasswordRequest, ForgotPasswordViewModel>()
+              .ForMember(x => x.Error, opt => opt.Ignore())
+              .ForMember(x => x.HasError, opt => opt.Ignore())
+              .ReverseMap();
+
         }
     }
 }

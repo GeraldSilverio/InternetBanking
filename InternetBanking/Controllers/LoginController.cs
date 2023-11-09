@@ -10,11 +10,13 @@ namespace WebApp.InternetBanking.Controllers
 {
     public class LoginController : Controller
     {
-        private readonly ILoginService _userService;
+        private readonly ILoginService _loginService;
+        private readonly IUserServices _userServices;
 
-        public LoginController(ILoginService userService)
+        public LoginController(ILoginService loginService, IUserServices userServices)
         {
-            _userService = userService;
+            _loginService = loginService;
+            _userServices = userServices;
         }
 
         #region Login And Register
@@ -32,7 +34,7 @@ namespace WebApp.InternetBanking.Controllers
                 return View("Login", vm);
             }
 
-            AuthenticationResponse authenticationResponse = await _userService.LoginAsync(vm);
+            AuthenticationResponse authenticationResponse = await _loginService.LoginAsync(vm);
             if (authenticationResponse != null && authenticationResponse.HasError == false)
             {
                 HttpContext.Session.Set("user", authenticationResponse);
@@ -62,7 +64,7 @@ namespace WebApp.InternetBanking.Controllers
             }
             var origin = Request.Headers["origin"];
 
-            RegisterResponse response = await _userService.RegisterAsync(saveVM, origin);
+            RegisterResponse response = await _loginService.RegisterAsync(saveVM, origin);
 
             if (response.HasError)
             {
@@ -76,22 +78,42 @@ namespace WebApp.InternetBanking.Controllers
 
         public async Task<IActionResult> LogOut()
         {
-            await _userService.SignOutAsync();
+            await _loginService.SignOutAsync();
             HttpContext.Session.Remove("user");
             return RedirectToRoute(new { controller = "Login", action = "Index" });
         }
 
-        [ServiceFilter(typeof(LoginAuthorize))]
+        //[ServiceFilter(typeof(LoginAuthorize))]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
-            string response = await _userService.ConfirmEmailAsync(userId, token);
+            string response = await _loginService.ConfirmEmailAsync(userId, token);
             return View("ConfirmEmail", response);
         }
 
         #region ForgotPassword
         public IActionResult ForgotPassword()
         {
-            return View(new ForgotPasswordRequest());
+            return View(new ForgotPasswordViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var origin = Request.Headers["origin"];
+            var response = await _userServices.ForgotPasswordAsync(model, origin);
+
+            if (response.HasError)
+            {
+                model.HasError = response.HasError;
+                model.Error = response.Error;
+                return View(model);
+            }
+
+            return RedirectToRoute(new { controller = "Login", action = "Index" });
         }
 
         #endregion
