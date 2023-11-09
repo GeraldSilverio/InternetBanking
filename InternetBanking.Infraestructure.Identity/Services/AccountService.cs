@@ -59,7 +59,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             if (result.Succeeded)
             {
                 //Asignando el rol dependiendo el tipo del cliente.
-                if(request.SelectRole == ((int)Roles.Admin))
+                if (request.SelectRole == ((int)Roles.Admin))
                 {
                     await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
                 }
@@ -166,7 +166,21 @@ namespace InternetBanking.Infraestructure.Identity.Services
             {
                 return $"ha ocurrido un error confirmando '{user.Email}'";
             }
-        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+   }
         #endregion
 
         #region Password
@@ -206,7 +220,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             return response;
         }
 
-        
+
         #endregion
 
         public async Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordRequest request)
