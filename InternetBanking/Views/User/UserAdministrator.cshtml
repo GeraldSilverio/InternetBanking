@@ -52,9 +52,9 @@
                                                 {
                                                     <a asp-controller="User" asp-action="ActivateUser" asp-route-id="@item.Id" title="Activar" class="btn btn-sm btn-success p-2 text-white m-md-1"><i class="fa-regular fa-thumbs-up"></i></a>
                                                 }
-                                                else if (item.IsActive != false)
+                                                else
                                                 {
-                                                    <a asp-controller="User" asp-action="DeactivateUser" asp-route-id="@item.Id" title="Desactivar" class="btn btn-sm btn-danger p-2 text-white m-md-1"><i class="fa-regular fa-thumbs-down"></i></a>
+                                                    <a asp-controller="User" asp-action="DesactivateUser" asp-route-id="@item.Id" title="Desactivar" class="btn btn-sm btn-danger p-2 text-white m-md-1"><i class="fa-regular fa-thumbs-down"></i></a>
                                                 }                                                                                       
                                             </div>
                                         }                                     

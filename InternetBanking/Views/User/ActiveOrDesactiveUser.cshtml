@@ -2,7 +2,7 @@
 @model UserStatusViewModel
 @{
     ViewData["Title"] = "Desactivar usuario";
-    bool isUserActive = Model.IsActive == true ? true : false;
+    bool isActive = Model.IsActive == true ? true : false;
 }
 
 <div class="container-fluid">
@@ -10,10 +10,10 @@
         <div class="col-6 offset-3">
             <div class="card">
                 <div class="bg-blue-card-header p-2 text-white bg-opacity-75 m-md-1 fw-bolder">
-                    <h4>@(isUserActive ? "¿Está seguro de que desea activar este usuario?" : "¿Está seguro de que desea desactivar este usuario?")</h4>
+                    <h4>@(isActive ? "¿Está seguro de que desea desactivar este usuario?" : "¿Está seguro de que desea activar este usuario?")</h4>
                 </div>
                 <div class="card-body">
-                    <form method="post" asp-controller="User" asp-action="@(isUserActive ? "ActivateUser" : "DeactivateUser")">
+                    <form method="post" asp-controller="User" asp-action="@(isActive ? "DesactivateUser" : "ActivateUser")">
 
                         <input type="hidden" asp-for="Id" name="id" />
                         
