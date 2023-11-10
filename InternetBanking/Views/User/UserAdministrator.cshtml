@@ -1,6 +1,10 @@
-﻿@using InternetBanking.Core.Application.ViewModels.User;
+﻿@using InternetBanking.Core.Application.Dtos.Account;
+@using InternetBanking.Core.Application.ViewModels.User;
+@using InternetBanking.Core.Application.Helpers;
+@inject IHttpContextAccessor httpContextAccessor
 @model List<UsersViewModel>
 @{
+    var User = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
     ViewData["Title"] = "Usuarios";
 }
 
@@ -8,7 +12,7 @@
 <div class="container">
     <div class="col-12 mt-5">
         <div class="d-flex justify-content-end mb-2">
-            <a asp-controller="User" asp-action="AddUser" class="btn btn-outline-primary bg-gradient">Registrar nuevo usuario</a>
+            <a asp-controller="User" asp-action="AddUser" class="btn text-white bg-gradient" style="background-color:#09385B; outline-color:#D3D9DE;">Registrar nuevo usuario</a>
         </div>
         <div class="card">
             <div class="card-header" style="background-color:#09385B">
@@ -41,10 +45,19 @@
                                     <td>@item.Roles.FirstOrDefault()</td>
                                     <td>@(item.IsActive == true ? "Activo" : "Inactivo")</td>
                                     <td>
-                                        <div class="btn-group">
-                                            <a asp-controller="" asp-action="" title="Activar" class="btn btn-sm btn-success p-2 text-white m-md-1"><i class="fa-regular fa-thumbs-up"></i></a>
-                                            <a asp-controller="" asp-action="" title="Desactivar" class="btn btn-sm btn-danger p-2 text-white m-md-1"><i class="fa-regular fa-thumbs-down"></i></a>
-                                        </div>
+                                        @if (item.Id != User.Id)
+                                        {
+                                            <div class="btn-group">
+                                                @if (item.IsActive != true)
+                                                {
+                                                    <a asp-controller="User" asp-action="ActivateUser" asp-route-id="@item.Id" title="Activar" class="btn btn-sm btn-success p-2 text-white m-md-1"><i class="fa-regular fa-thumbs-up"></i></a>
+                                                }
+                                                else if (item.IsActive != false)
+                                                {
+                                                    <a asp-controller="User" asp-action="DeactivateUser" asp-route-id="@item.Id" title="Desactivar" class="btn btn-sm btn-danger p-2 text-white m-md-1"><i class="fa-regular fa-thumbs-down"></i></a>
+                                                }                                                                                       
+                                            </div>
+                                        }                                     
                                     </td>
                                 </tr>
                             }

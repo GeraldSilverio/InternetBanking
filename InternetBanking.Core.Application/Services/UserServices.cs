@@ -53,17 +53,36 @@ namespace InternetBanking.Core.Application.Services
             return await _accountService.ForgotPasswordAsync(forgotRequest, origin);
         }
 
-        public async Task<List<UsersViewModel>> GetAllAsync()
+        public List<UsersViewModel> GetAllAsync()
         {
-            var request = await _accountService.GetAllUsersAsync();
+            var request = _accountService.GetAllUsersAsync();
             var user = _mapper.Map<List<UsersViewModel>>(request);
             return user;
         }
+
+        public async Task UpdateStatus(string id, bool status)
+        {
+            await _accountService.UpdateAsync(id, status);
+        }
+
+        //public async Task<List<UsersViewModel>> GetNonCurrentUsers()
+        //{
+        //    var request = await _accountService.GetNonCurrentUsersAsync();
+        //    var user = _mapper.Map<List<UsersViewModel>>(request);
+        //    return user;
+        //}
 
         public async Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordViewModel model)
         {
             ResetPasswordRequest forgotRequest = _mapper.Map<ResetPasswordRequest>(model);
             return await _accountService.ResetPasswordAsync(forgotRequest);
+        }
+
+        public async Task<UserStatusViewModel> GetUserById(string id)
+        {
+            var request = await _accountService.GetUserByIdAsync(id);
+            var user = _mapper.Map<UserStatusViewModel>(request);
+            return user;
         }
     }
 }

@@ -21,6 +21,18 @@ namespace InternetBanking.Core.Application.Mappings
 
             CreateMap<AuthenticationResponse, UsersViewModel>();
 
+            CreateMap<AuthenticationResponse, UserStatusViewModel>()
+                .ReverseMap();
+                //.ForMember(u => u.UserName, opt => opt.Ignore())
+                //.ForMember(u => u.FirstName, opt => opt.Ignore())
+                //.ForMember(u => u.LastName, opt => opt.Ignore())
+                //.ForMember(u => u.Email, opt => opt.Ignore())
+                //.ForMember(u => u.IdentityCard, opt => opt.Ignore())
+                //.ForMember(u => u.Roles, opt => opt.Ignore())
+                //.ForMember(u => u.IsVerified, opt => opt.Ignore())
+                //.ForMember(u => u.HasError, opt => opt.Ignore())
+                //.ForMember(u => u.Error, opt => opt.Ignore());
+
             CreateMap<RegisterResponse, AuthenticationResponse>();
 
             CreateMap<ResetPasswordRequest, ResetPasswordViewModel>()

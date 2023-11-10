@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using InternetBanking.Infraestructure.Identity.Contexts;
 using Azure;
 using InternetBanking.Core.Application.Helpers;
+using Microsoft.AspNetCore.Http;
+using InternetBanking.Core.Application.ViewModels.User;
 
 namespace InternetBanking.Infraestructure.Identity.Services
 {
@@ -19,13 +21,15 @@ namespace InternetBanking.Infraestructure.Identity.Services
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailService _emailService;
         public readonly IdentityContext _identityContext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService emailService, IdentityContext identityContext)
+        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService emailService, IdentityContext identityContext, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
             _identityContext = identityContext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         #region Register User
@@ -261,7 +265,55 @@ namespace InternetBanking.Infraestructure.Identity.Services
         {
             await _signInManager.SignOutAsync();
         }
-        public async Task<List<AuthenticationResponse>> GetAllUsersAsync()
+        public List<AuthenticationResponse> GetAllUsersAsync()
+        {
+            var user = _userManager.Users.Select(u => new AuthenticationResponse
+            {
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                IdentityCard = u.IdentityCard,
+                Roles = _userManager.GetRolesAsync(u).Result.ToList(),
+                IsVerified = u.EmailConfirmed,
+                IsActive = u.IsActive,
+                
+            }).ToList();
+
+            return user;
+        }
+
+        //Obtener todos los usuarios registrados excepto el usuario en sesion.
+        /*
+        public async Task<List<AuthenticationResponse>> GetNonCurrentUsersAsync()
+        {
+            var User = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+
+            var user = await _userManager.Users.Select(u => new AuthenticationResponse
+            {
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                IdentityCard = u.IdentityCard,
+                Roles = _userManager.GetRolesAsync(u).Result.ToList(),
+                IsVerified = u.EmailConfirmed,
+                IsActive = u.IsActive,
+
+            }).Where(u => u.Id != User.Id).ToListAsync();
+
+            return user;
+        }
+        */
+
+        public async Task UpdateAsync(string id, bool status)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            user.IsActive = status;
+            await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<AuthenticationResponse> GetUserByIdAsync(string id)
         {
             var user = await _userManager.Users.Select(u => new AuthenticationResponse
             {
@@ -273,16 +325,13 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 Roles = _userManager.GetRolesAsync(u).Result.ToList(),
                 IsVerified = u.EmailConfirmed,
                 IsActive = u.IsActive,
-                
-            }).ToListAsync();
+
+            }).Where(u => u.Id == id).FirstOrDefaultAsync();
 
             return user;
         }
 
         #endregion
-
-
-
 
     }
 

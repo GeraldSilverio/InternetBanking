@@ -1,4 +1,5 @@
 ﻿using InternetBanking.Core.Application.Dtos.Account;
+using InternetBanking.Core.Application.ViewModels.User;
 
 namespace InternetBanking.Core.Application.Interfaces.Services
 {
@@ -9,7 +10,10 @@ namespace InternetBanking.Core.Application.Interfaces.Services
         Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordRequest request, string origin);
         Task<RegisterResponse> RegisterBasicUserAsync(RegisterRequest request, string origin);
         Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordRequest request);
-        Task<List<AuthenticationResponse>> GetAllUsersAsync();
+        List<AuthenticationResponse> GetAllUsersAsync();
         Task SignOutAsync();
+        Task UpdateAsync(string id, bool status);
+        Task<AuthenticationResponse> GetUserByIdAsync(string id);
+        //Task<List<AuthenticationResponse>> GetNonCurrentUsersAsync();
     }
 }
