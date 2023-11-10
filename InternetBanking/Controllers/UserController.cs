@@ -81,11 +81,11 @@ namespace WebApp.InternetBanking.Controllers
         public async Task<IActionResult> DeactivateUser(string id)
         {
             UserStatusViewModel viewModel = await _userService.GetUserById(id);
-            return View(viewModel);
+            return View("ActiveOrDesactiveUser", viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeactivateUser(UserStatusViewModel vm)
+        public async Task<IActionResult> C(UserStatusViewModel vm)
         {
             if (!ModelState.IsValid)
             {
@@ -109,7 +109,7 @@ namespace WebApp.InternetBanking.Controllers
         public async Task<IActionResult> ActivateUser(string id)
         {
             UserStatusViewModel viewModel = await _userService.GetUserById(id);
-            return View(viewModel);
+            return View("ActiveOrDesactiveUser", viewModel);
         }
 
         [HttpPost]

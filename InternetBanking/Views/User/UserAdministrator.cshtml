@@ -47,7 +47,7 @@
                                     <td>
                                         @if (item.Id != User.Id)
                                         {
-                                            <div class="btn-group">
+                                            <div class="btn-group">                                              
                                                 @if (item.IsActive != true)
                                                 {
                                                     <a asp-controller="User" asp-action="ActivateUser" asp-route-id="@item.Id" title="Activar" class="btn btn-sm btn-success p-2 text-white m-md-1"><i class="fa-regular fa-thumbs-up"></i></a>
