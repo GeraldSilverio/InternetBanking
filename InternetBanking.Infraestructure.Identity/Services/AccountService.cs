@@ -57,7 +57,8 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 LastName = request.LastName,
                 PhoneNumber = request.Phone,
                 IdentityCard = request.IdentityCard,
-                IsActive = false
+                IsActive = false,
+                EmailConfirmed = true
 
             };
 
@@ -77,13 +78,13 @@ namespace InternetBanking.Infraestructure.Identity.Services
                     
                     await _userManager.AddToRoleAsync(user, Roles.Client.ToString());
                 }
-                var verificationUrl = await VerificationEmailUrl(user, origin);
-                await _emailService.SendAsync(new EmailRequest
-                {
-                    To = user.Email,
-                    Body = $"¡Por favor, haga clic en este enlace para verficar su cuenta! {verificationUrl}",
-                    Subject = "Confirmar registro"
-                });
+                //var verificationUrl = await VerificationEmailUrl(user, origin);
+                //await _emailService.SendAsync(new EmailRequest
+                //{
+                //    To = user.Email,
+                //    Body = $"¡Por favor, haga clic en este enlace para verficar su cuenta! {verificationUrl}",
+                //    Subject = "Confirmar registro"
+                //});
             }
             else
             {

@@ -31,7 +31,7 @@ namespace InternetBanking.Core.Application.Services
             {
                 var savingAccount = new CreateSavingAccountViewModel()
                 {
-                    AccountCode = 923222234,
+                    AccountCode = GenerateAccountCode(viewModel),
                     IdUser = response.IdUser,
                     Balance = viewModel.BalanceAccount,
                     IsPrincipal = false
@@ -40,6 +40,21 @@ namespace InternetBanking.Core.Application.Services
             }
 
             return response;
+        }
+
+        private static int  GenerateAccountCode(SaveUserViewModel viewModel)
+        {
+
+            string formattedDate = viewModel.CurrentDate.ToString("MddHmss");
+
+            if (int.TryParse(formattedDate, out int accountCode))
+            {
+                return accountCode;
+            }
+            else
+            {
+                throw new InvalidOperationException("No se pudo generar el código de cuenta");
+            }
         }
 
         public Task<ResetPasswordResponse> ChangePassword(ResetPasswordViewModel model)
