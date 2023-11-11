@@ -11,5 +11,8 @@ namespace InternetBanking.Core.Application.Interfaces.Services
         Task<ResetPasswordResponse> ChangePassword(ResetPasswordViewModel model);
         Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordViewModel model);
         Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordViewModel model, string origin);
+        Task UpdateStatus(string id, bool status);
+        Task<UserStatusViewModel> GetUserById(string id);
+      
     }
 }
