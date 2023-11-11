@@ -53,10 +53,10 @@
 
                             <div class="mb-3">
                                 <label>Numero Telefonico</label>
-                                <input type="text" class="form-control" asp-for="Phone" placeholder="809-000-0000" autocomplete="off" maxlength="10">
+                                <input type="text" class="form-control" asp-for="Phone" placeholder="809-000-0000" autocomplete="off" maxlength="12">
                                 <span asp-validation-for="Phone" class="text-danger"></span>
                                 <small class="form-text text-muted">
-                                    Su número de telefono debe tener este formato: (809/829/849)-000-000
+                                    Su número de telefono debe tener este formato: (809/829/849)-000-0000
                                 </small>
                             </div>
 
@@ -88,13 +88,19 @@
                             </div>
 
                             <div class="mb-3">
-                                <select class="form-select" asp-for="SelectRole">
-                                    <option selected>Seleccione el rol de este usuario</option>
+                                <select class="form-select" asp-for="SelectRole" id="selectRole">
                                     <option value="0">Administrador</option>
                                     <option value="1">Cliente</option>
                                 </select>
                             </div>
-                             
+
+                            <div class="mb-3">
+                                <label>BALANCE DE LA CUENTA</label>
+                                <input type="number" class="form-control" asp-for="BalanceAccount" autocomplete="off" disabled id="balancecliente">
+                            </div>
+
+                            <input type="hidden" asp-for="CurrentDate">
+                           
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Crear cuenta</button>
                             <a class="btn btn-secondary float-end" asp-controller="User" asp-action="UserAdministrator">Volver</a>
                         </form>
@@ -127,3 +133,19 @@
     }
 
 </style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var selectRole = document.getElementById("selectRole");
+        var balanceCliente = document.getElementById("balancecliente");
+
+        var originalBalanceValue = balanceCliente.value;
+
+        selectRole.addEventListener("change", function () {
+            if (selectRole.value === "0") {
+                balanceCliente.value = originalBalanceValue;
+            }
+            balanceCliente.disabled = (selectRole.value !== "1");
+        });
+    });
+</script>

@@ -44,9 +44,9 @@ namespace InternetBanking.Core.Application.Services
             await _accountService.SignOutAsync();
         }
 
-        public async Task<List<AuthenticationResponse>> GetAllUsers()
+        public List<AuthenticationResponse> GetAllUsers()
         {
-            return await _accountService.GetAllUsersAsync();
+            return _accountService.GetAllUsersAsync();
         }
     }
 }

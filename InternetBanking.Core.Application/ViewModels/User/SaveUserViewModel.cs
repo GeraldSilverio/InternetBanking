@@ -8,7 +8,7 @@ namespace InternetBanking.Core.Application.ViewModels.User
         [Required(ErrorMessage = "Debe ingresar su nombre")]
         [DataType(DataType.Text)]
         public string FirstName { get; set; }
-        
+
         [Required(ErrorMessage = "Debe ingresar su nombre")]
         [DataType(DataType.Text)]
         public string UserName { get; set; }
@@ -27,7 +27,7 @@ namespace InternetBanking.Core.Application.ViewModels.User
 
         [Compare(nameof(Password), ErrorMessage = "Las contraseñas no coinciden")]
         [Required(ErrorMessage = "Debe ingresar una contraseña con caracteres especiales, numeros y al menos una mayúscula")]
-        [DataType(DataType.Password)]        
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar un teléfono")]
@@ -41,5 +41,7 @@ namespace InternetBanking.Core.Application.ViewModels.User
         public int SelectRole { get; set; }
         public bool HasError { get; set; }
         public string? Error { get; set; }
+        public decimal BalanceAccount { get; set; }
+        public DateTime CurrentDate { get; set; } = DateTime.Now;
     }
 }

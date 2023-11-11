@@ -17,14 +17,12 @@ namespace WebApp.InternetBanking.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var users = await _userServices.GetAllAsync();
-            var homeView = new HomeView()
-            {
-                ActiveUser = users.Where(x => x.IsActive = true).Count(),
-                InActiveUser = users.Where(x => x.IsActive = false).Count(),
-            };
+            var users = _userServices.GetAllAsync();
+            var homeView = new HomeView();
+            homeView.ActiveUser = users.Where(x => x.IsActive == true).Count();
+            homeView.InActiveUser = users.Where(x => x.IsActive == false).Count();
             return View(homeView);
         }
 

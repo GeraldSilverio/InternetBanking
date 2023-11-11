@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using InternetBanking.Infraestructure.Identity.Contexts;
 using Azure;
 using InternetBanking.Core.Application.Helpers;
+using Microsoft.AspNetCore.Http;
+using InternetBanking.Core.Application.ViewModels.User;
 
 namespace InternetBanking.Infraestructure.Identity.Services
 {
@@ -19,13 +21,15 @@ namespace InternetBanking.Infraestructure.Identity.Services
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailService _emailService;
         public readonly IdentityContext _identityContext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService emailService, IdentityContext identityContext)
+        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService emailService, IdentityContext identityContext, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
             _identityContext = identityContext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         #region Register User
@@ -33,6 +37,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
         {
             RegisterResponse response = new()
             {
+                
                 HasError = false
             };
 
@@ -52,28 +57,34 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 LastName = request.LastName,
                 PhoneNumber = request.Phone,
                 IdentityCard = request.IdentityCard,
-                IsActive = true
+                IsActive = false,
+                EmailConfirmed = true
+
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
+            response.IdUser = user.Id;
             if (result.Succeeded)
             {
                 //Asignando el rol dependiendo el tipo del cliente.
                 if (request.SelectRole == ((int)Roles.Admin))
                 {
+                    user.IsActive = true;
                     await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
+
                 }
                 else
                 {
+                    
                     await _userManager.AddToRoleAsync(user, Roles.Client.ToString());
                 }
-                var verificationUrl = await VerificationEmailUrl(user, origin);
-                await _emailService.SendAsync(new EmailRequest
-                {
-                    To = user.Email,
-                    Body = $"¡Por favor, haga clic en este enlace para verficar su cuenta! {verificationUrl}",
-                    Subject = "Confirmar registro"
-                });
+                //var verificationUrl = await VerificationEmailUrl(user, origin);
+                //await _emailService.SendAsync(new EmailRequest
+                //{
+                //    To = user.Email,
+                //    Body = $"¡Por favor, haga clic en este enlace para verficar su cuenta! {verificationUrl}",
+                //    Subject = "Confirmar registro"
+                //});
             }
             else
             {
@@ -81,7 +92,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 response.Error = $"Error al registrar al usuario";
                 return response;
             }
-
+            
             return response;
         }
 
@@ -166,21 +177,21 @@ namespace InternetBanking.Infraestructure.Identity.Services
             {
                 return $"ha ocurrido un error confirmando '{user.Email}'";
             }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
         #endregion
 
         #region Password
@@ -255,7 +266,55 @@ namespace InternetBanking.Infraestructure.Identity.Services
         {
             await _signInManager.SignOutAsync();
         }
-        public async Task<List<AuthenticationResponse>> GetAllUsersAsync()
+        public List<AuthenticationResponse> GetAllUsersAsync()
+        {
+            var user = _userManager.Users.Select(u => new AuthenticationResponse
+            {
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                IdentityCard = u.IdentityCard,
+                Roles = _userManager.GetRolesAsync(u).Result.ToList(),
+                IsVerified = u.EmailConfirmed,
+                IsActive = u.IsActive,
+                
+            }).ToList();
+
+            return user;
+        }
+
+        //Obtener todos los usuarios registrados excepto el usuario en sesion.
+        /*
+        public async Task<List<AuthenticationResponse>> GetNonCurrentUsersAsync()
+        {
+            var User = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+
+            var user = await _userManager.Users.Select(u => new AuthenticationResponse
+            {
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                IdentityCard = u.IdentityCard,
+                Roles = _userManager.GetRolesAsync(u).Result.ToList(),
+                IsVerified = u.EmailConfirmed,
+                IsActive = u.IsActive,
+
+            }).Where(u => u.Id != User.Id).ToListAsync();
+
+            return user;
+        }
+        */
+
+        public async Task UpdateAsync(string id, bool status)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            user.IsActive = status;
+            await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<AuthenticationResponse> GetUserByIdAsync(string id)
         {
             var user = await _userManager.Users.Select(u => new AuthenticationResponse
             {
@@ -265,16 +324,15 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 Email = u.Email,
                 IdentityCard = u.IdentityCard,
                 Roles = _userManager.GetRolesAsync(u).Result.ToList(),
-                IsVerified = u.EmailConfirmed
-            }).ToListAsync();
+                IsVerified = u.EmailConfirmed,
+                IsActive = u.IsActive,
+
+            }).Where(u => u.Id == id).FirstOrDefaultAsync();
 
             return user;
         }
 
         #endregion
-
-
-
 
     }
 

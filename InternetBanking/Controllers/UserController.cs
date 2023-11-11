@@ -2,6 +2,8 @@
 using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
+using InternetBanking.Core.Application.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.InternetBanking.Controllers
@@ -16,9 +18,9 @@ namespace WebApp.InternetBanking.Controllers
             _userService = userService;
         }
         //Este metodo solo entran admins.
-        public async Task<IActionResult> UserAdministrator()
+        public IActionResult UserAdministrator()
         {
-            return View(await _userService.GetAllAsync());
+            return View(_userService.GetAllAsync());
         }
         //Este metodo solo entran admin
         public  IActionResult AddUser()
@@ -74,6 +76,62 @@ namespace WebApp.InternetBanking.Controllers
                 return View(model);
             }
             return RedirectToRoute(new { controller = "User", action = "PasswordConfirm" });
+        }
+
+        public async Task<IActionResult> DesactivateUser(string id)
+        {
+            UserStatusViewModel viewModel = await _userService.GetUserById(id);
+            return View("ActiveOrDesactiveUser", viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DesactivateUser(UserStatusViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            try
+            {
+                await _userService.UpdateStatus(vm.Id, false);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+            return RedirectToAction("UserAdministrator");
+        }
+
+        public async Task<IActionResult> ActivateUser(string id)
+        {
+            UserStatusViewModel viewModel = await _userService.GetUserById(id);
+            return View("ActiveOrDesactiveUser", viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ActivateUser(UserStatusViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            try
+            {
+                
+                await _userService.UpdateStatus(vm.Id, true);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return RedirectToAction("UserAdministrator");
         }
     }
 }
