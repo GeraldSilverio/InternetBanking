@@ -42,5 +42,6 @@ namespace InternetBanking.Core.Application.ViewModels.User
         public bool HasError { get; set; }
         public string? Error { get; set; }
         public decimal BalanceAccount { get; set; }
+        public DateTime CurrentDate { get; set; } = DateTime.Now;
     }
 }
