@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InternetBanking.Core.Application.Dtos.Account;
 using InternetBanking.Core.Application.Enums;
+using InternetBanking.Core.Application.Helpers;
 using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.ViewModels.Login;
 using InternetBanking.Core.Application.ViewModels.SavingAccount;
@@ -31,7 +32,7 @@ namespace InternetBanking.Core.Application.Services
             {
                 var savingAccount = new CreateSavingAccountViewModel()
                 {
-                    AccountCode = GenerateAccountCode(viewModel),
+                    AccountCode = GenerateCode.GenerateAccountCode(viewModel),
                     IdUser = response.IdUser,
                     Balance = viewModel.BalanceAccount,
                     IsPrincipal = false
@@ -41,22 +42,6 @@ namespace InternetBanking.Core.Application.Services
 
             return response;
         }
-
-        private static int  GenerateAccountCode(SaveUserViewModel viewModel)
-        {
-
-            string formattedDate = viewModel.CurrentDate.ToString("MddHmss");
-
-            if (int.TryParse(formattedDate, out int accountCode))
-            {
-                return accountCode;
-            }
-            else
-            {
-                throw new InvalidOperationException("No se pudo generar el código de cuenta");
-            }
-        }
-
         public Task<ResetPasswordResponse> ChangePassword(ResetPasswordViewModel model)
         {
             throw new NotImplementedException();

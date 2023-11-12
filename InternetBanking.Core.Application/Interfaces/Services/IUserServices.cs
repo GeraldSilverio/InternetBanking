@@ -14,8 +14,5 @@ namespace InternetBanking.Core.Application.Interfaces.Services
         Task UpdateStatus(string id, bool status);
         Task<UserStatusViewModel> GetUserById(string id);
       
-        Task UpdateStatus(string id, bool status);
-        Task<UserStatusViewModel> GetUserById(string id);
-        //Task<List<UsersViewModel>> GetNonCurrentUsers();
     }
 }
