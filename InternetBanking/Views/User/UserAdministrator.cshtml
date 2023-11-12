@@ -64,7 +64,11 @@
                                                     <a asp-controller="User" asp-action="ResetPassword" asp-route-id="@item.Id" title="Editar" class="dropdown-item"><i class="fa-solid fa-arrows-rotate"></i> Cambiar Contraseña</a>
                                                 </div>
                                             </div>
-                                        }                                     
+                                        }
+                                        else
+                                        {
+                                            <b class="text-secondary">En sesión</b>
+                                        }
                                     </td>
                                 </tr>
                             }

@@ -142,6 +142,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             response.IdentityCard = user.IdentityCard;
             response.FirstName = user.FirstName;
             response.LastName = user.LastName;
+            response.IsActive = user.IsActive;
 
             var listRole = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
 
