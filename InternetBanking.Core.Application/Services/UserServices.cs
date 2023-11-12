@@ -39,14 +39,9 @@ namespace InternetBanking.Core.Application.Services
                 };
                 await _savingAccountService.Add(savingAccount);
             }
-
             return response;
         }
-        public Task<ResetPasswordResponse> ChangePassword(ResetPasswordViewModel model)
-        {
-            throw new NotImplementedException();
-        }
-
+     
         public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordViewModel model, string origin)
         {
             ForgotPasswordRequest forgotRequest = _mapper.Map<ForgotPasswordRequest>(model);
@@ -69,14 +64,6 @@ namespace InternetBanking.Core.Application.Services
         {
             await _accountService.UpdateUserAsync(vm, id);
         }
-
-        //public async Task<List<UsersViewModel>> GetNonCurrentUsers()
-        //{
-        //    var request = await _accountService.GetNonCurrentUsersAsync();
-        //    var user = _mapper.Map<List<UsersViewModel>>(request);
-        //    return user;
-        //}
-
         public async Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordViewModel model)
         {
             ResetPasswordRequest forgotRequest = _mapper.Map<ResetPasswordRequest>(model);

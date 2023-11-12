@@ -8,12 +8,9 @@ using InternetBanking.Core.Application.Dtos.Email;
 using InternetBanking.Core.Application.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
 using InternetBanking.Infraestructure.Identity.Contexts;
-using Azure;
 using InternetBanking.Core.Application.Helpers;
 using Microsoft.AspNetCore.Http;
 using InternetBanking.Core.Application.ViewModels.User;
-using InternetBanking.Core.Application.ViewModels.SavingAccount;
-using InternetBanking.Core.Application.Services;
 
 namespace InternetBanking.Infraestructure.Identity.Services
 {
@@ -23,7 +20,6 @@ namespace InternetBanking.Infraestructure.Identity.Services
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailService _emailService;
         public readonly IdentityContext _identityContext;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService emailService, IdentityContext identityContext, IHttpContextAccessor httpContextAccessor)
         {
@@ -31,7 +27,6 @@ namespace InternetBanking.Infraestructure.Identity.Services
             _signInManager = signInManager;
             _emailService = emailService;
             _identityContext = identityContext;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         #region Register User
@@ -39,7 +34,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
         {
             RegisterResponse response = new()
             {
-                
+
                 HasError = false
             };
 
@@ -77,7 +72,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 }
                 else
                 {
-                    
+
                     await _userManager.AddToRoleAsync(user, Roles.Client.ToString());
                 }
                 //var verificationUrl = await VerificationEmailUrl(user, origin);
@@ -94,7 +89,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 response.Error = $"Error al registrar al usuario";
                 return response;
             }
-            
+
             return response;
         }
 
@@ -281,7 +276,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             await _userManager.UpdateAsync(user);
         }
 
-        public async Task UpdateUserAsync(EditUserViewModel vm,string id)
+        public async Task UpdateUserAsync(EditUserViewModel vm, string id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
             #region User Attributes
@@ -306,7 +301,6 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 LastName = u.LastName,
                 UserName = u.UserName,
                 Email = u.Email,
-                Phone = u.PhoneNumber,
                 IdentityCard = u.IdentityCard,
                 Roles = _userManager.GetRolesAsync(u).Result.ToList(),
                 IsVerified = u.EmailConfirmed,
@@ -335,30 +329,8 @@ namespace InternetBanking.Infraestructure.Identity.Services
             return user;
         }
 
-        //Obtener todos los usuarios registrados excepto el usuario en sesion.
-        /*
-        public async Task<List<AuthenticationResponse>> GetNonCurrentUsersAsync()
-        {
-            var User = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
 
-            var user = await _userManager.Users.Select(u => new AuthenticationResponse
-            {
-                Id = u.Id,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Email = u.Email,
-                IdentityCard = u.IdentityCard,
-                Roles = _userManager.GetRolesAsync(u).Result.ToList(),
-                IsVerified = u.EmailConfirmed,
-                IsActive = u.IsActive,
-
-            }).Where(u => u.Id != User.Id).ToListAsync();
-
-            return user;
-        }
-        */
         #endregion
 
     }
-
 }

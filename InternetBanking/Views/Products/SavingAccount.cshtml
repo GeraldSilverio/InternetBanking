@@ -1,1 +1,48 @@
-﻿<h1>AQUI ESTAN LAS CUENTAS DE AHORROS DE TODOS LOS USUARIOS</h1>
+﻿@using InternetBanking.Core.Application.ViewModels.SavingAccount;
+
+@model List<SavingAccountViewModel>
+
+<div class="container-fluid">
+    <div class="col-12 mt-5">
+        <div class="d-flex justify-content-end mb-2">
+            <a asp-controller="Products" asp-action="NewAccount" class="btn text-white bg-gradient" style="background-color:#09385B; outline-color:#D3D9DE;">Abrir Nueva Cuenta</a>
+        </div>
+        <div class="card">
+            <div class="card-header" style="background-color:#09385B">
+                <h3 class="card-title text-light text-center">CUENTAS DE AHORROS DEL SISTEMA</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Titular de la Cuenta</th>
+                            <th>Cedula</th>
+                            <th>Numero Cuenta</th>
+                            <th>Balance</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(SavingAccountViewModel account in Model)
+                        {
+                            <tr>
+                                <td>@account.FullName</td>
+                                <td>@account.IdentityCard</td>
+                                <td>@account.AccountCode</td>
+                                <td>$@account.Balance</td>
+                                <td>
+                                    @if(account.IsPrincial !=true)
+                                    {
+                                        <a class="btn btn-outline-danger">ELIMINAR</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
