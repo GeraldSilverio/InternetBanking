@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Admin\**" />
+    <Compile Remove="Views\Client\**" />
+    <Content Remove="Views\Admin\**" />
+    <Content Remove="Views\Client\**" />
+    <EmbeddedResource Remove="Views\Admin\**" />
+    <EmbeddedResource Remove="Views\Client\**" />
+    <None Remove="Views\Admin\**" />
+    <None Remove="Views\Client\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.13">
       <PrivateAssets>all</PrivateAssets>
@@ -21,11 +32,6 @@
     <ProjectReference Include="..\InternetBanking.Infraestructure.Identity\InternetBanking.Infraestructure.Identity.csproj" />
     <ProjectReference Include="..\InternetBanking.Infraestructure.Persistence\InternetBanking.Infraestructure.Persistence.csproj" />
     <ProjectReference Include="..\InternetBanking.Infraestructure.Shared\InternetBanking.Infraestructure.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Admin\" />
-    <Folder Include="Views\Client\" />
   </ItemGroup>
 
 </Project>
