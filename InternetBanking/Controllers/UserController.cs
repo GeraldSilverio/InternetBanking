@@ -56,6 +56,18 @@ namespace WebApp.InternetBanking.Controllers
             }
         }
 
+        public async Task<IActionResult> EditUser(string id)
+        {
+            EditUserViewModel editUser = await _userService.GetUserViewModelById(id);
+            return View("EditUser", editUser);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditUser(EditUserViewModel vm)
+        {
+            await _userService.UpdateUser(vm, vm.Id);
+            return RedirectToAction("UserAdministrator");
+        }
+
         public IActionResult ResetPassword()
         {
             return View(new ResetPasswordViewModel());

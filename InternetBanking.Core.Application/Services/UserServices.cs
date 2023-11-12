@@ -77,7 +77,12 @@ namespace InternetBanking.Core.Application.Services
 
         public async Task UpdateStatus(string id, bool status)
         {
-            await _accountService.UpdateAsync(id, status);
+            await _accountService.UpdateStatusAsync(id, status);
+        }
+
+        public async Task UpdateUser(EditUserViewModel vm, string id)
+        {
+            await _accountService.UpdateUserAsync(vm, id);
         }
 
         //public async Task<List<UsersViewModel>> GetNonCurrentUsers()
@@ -97,6 +102,13 @@ namespace InternetBanking.Core.Application.Services
         {
             var request = await _accountService.GetUserByIdAsync(id);
             var user = _mapper.Map<UserStatusViewModel>(request);
+            return user;
+        }
+
+        public async Task<EditUserViewModel> GetUserViewModelById(string id)
+        {
+            var request = await _accountService.GetUserByIdAsync(id);
+            var user = _mapper.Map<EditUserViewModel>(request);
             return user;
         }
     }

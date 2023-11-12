@@ -12,7 +12,8 @@ namespace InternetBanking.Core.Application.Interfaces.Services
         Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordRequest request);
         List<AuthenticationResponse> GetAllUsersAsync();
         Task SignOutAsync();
-        Task UpdateAsync(string id, bool status);
+        Task UpdateStatusAsync(string id, bool status);
+        Task UpdateUserAsync(EditUserViewModel vm, string id);
         Task<AuthenticationResponse> GetUserByIdAsync(string id);
         //Task<List<AuthenticationResponse>> GetNonCurrentUsersAsync();
     }

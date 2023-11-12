@@ -93,12 +93,7 @@
                                     <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                         <b>@User.FirstName @User.LastName</b>
                                     </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownuser">
-                                        @if(isAdmin){
-                                            <li>
-                                                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="ResetPassword">Cambiar Contraseña</a>
-                                            </li>
-                                        }                                       
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownuser">                                       
                                         <li>
                                             <a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="LogOut">Cerrar sesión</a>
                                         </li>
@@ -126,6 +121,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     @* Font Awesome Icons *@
     <script src="https://kit.fontawesome.com/1438bae15e.js" crossorigin="anonymous"></script>

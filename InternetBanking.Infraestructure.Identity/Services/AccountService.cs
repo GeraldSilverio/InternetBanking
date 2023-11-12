@@ -12,6 +12,8 @@ using Azure;
 using InternetBanking.Core.Application.Helpers;
 using Microsoft.AspNetCore.Http;
 using InternetBanking.Core.Application.ViewModels.User;
+using InternetBanking.Core.Application.ViewModels.SavingAccount;
+using InternetBanking.Core.Application.Services;
 
 namespace InternetBanking.Infraestructure.Identity.Services
 {
@@ -266,6 +268,55 @@ namespace InternetBanking.Infraestructure.Identity.Services
         {
             await _signInManager.SignOutAsync();
         }
+
+        #endregion
+
+        #region CommonMethods
+
+        #region Update
+        public async Task UpdateStatusAsync(string id, bool status)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            user.IsActive = status;
+            await _userManager.UpdateAsync(user);
+        }
+
+        public async Task UpdateUserAsync(EditUserViewModel vm,string id)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            #region User Attributes
+            user.FirstName = vm.FirstName;
+            user.LastName = vm.LastName;
+            user.Email = vm.Email;
+            user.NormalizedEmail = vm.Email;
+            user.PhoneNumber = vm.Phone;
+            user.IdentityCard = vm.IdentityCard;
+            #endregion
+            await _userManager.UpdateAsync(user);
+        }
+
+        #endregion
+
+        public async Task<AuthenticationResponse> GetUserByIdAsync(string id)
+        {
+            var user = await _userManager.Users.Select(u => new AuthenticationResponse
+            {
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                UserName = u.UserName,
+                Email = u.Email,
+                Phone = u.PhoneNumber,
+                IdentityCard = u.IdentityCard,
+                Roles = _userManager.GetRolesAsync(u).Result.ToList(),
+                IsVerified = u.EmailConfirmed,
+                IsActive = u.IsActive,
+
+            }).Where(u => u.Id == id).FirstOrDefaultAsync();
+
+            return user;
+        }
+
         public List<AuthenticationResponse> GetAllUsersAsync()
         {
             var user = _userManager.Users.Select(u => new AuthenticationResponse
@@ -278,7 +329,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 Roles = _userManager.GetRolesAsync(u).Result.ToList(),
                 IsVerified = u.EmailConfirmed,
                 IsActive = u.IsActive,
-                
+
             }).ToList();
 
             return user;
@@ -306,32 +357,6 @@ namespace InternetBanking.Infraestructure.Identity.Services
             return user;
         }
         */
-
-        public async Task UpdateAsync(string id, bool status)
-        {
-            ApplicationUser user = await _userManager.FindByIdAsync(id);
-            user.IsActive = status;
-            await _userManager.UpdateAsync(user);
-        }
-
-        public async Task<AuthenticationResponse> GetUserByIdAsync(string id)
-        {
-            var user = await _userManager.Users.Select(u => new AuthenticationResponse
-            {
-                Id = u.Id,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Email = u.Email,
-                IdentityCard = u.IdentityCard,
-                Roles = _userManager.GetRolesAsync(u).Result.ToList(),
-                IsVerified = u.EmailConfirmed,
-                IsActive = u.IsActive,
-
-            }).Where(u => u.Id == id).FirstOrDefaultAsync();
-
-            return user;
-        }
-
         #endregion
 
     }

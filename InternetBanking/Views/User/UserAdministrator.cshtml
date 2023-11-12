@@ -47,15 +47,22 @@
                                     <td>
                                         @if (item.Id != User.Id)
                                         {
-                                            <div class="btn-group">                                              
-                                                @if (item.IsActive != true)
-                                                {
-                                                    <a asp-controller="User" asp-action="ActivateUser" asp-route-id="@item.Id" title="Activar" class="btn btn-sm btn-success p-2 text-white m-md-1"><i class="fa-regular fa-thumbs-up"></i></a>
-                                                }
-                                                else
-                                                {
-                                                    <a asp-controller="User" asp-action="DesactivateUser" asp-route-id="@item.Id" title="Desactivar" class="btn btn-sm btn-danger p-2 text-white m-md-1"><i class="fa-regular fa-thumbs-down"></i></a>
-                                                }                                                                                       
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-h" style="font-size: 1.5em; color:black;"></i>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    @if (item.IsActive != true)
+                                                    {
+                                                        <a asp-controller="User" asp-action="ActivateUser" asp-route-id="@item.Id" title="Activar" class="dropdown-item"><i class="far fa-thumbs-up"></i> Activar</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-controller="User" asp-action="DesactivateUser" asp-route-id="@item.Id" title="Desactivar" class="dropdown-item"><i class="far fa-thumbs-down"></i> Desactivar</a>
+                                                    }
+                                                    <a asp-controller="User" asp-action="EditUser" asp-route-id="@item.Id" title="Editar" class="dropdown-item"><i class="fa-regular fa-pen-to-square"></i> Editar</a>
+                                                    <a asp-controller="User" asp-action="ResetPassword" asp-route-id="@item.Id" title="Editar" class="dropdown-item"><i class="fa-solid fa-arrows-rotate"></i> Cambiar Contraseña</a>
+                                                </div>
                                             </div>
                                         }                                     
                                     </td>
@@ -68,4 +75,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    var dropdownTrigger = document.querySelector('.btn-link');
+    var myDropdown = new bootstrap.Dropdown(dropdownTrigger);
+</script>
 

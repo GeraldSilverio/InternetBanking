@@ -1,0 +1,105 @@
+﻿@using InternetBanking.Core.Application.ViewModels.User
+@model EditUserViewModel
+@{
+    ViewData["Title"] = "Registro Usuario";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+            <div class="col-6">
+                <div class="card mt-3">
+                    @if (Model.HasError)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <p>@Model.Error</p>
+                            <button type="button" class=" btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+                    <div class="card-body mt-3">
+                        <form class=" mb-3" method="post" asp-controller="User" asp-action="EditUser">
+
+                            <div class="row mb-3">
+
+                                <div class="col">
+                                    <label>Nombre</label>
+                                    <input type="text" class="form-control" asp-for="FirstName" placeholder="Ingrese su nombre" autocomplete="off" maxlength="40">
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+
+                                <div class="col">
+                                    <label>Apellidos</label>
+                                    <input type="text" class="form-control" asp-for="LastName" placeholder="Ingrese su apellido" autocomplete="off">
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                            <div class="row mb-3">
+
+                                <div class="col">
+                                    <label>Correo Electronico</label>
+                                    <input type="text" class="form-control" asp-for="Email" placeholder="Ingrese su correo" autocomplete="off" maxlength="40">
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+
+                                <div class="col">
+                                    <label>Nombre Usuario</label>
+                                    <input type="text" class="form-control" asp-for="UserName" placeholder="Ingrese su nombre de usuario" autocomplete="off">
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Numero Telefonico</label>
+                                <input type="text" class="form-control" asp-for="Phone" placeholder="809-000-0000" autocomplete="off" maxlength="12">
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                                <small class="form-text text-muted">
+                                    Su número de telefono debe tener este formato: (809/829/849)-000-0000
+                                </small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Cedula</label>
+                                <input type="text" class="form-control" asp-for="IdentityCard" autocomplete="off" maxlength="11">
+                                <span asp-validation-for="IdentityCard" class="text-danger"></span>
+                                <small class="form-text text-muted">
+                                    La cedula debe contener el siguiente formato 000--0000000-0 en total 11 caracteres sin guiones
+                                </small>
+                            </div>
+
+                            <input type="hidden" asp-for="CurrentDate">
+
+                            <button type="submit" class="btn btn-outline-primary float-end ms-2">Confirmar</button>
+                            <a class="btn btn-secondary float-end" asp-controller="User" asp-action="UserAdministrator">Volver</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+
+    .card {
+        border: 0.2px solid #09385B;
+        border-radius: 4px 4px 10px 10px;
+        box-shadow: 0 0 10px #6BA2CD;
+    }
+
+    label {
+        color: #1B4A6F;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .input-blue {
+        color: #1B4A6F;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+</style>
