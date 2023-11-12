@@ -9,8 +9,5 @@ namespace InternetBanking.Core.Domain.Entities
         public decimal BalancePaid {  get; set; }
         public decimal BorrowedBalance{  get; set; }
 
-
-
-
     }
 }

@@ -8,13 +8,9 @@
 
   <ItemGroup>
     <Compile Remove="Views\Admin\**" />
-    <Compile Remove="Views\Client\**" />
     <Content Remove="Views\Admin\**" />
-    <Content Remove="Views\Client\**" />
     <EmbeddedResource Remove="Views\Admin\**" />
-    <EmbeddedResource Remove="Views\Client\**" />
     <None Remove="Views\Admin\**" />
-    <None Remove="Views\Client\**" />
   </ItemGroup>
 
   <ItemGroup>
