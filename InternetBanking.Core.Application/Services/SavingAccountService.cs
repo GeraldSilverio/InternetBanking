@@ -4,6 +4,7 @@ using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.ViewModels.SavingAccount;
 using InternetBanking.Core.Domain.Entities;
+using System.Security.Principal;
 
 namespace InternetBanking.Core.Application.Services
 {
@@ -11,10 +12,12 @@ namespace InternetBanking.Core.Application.Services
     {
         private readonly ISavingAccountRepository _savingAccountrepository;
         private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
         public SavingAccountService(ISavingAccountRepository savingAccountRepository, IMapper mapper, ISavingAccountRepository savingAccountrepository, IAccountService accountService) : base(savingAccountRepository, mapper)
         {
             _savingAccountrepository = savingAccountrepository;
             _accountService = accountService;
+            _mapper = mapper;
         }
 
         public override Task<CreateSavingAccountViewModel> Add(CreateSavingAccountViewModel model)
@@ -35,7 +38,7 @@ namespace InternetBanking.Core.Application.Services
 
             foreach (var account in savingAccount)
             {
-                var user = await _accountService.GetUserByIdAsync(account.IdUser);
+                var user = _accountService.GetUserByIdAsync(account.IdUser);
                 var accountView = new SavingAccountViewModel()
                 {
                     Id = account.Id,
@@ -50,6 +53,25 @@ namespace InternetBanking.Core.Application.Services
             }
 
             return accountList;
+        }
+
+        public override Task<CreateSavingAccountViewModel> GetById(int id)
+        {
+
+            return base.GetById(id);
+        }
+
+        public async Task<SavingAccountViewModel> GetByIdUser(string id)
+        {
+            var account = await _savingAccountrepository.GetByIdUser(id);
+            return _mapper.Map<SavingAccountViewModel>(account);
+        }
+
+        public async Task UpdatePrincialAccount(decimal balance, string IdUser)
+        {
+            var principalAccount = await _savingAccountrepository.GetByIdUser(IdUser);
+            principalAccount.Balance += balance;
+            await _savingAccountrepository.UpdateAsync(principalAccount, principalAccount.Id);
         }
     }
 }

@@ -5,5 +5,9 @@ namespace InternetBanking.Core.Application.Interfaces.Services
 {
     public interface ISavingAccountService:IGenericService<SavingAccount,CreateSavingAccountViewModel,SavingAccountViewModel>
     {
+        Task<SavingAccountViewModel> GetByIdUser(string id);
+        Task UpdatePrincialAccount(decimal balance, string IdUser);
+
+
     }
 }

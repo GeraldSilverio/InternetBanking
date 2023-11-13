@@ -8,7 +8,7 @@
             <div class="col-6">
                 <div class="card mt-3">
                     <div class="card-body mt-3">
-                        <form class=" mb-3" method="post" asp-controller="Products" asp-action="NewAccount">
+                        <form class=" mb-3" method="post" asp-controller="SavingAccount" asp-action="NewAccount">
 
                             <div class="mb-3">
                                 <label>Seleccione el titular de la cuenta</label>
@@ -17,7 +17,7 @@
                                     {
                                         <option value="@user.Id">@user.FirstName @user.LastName</option>
                                     }
-                                    
+
                                 </select>
                             </div>
 
@@ -29,7 +29,7 @@
                             <input type="hidden" asp-for="CurrentDate">
 
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Crear cuenta</button>
-                            <a class="btn btn-secondary float-end" asp-controller="User" asp-action="UserAdministrator">Volver</a>
+                            <a class="btn btn-secondary float-end" asp-controller="SavingAccount" asp-action="SavingAccount">Volver</a>
                         </form>
                     </div>
                 </div>

@@ -12,7 +12,7 @@ namespace InternetBanking.Core.Application.Interfaces.Services
         Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordViewModel model, string origin);
         Task UpdateStatus(string id, bool status);
         Task UpdateUser(EditUserViewModel vm, string id);
-        Task<UserStatusViewModel> GetUserById(string id);
-        Task<EditUserViewModel> GetUserViewModelById(string id);
+        UserStatusViewModel GetUserById(string id);
+        EditUserViewModel GetUserViewModelById(string id);
     }
 }
