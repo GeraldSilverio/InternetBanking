@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using InternetBanking.Core.Application.ViewModels.CreditCards;
+using InternetBanking.Core.Domain.Entities;
 
 namespace InternetBanking.Core.Application.Mappings
 {
@@ -6,7 +8,8 @@ namespace InternetBanking.Core.Application.Mappings
     {
         public CreditCardProfile()
         {
-            
+            CreateMap<CreditsCard, SaveCardViewModel>()
+               .ReverseMap();
         }
     }
 }

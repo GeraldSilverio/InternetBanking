@@ -15,6 +15,7 @@ namespace InternetBanking.Core.Application
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<ISavingAccountService, SavingAccountService>();
+            services.AddScoped<ICreditCardsService, CreditsCardService>();
             #endregion
         }
     }

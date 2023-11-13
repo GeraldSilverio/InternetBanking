@@ -10,7 +10,5 @@ namespace InternetBanking.Core.Domain.Entities
         public decimal CreditLimited { get; set; }
         //Balance disponible
         public decimal Available { get; set; }
-        //Lo que ha gastado
-        public decimal Spent { get; set; }
     }
 }
