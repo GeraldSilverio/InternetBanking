@@ -63,6 +63,7 @@ namespace InternetBanking.Core.Application.Services
         public async Task UpdateUser(EditUserViewModel vm, string id)
         {
             await _accountService.UpdateUserAsync(vm, id);
+            await _savingAccountService.UpdatePrincialAccount(vm.Balance, id);
         }
         public async Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordViewModel model)
         {
@@ -77,10 +78,10 @@ namespace InternetBanking.Core.Application.Services
             return user;
         }
 
-        public EditUserViewModel GetUserViewModelById(string id)
+        public async Task<EditUserViewModel> GetUserViewModelById(string id)
         {
 
-            var request = _accountService.GetUserByIdAsync(id);
+            var request = await _accountService.GetUserByIdAsync(id);
             var user = _mapper.Map<EditUserViewModel>(request);
             return user;
         }

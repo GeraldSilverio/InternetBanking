@@ -42,7 +42,7 @@ namespace InternetBanking.Core.Application.Services
 
             foreach (var card in cards)
             {
-                var user = _accountService.GetUserByIdAsync(card.IdUser);
+                var user = await _accountService.GetUserByIdAsync(card.IdUser);
                 var cardViewModel = new CardViewModel()
                 {
                     Id = card.Id,

@@ -34,7 +34,7 @@ namespace InternetBanking.Core.Application.Services
 
             foreach (var moneyLoan in moneyLoans)
             {
-                var user = _accountService.GetUserByIdAsync(moneyLoan.IdUser);
+                var user = await _accountService.GetUserByIdAsync(moneyLoan.IdUser);
                 var moneyLoanView = new MoneyLoanViewModel()
                 {
                     Id = moneyLoan.Id,

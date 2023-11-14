@@ -38,7 +38,7 @@ namespace InternetBanking.Core.Application.Services
 
             foreach (var account in savingAccount)
             {
-                var user = _accountService.GetUserByIdAsync(account.IdUser);
+                var user = await _accountService.GetUserByIdAsync(account.IdUser);
                 var accountView = new SavingAccountViewModel()
                 {
                     Id = account.Id,

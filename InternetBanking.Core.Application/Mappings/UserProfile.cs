@@ -26,6 +26,7 @@ namespace InternetBanking.Core.Application.Mappings
 
             CreateMap<AuthenticationResponse, EditUserViewModel>()
                 .ReverseMap();
+                
 
             CreateMap<RegisterResponse, AuthenticationResponse>();
 

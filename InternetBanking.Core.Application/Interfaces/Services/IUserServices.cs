@@ -13,6 +13,6 @@ namespace InternetBanking.Core.Application.Interfaces.Services
         Task UpdateStatus(string id, bool status);
         Task UpdateUser(EditUserViewModel vm, string id);
         UserStatusViewModel GetUserById(string id);
-        EditUserViewModel GetUserViewModelById(string id);
+        Task<EditUserViewModel> GetUserViewModelById(string id);
     }
 }

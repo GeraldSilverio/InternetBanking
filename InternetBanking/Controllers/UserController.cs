@@ -51,9 +51,9 @@ namespace WebApp.InternetBanking.Controllers
             }
         }
 
-        public IActionResult EditUser(string id)
+        public async Task<IActionResult> EditUser(string id)
         {
-            EditUserViewModel editUser =  _userService.GetUserViewModelById(id);
+            EditUserViewModel editUser =  await _userService.GetUserViewModelById(id);
             return View("EditUser", editUser);
         }
         [HttpPost]

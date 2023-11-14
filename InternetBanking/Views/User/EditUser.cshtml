@@ -1,4 +1,5 @@
 ﻿@using InternetBanking.Core.Application.ViewModels.User
+@using InternetBanking.Core.Application.Enums
 @model EditUserViewModel
 @{
     ViewData["Title"] = "Registro Usuario";
@@ -52,15 +53,6 @@
                             </div>
 
                             <div class="mb-3">
-                                <label>Numero Telefonico</label>
-                                <input type="text" class="form-control" asp-for="Phone" placeholder="809-000-0000" autocomplete="off" maxlength="12">
-                                <span asp-validation-for="Phone" class="text-danger"></span>
-                                <small class="form-text text-muted">
-                                    Su número de telefono debe tener este formato: (809/829/849)-000-0000
-                                </small>
-                            </div>
-
-                            <div class="mb-3">
                                 <label>Cedula</label>
                                 <input type="text" class="form-control" asp-for="IdentityCard" autocomplete="off" maxlength="11">
                                 <span asp-validation-for="IdentityCard" class="text-danger"></span>
@@ -69,7 +61,15 @@
                                 </small>
                             </div>
 
-                            <input type="hidden" asp-for="CurrentDate">
+                            @if (Model.Roles.Contains(Roles.Client.ToString()))
+                            {
+                                <div class="mb-3">
+                                    <label>Agregar balance a cuenta principal</label>
+                                    <input type="number" class="form-control" asp-for="Balance">
+                                    <span asp-validation-for="Balance" class="text-danger"></span>
+
+                                </div>
+                            }
 
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Confirmar</button>
                             <a class="btn btn-secondary float-end" asp-controller="User" asp-action="UserAdministrator">Volver</a>

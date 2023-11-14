@@ -75,13 +75,6 @@ namespace InternetBanking.Infraestructure.Identity.Services
 
                     await _userManager.AddToRoleAsync(user, Roles.Client.ToString());
                 }
-                //var verificationUrl = await VerificationEmailUrl(user, origin);
-                //await _emailService.SendAsync(new EmailRequest
-                //{
-                //    To = user.Email,
-                //    Body = $"¡Por favor, haga clic en este enlace para verficar su cuenta! {verificationUrl}",
-                //    Subject = "Confirmar registro"
-                //});
             }
             else
             {
@@ -93,20 +86,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             return response;
         }
 
-        private async Task<string> VerificationEmailUrl(ApplicationUser user, string origin)
-        {
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
-
-            //User = se refiere al controlador
-            var path = "Login/ConfirmEmail";
-            var url = new Uri(string.Concat($"{origin}/", path));
-
-            var verificationUrl = QueryHelpers.AddQueryString(url.ToString(), "userId", user.Id);
-            verificationUrl = QueryHelpers.AddQueryString(verificationUrl, "token", token);
-
-            return verificationUrl;
-        }
+        
         #endregion
 
         #region Autheincate User
@@ -313,23 +293,24 @@ namespace InternetBanking.Infraestructure.Identity.Services
             return user;
         }
         //Cambie esto a normal no asincrono
-        public AuthenticationResponse GetUserByIdAsync(string id)
+        public async Task<AuthenticationResponse> GetUserByIdAsync(string id)
         {
-            var user = _userManager.Users.Select(u => new AuthenticationResponse
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id);
+            var userResponse = new AuthenticationResponse()
             {
-                Id = u.Id,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                UserName = u.UserName,
-                Email = u.Email,
-                IdentityCard = u.IdentityCard,
-                Roles = _userManager.GetRolesAsync(u).Result.ToList(),
-                IsVerified = u.EmailConfirmed,
-                IsActive = u.IsActive,
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.UserName,
+                Email = user.Email,
+                IdentityCard = user.IdentityCard,
+                Roles = _userManager.GetRolesAsync(user).Result.ToList(),
+                IsVerified = user.EmailConfirmed,
+                IsActive = user.IsActive,
 
-            }).Where(u => u.Id == id).FirstOrDefault();
+            };
 
-            return user;
+            return userResponse;
         }
 
 
