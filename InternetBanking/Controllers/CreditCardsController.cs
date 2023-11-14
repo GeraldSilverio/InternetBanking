@@ -29,6 +29,11 @@ namespace WebApp.InternetBanking.Controllers
         [HttpPost]
         public async Task<IActionResult> NewCreditCard(SaveCardViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Users = _accountService.GetAllUsersAsync();
+                return View(model);
+            }
             await _creditCardsService.Add(model);
             return RedirectToRoute(new {controller = "CreditCards",action ="Index"});
         }

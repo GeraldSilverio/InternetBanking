@@ -21,7 +21,7 @@ namespace InternetBanking.Core.Application.Services
 
         public override async Task<SaveCardViewModel> Add(SaveCardViewModel model)
         {
-            model.CardNumber = GenerateCode.GenerateAccountCode(model);
+            model.CardNumber = GenerateCode.GenerateAccountCode(model.CurrentDate);
             switch (model.SelectCard)
             {
                 case nameof(CreditCards.CLASSIC): model.CreditLimited = (int)CreditCards.CLASSIC; break;

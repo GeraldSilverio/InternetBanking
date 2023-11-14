@@ -22,7 +22,7 @@ namespace InternetBanking.Core.Application.Services
 
         public override Task<CreateSavingAccountViewModel> Add(CreateSavingAccountViewModel model)
         {
-            model.AccountCode = GenerateCode.GenerateAccountCode(model);
+            model.AccountCode = GenerateCode.GenerateAccountCode(model.CurrentDate);
             var haveAccount = _savingAccountrepository.HaveAccount(model.IdUser);
             if (haveAccount != true)
             {

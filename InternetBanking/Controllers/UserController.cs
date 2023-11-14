@@ -15,18 +15,15 @@ namespace WebApp.InternetBanking.Controllers
         {
             _userService = userService;
         }
-        //Este metodo solo entran admins.
         public IActionResult UserAdministrator()
         {
             return View(_userService.GetAllAsync());
         }
-        //Este metodo solo entran admin
         public  IActionResult AddUser()
         {
             return View(new SaveUserViewModel());
         }
 
-        //Este metodo solo entran admin
         [HttpPost]
         public async Task<IActionResult> AddUser(SaveUserViewModel viewModel)
         {

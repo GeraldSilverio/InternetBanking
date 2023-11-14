@@ -1,13 +1,11 @@
-﻿using InternetBanking.Core.Application.ViewModels;
-
-namespace InternetBanking.Core.Application.Helpers
+﻿namespace InternetBanking.Core.Application.Helpers
 {
     public static class GenerateCode
     {
-        public static int GenerateAccountCode(DefaultViewModel model)
+        public static int GenerateAccountCode(DateTime model)
         {
 
-            string formattedDate = model.CurrentDate.ToString("MddHmss");
+            string formattedDate = model.ToString("MddHmss");
 
             if (int.TryParse(formattedDate, out int accountCode))
             {

@@ -32,7 +32,7 @@ namespace InternetBanking.Core.Application.Services
             {
                 var savingAccount = new CreateSavingAccountViewModel()
                 {
-                    AccountCode = GenerateCode.GenerateAccountCode(viewModel),
+                    AccountCode = GenerateCode.GenerateAccountCode(viewModel.CurrentDate),
                     IdUser = response.IdUser,
                     Balance = viewModel.BalanceAccount,
                     IsPrincipal = false

@@ -58,14 +58,15 @@
                                 <td>@card.CreditLimited</td>
                                 <td>@card.Available</td>
                                 <td>@card.Debt</td>
-                                @if(card.Debt != 0)
+                                @if (card.Debt != 0)
                                 {
-                                    <td><b class="text-secondary">No se puede eliminar, debe la tarjeta</b></td>
-                                }else
+                                    <td><b class="text-secondary">No se puede eliminar, aun debe dinerp</b></td>
+                                }
+                                else
                                 {
-                                   <td>
-                                       <a class="btn btn-danger" asp-controller="CreditCards" asp-action="DeleteCard" asp-route-id="@card.Id">Eliminar</a>
-                                   </td>
+                                    <td>
+                                        <a class="btn btn-danger" asp-controller="CreditCards" asp-action="DeleteCard" asp-route-id="@card.Id">Eliminar</a>
+                                    </td>
                                 }
 
                             </tr>
