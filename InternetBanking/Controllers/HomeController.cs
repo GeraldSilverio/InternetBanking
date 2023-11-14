@@ -29,7 +29,7 @@ namespace WebApp.InternetBanking.Controllers
         [Authorize(Roles = "Client")]
         public IActionResult IndexClient()
         {
-            return View();
+            return RedirectToRoute(new {controller = "Client", action = "Index"});
         }
     }
 }
