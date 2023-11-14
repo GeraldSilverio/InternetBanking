@@ -9,6 +9,12 @@ namespace InternetBanking.Core.Application.Mappings
         public CreditCardProfile()
         {
             CreateMap<CreditsCard, SaveCardViewModel>()
+               .ReverseMap()
+               .ForMember(x => x.Created, opt => opt.Ignore())
+               .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+               .ForMember(x => x.LastModified, opt => opt.Ignore())
+               .ForMember(x => x.LastModifiedBy, opt => opt.Ignore());
+            CreateMap<CreditsCard, CardViewModel>()
                .ReverseMap();
         }
     }

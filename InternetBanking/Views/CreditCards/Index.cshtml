@@ -1,4 +1,5 @@
 ﻿@using InternetBanking.Core.Application.ViewModels.CreditCards;
+@using InternetBanking.Core.Application.Enums;
 
 
 @model List<CardViewModel>
@@ -16,26 +17,61 @@
                 <table class="table table-responsive">
                     <thead>
                         <tr>
-                            <th>Titular de la Cuenta</th>
+                            <th>Titular de la Tarjeta</th>
                             <th>Cedula</th>
                             <th>Numero de Tarjeta</th>
+                            <th>Tipo de Tarjeta</th>
                             <th>Limite de Credito</th>
                             <th>Disponible</th>
                             <th>Deuda</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        @foreach (CardViewModel card in Model)
+                        {
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>$Balance</td>
-                                <td>
-                                   
-                                </td>
+                                <td>@card.FullName</td>
+                                <td>@card.IdentityCard</td>
+                                <td>@card.CardNumber</td>
+                                @switch (card.CreditLimited)
+                                {
+                                    case (int)CreditCards.BLACK:
+                                        <td>BLACK</td>
+                                        ; break;
+                                    case (int)CreditCards.CLASSIC:
+                                        <td>CLASSIC</td>
+                                        ; break;
+                                    case (int)CreditCards.ELITE:
+                                        <td>ELITE</td>
+                                        ; break;
+                                    case (int)CreditCards.DIAMOND:
+                                        <td>DIAMOND</td>
+                                        ; break;
+                                    case (int)CreditCards.PLATINUM:
+                                        <td>PLATINUM</td>
+                                        ; break;
+                                    case (int)CreditCards.GOLD:
+                                        <td>GOLD</td>
+                                        ; break;
+                                }
+                                <td>@card.CreditLimited</td>
+                                <td>@card.Available</td>
+                                <td>@card.Debt</td>
+                                @if(card.Debt != 0)
+                                {
+                                    <td><b class="text-secondary">No se puede eliminar, debe la tarjeta</b></td>
+                                }else
+                                {
+                                   <td>
+                                       <a class="btn btn-danger" asp-controller="CreditCards" asp-action="DeleteCard" asp-route-id="@card.Id">Eliminar</a>
+                                   </td>
+                                }
+
                             </tr>
-                        
+                        }
+
+
 
                     </tbody>
                 </table>

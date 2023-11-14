@@ -9,6 +9,7 @@
         public int CardNumber { get; set; }
         public decimal CreditLimited { get; set; }
         public decimal Available { get; set; }
+        public string TypeOfCard {  get; set; }
         public decimal Spent { get; set; }
         public decimal Debt { get; set; }
     }
