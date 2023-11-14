@@ -4,7 +4,6 @@ using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.ViewModels.SavingAccount;
 using InternetBanking.Core.Domain.Entities;
-using System.Security.Principal;
 
 namespace InternetBanking.Core.Application.Services
 {
