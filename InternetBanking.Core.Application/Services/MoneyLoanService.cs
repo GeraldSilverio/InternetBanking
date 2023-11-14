@@ -2,7 +2,6 @@
 using InternetBanking.Core.Application.Helpers;
 using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Application.Interfaces.Services;
-using InternetBanking.Core.Application.ViewModels.CreditCards;
 using InternetBanking.Core.Application.ViewModels.MoneyLoan;
 using InternetBanking.Core.Domain.Entities;
 

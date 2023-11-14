@@ -71,9 +71,9 @@ namespace InternetBanking.Core.Application.Services
             return await _accountService.ResetPasswordAsync(forgotRequest);
         }
 
-        public UserStatusViewModel GetUserById(string id)
+        public async Task<UserStatusViewModel> GetUserById(string id)
         {
-            var request = _accountService.GetUserByIdAsync(id);
+            var request = await _accountService.GetUserByIdAsync(id);
             var user = _mapper.Map<UserStatusViewModel>(request);
             return user;
         }

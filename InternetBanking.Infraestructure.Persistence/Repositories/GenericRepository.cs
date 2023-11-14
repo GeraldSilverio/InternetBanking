@@ -54,5 +54,10 @@ namespace InternetBanking.Infraestructure.Persistence.Repositories
         {
             return await Entities.FindAsync(id);
         }
+
+        public int GetCount()
+        {
+            return Entities.Count();
+        }
     }
 }
