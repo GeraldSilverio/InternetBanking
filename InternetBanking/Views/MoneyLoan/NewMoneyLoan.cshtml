@@ -1,6 +1,6 @@
 ﻿@using InternetBanking.Core.Application.Dtos.Account;
-@using InternetBanking.Core.Application.ViewModels.SavingAccount;
-@model CreateSavingAccountViewModel
+@using InternetBanking.Core.Application.ViewModels.MoneyLoan;
+@model NewMoneyLoanViewModel
 
 <div class="container-fluid">
     <div class="row">
@@ -8,7 +8,7 @@
             <div class="col-6">
                 <div class="card mt-3">
                     <div class="card-body mt-3">
-                        <form class=" mb-3" method="post" asp-controller="SavingAccount" asp-action="NewAccount">
+                        <form class=" mb-3" method="post" asp-controller="MoneyLoan" asp-action="NewMoneyLoan">
 
                             <div class="mb-3">
                                 <label>Seleccione el titular de la cuenta</label>
@@ -22,12 +22,11 @@
                             </div>
 
                             <div class="mb-3">
-                                <label>BALANCE DE LA CUENTA</label>
-                                <input type="number" class="form-control" asp-for="Balance" autocomplete="off">
+                                <label>Monto a Prestar</label>
+                                <input type="number" class="form-control" asp-for="BorrowedBalance" autocomplete="off">
                             </div>
 
-
-                            <button type="submit" class="btn btn-outline-primary float-end ms-2">Crear cuenta</button>
+                            <button type="submit" class="btn btn-outline-primary float-end ms-2">Asignar Prestamo</button>
                             <a class="btn btn-secondary float-end" asp-controller="SavingAccount" asp-action="SavingAccount">Volver</a>
                         </form>
                     </div>
@@ -59,4 +58,5 @@
     }
 
 </style>
+
 

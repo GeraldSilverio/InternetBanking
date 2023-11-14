@@ -4,5 +4,6 @@
     {
         public int ActiveUser { get; set; }
         public int InActiveUser { get; set; }
+        public int Products {  get; set; }
     }
 }

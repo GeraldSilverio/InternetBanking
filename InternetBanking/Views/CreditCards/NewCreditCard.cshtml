@@ -1,6 +1,7 @@
 ﻿@using InternetBanking.Core.Application.Dtos.Account;
-@using InternetBanking.Core.Application.ViewModels.SavingAccount;
-@model CreateSavingAccountViewModel
+@using InternetBanking.Core.Application.ViewModels.CreditCards;
+
+@model SaveCardViewModel
 
 <div class="container-fluid">
     <div class="row">
@@ -8,11 +9,11 @@
             <div class="col-6">
                 <div class="card mt-3">
                     <div class="card-body mt-3">
-                        <form class=" mb-3" method="post" asp-controller="SavingAccount" asp-action="NewAccount">
+                        <form class=" mb-3" method="post" asp-controller="CreditCards" asp-action="NewCreditCard">
 
                             <div class="mb-3">
-                                <label>Seleccione el titular de la cuenta</label>
-                                <select class="form-select" asp-for="IdUser" id="selectRole">
+                                <label>Seleccione el titular de la tarjeta</label>
+                                <select class="form-select" asp-for="IdUser">
                                     @foreach (AuthenticationResponse user in ViewBag.Users)
                                     {
                                         <option value="@user.Id">@user.FirstName @user.LastName</option>
@@ -22,10 +23,22 @@
                             </div>
 
                             <div class="mb-3">
-                                <label>BALANCE DE LA CUENTA</label>
-                                <input type="number" class="form-control" asp-for="Balance" autocomplete="off">
+                                <label>Seleccione el tipo de tarjeta</label>
+                                <select class="form-select" asp-for="SelectCard" >
+
+                                    <option value="CLASSIC">CLASICA --Limite: $5,000</option>
+                                    <option value="ELITE"> ELITE --Limite: $15,000</option>
+                                    <option value="GOLD">GOLD, --Limite: $25,000</option>
+                                    <option value="PLATINUM">PLATINUM --Limite: $40,000</option>
+                                    <option value="DIAMOND"> DIAMOND --Limite: $75,000</option>
+                                    <option value="BLACK"> BLACK --Limite: $100,000</option>
+
+                                </select>
                             </div>
 
+
+
+                            <input type="hidden" asp-for="CurrentDate">
 
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Crear cuenta</button>
                             <a class="btn btn-secondary float-end" asp-controller="SavingAccount" asp-action="SavingAccount">Volver</a>
@@ -59,4 +72,3 @@
     }
 
 </style>
-

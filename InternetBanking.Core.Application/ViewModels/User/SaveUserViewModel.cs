@@ -2,7 +2,7 @@
 
 namespace InternetBanking.Core.Application.ViewModels.User
 {
-    public class SaveUserViewModel:DefaultViewModel
+    public class SaveUserViewModel
     {
         public string? Id { get; set; }
         [Required(ErrorMessage = "Debe ingresar su nombre")]
@@ -42,5 +42,6 @@ namespace InternetBanking.Core.Application.ViewModels.User
         public bool HasError { get; set; }
         public string? Error { get; set; }
         public decimal BalanceAccount { get; set; }
+        public DateTime CurrentDate { get; set; } = DateTime.Now;
     }
 }

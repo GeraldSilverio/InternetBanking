@@ -2,7 +2,7 @@
 
 namespace InternetBanking.Core.Application.ViewModels.SavingAccount
 {
-    public class CreateSavingAccountViewModel:DefaultViewModel
+    public class CreateSavingAccountViewModel
     {
         public int Id { get; set; }
         public int AccountCode { get; set; } = 1;
@@ -11,5 +11,6 @@ namespace InternetBanking.Core.Application.ViewModels.SavingAccount
         [Required]
         public decimal Balance { get; set; }
         public bool? IsPrincipal { get; set; } = false;
+        public DateTime CurrentDate { get; set; } = DateTime.Now;
     }
 }

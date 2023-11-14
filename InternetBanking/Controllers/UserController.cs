@@ -15,18 +15,15 @@ namespace WebApp.InternetBanking.Controllers
         {
             _userService = userService;
         }
-        //Este metodo solo entran admins.
         public IActionResult UserAdministrator()
         {
             return View(_userService.GetAllAsync());
         }
-        //Este metodo solo entran admin
         public  IActionResult AddUser()
         {
             return View(new SaveUserViewModel());
         }
 
-        //Este metodo solo entran admin
         [HttpPost]
         public async Task<IActionResult> AddUser(SaveUserViewModel viewModel)
         {
@@ -54,9 +51,9 @@ namespace WebApp.InternetBanking.Controllers
             }
         }
 
-        public IActionResult EditUser(string id)
+        public async Task<IActionResult> EditUser(string id)
         {
-            EditUserViewModel editUser =  _userService.GetUserViewModelById(id);
+            EditUserViewModel editUser =  await _userService.GetUserViewModelById(id);
             return View("EditUser", editUser);
         }
         [HttpPost]
@@ -88,9 +85,9 @@ namespace WebApp.InternetBanking.Controllers
             return RedirectToRoute(new { controller = "User", action = "PasswordConfirm" });
         }
 
-        public IActionResult DesactivateUser(string id)
+        public async Task<ActionResult> DesactivateUser(string id)
         {
-            UserStatusViewModel viewModel =  _userService.GetUserById(id);
+            UserStatusViewModel viewModel =  await _userService.GetUserById(id);
             return View("ActiveOrDesactiveUser", viewModel);
         }
 
@@ -116,9 +113,9 @@ namespace WebApp.InternetBanking.Controllers
             return RedirectToAction("UserAdministrator");
         }
 
-        public IActionResult ActivateUser(string id)
+        public async Task<IActionResult> ActivateUser(string id)
         {
-            UserStatusViewModel viewModel =  _userService.GetUserById(id);
+            UserStatusViewModel viewModel =  await _userService.GetUserById(id);
             return View("ActiveOrDesactiveUser", viewModel);
         }
 

@@ -22,7 +22,7 @@ namespace InternetBanking.Core.Application.Services
 
         public override Task<CreateSavingAccountViewModel> Add(CreateSavingAccountViewModel model)
         {
-            model.AccountCode = GenerateCode.GenerateAccountCode(model);
+            model.AccountCode = GenerateCode.GenerateAccountCode(model.CurrentDate);
             var haveAccount = _savingAccountrepository.HaveAccount(model.IdUser);
             if (haveAccount != true)
             {
@@ -38,7 +38,7 @@ namespace InternetBanking.Core.Application.Services
 
             foreach (var account in savingAccount)
             {
-                var user = _accountService.GetUserByIdAsync(account.IdUser);
+                var user = await _accountService.GetUserByIdAsync(account.IdUser);
                 var accountView = new SavingAccountViewModel()
                 {
                     Id = account.Id,

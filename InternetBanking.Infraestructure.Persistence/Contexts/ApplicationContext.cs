@@ -18,6 +18,8 @@ namespace InternetBanking.Infraestructure.Persistence.Contexts
             modelBuilder.ApplyConfiguration(new SavingAccountConfiguration());
         }
 
+        
+
         #region DbSets
         public DbSet<Beneficiary> Beneficiaries { get; set; }
         public DbSet<CreditsCard> CreditsCards { get; set; }

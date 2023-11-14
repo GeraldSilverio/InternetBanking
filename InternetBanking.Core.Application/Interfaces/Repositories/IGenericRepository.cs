@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InternetBanking.Core.Application.Interfaces.Repositories
+﻿namespace InternetBanking.Core.Application.Interfaces.Repositories
 {
     public interface IGenericRepository<Entity> where Entity : class
     {
@@ -14,5 +8,6 @@ namespace InternetBanking.Core.Application.Interfaces.Repositories
         Task<List<Entity>> GetAllAsync();
         Task<Entity> GetByIdAsync(int id);
         Task<List<Entity>> GetAllWithIncludeAsync(List<string> properties);
+        int GetCount();
     }
 }

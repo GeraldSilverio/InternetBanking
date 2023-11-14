@@ -9,11 +9,13 @@ namespace WebApp.InternetBanking.Controllers
     public class HomeController : Controller
     {
         private readonly IUserServices _userServices;
+        private readonly IGetCountProduct _getCount;
 
-        public HomeController(IUserServices userServices)
+        public HomeController(IUserServices userServices, IGetCountProduct getCount)
         {
-            
+
             _userServices = userServices;
+            _getCount = getCount;
         }
 
         [Authorize(Roles = "Admin")]
@@ -23,6 +25,7 @@ namespace WebApp.InternetBanking.Controllers
             var homeView = new HomeView();
             homeView.ActiveUser = users.Where(x => x.IsActive == true).Count();
             homeView.InActiveUser = users.Where(x => x.IsActive == false).Count();
+            homeView.Products = _getCount.GetCount();
             return View(homeView);
         }
 

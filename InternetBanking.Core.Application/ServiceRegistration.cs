@@ -12,9 +12,14 @@ namespace InternetBanking.Core.Application
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             #region Services
+            services.AddTransient(typeof(IGenericService<,,>), typeof(GenericService<,,>));
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<ISavingAccountService, SavingAccountService>();
+            services.AddScoped<ICreditCardsService, CreditsCardService>();
+            services.AddScoped<ICreditCardsService, CreditsCardService>();
+            services.AddScoped<IMoneyLoanService, MoneyLoanService>();
+            services.AddScoped<IGetCountProduct, GetCountProducts>();
             #endregion
         }
     }
