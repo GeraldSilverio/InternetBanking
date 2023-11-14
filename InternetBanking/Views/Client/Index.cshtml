@@ -53,17 +53,20 @@
                                         </tr>
                                     </thead>
                                     <tbody class="border-start border-end">
-                                        @*                                         @foreach (ClientViewModel homeClient in Model)
+                                        @foreach (var homeClient in ViewBag.SavingAccounts)
                                         {
                                             <tr>
                                                 <td>@homeClient.AccountCode</td>
-                                                <td>@homeClient.Balance</td>
+                                                <td>
+                                                    <script>
+                                                        var balance = @homeClient.Balance;
+                                                        var formattedBalance = balance.toLocaleString('es-DO', { style: 'currency', currency: 'DOP' });
+                                                        document.write(formattedBalance);
+                                                    </script>
+                                                </td>
+
                                             </tr>
-                                        } *@
-                                        <tr>
-                                            <td>123456789</td>
-                                            <td>RD$ 50,000.00</td>
-                                        </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>

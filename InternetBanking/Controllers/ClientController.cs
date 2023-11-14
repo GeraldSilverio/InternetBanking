@@ -1,6 +1,4 @@
 ﻿using InternetBanking.Core.Application.Interfaces.Services;
-using InternetBanking.Core.Application.ViewModels.Client;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.InternetBanking.Controllers
@@ -9,15 +7,20 @@ namespace WebApp.InternetBanking.Controllers
     public class ClientController : Controller
     {
         private readonly IUserServices _userServices;
+        private readonly ISavingAccountService _accountService;
 
-        public ClientController(IUserServices userServices)
+        public ClientController(IUserServices userServices, ISavingAccountService accountService)
         {
             
             _userServices = userServices;
+            _accountService = accountService;
+            
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+
+            ViewBag.SavingAccounts = await _accountService.GetAll();
             return View();
         }
     }
