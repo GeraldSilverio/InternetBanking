@@ -115,21 +115,15 @@
                                         </tr>
                                     </thead>
                                     <tbody class="border-start border-end">
-                                        @*                                         @foreach (ClientViewModel homeClient in Model)
+                                        @foreach (var card in ViewBag.CreditCards)
                                         {
                                         <tr>
-                                        <td>@homeClient.CardNumber</td>
-                                        <td>@homeClient.CreditLimited</td>
-                                        <td>@homeClient.Available</td>
-                                        <td>@homeClient.Spent</td>
+                                            <td>@card.CardNumber</td>
+                                            <td>@card.CreditLimited</td>
+                                            <td>@card.Available</td>
+                                            <td>@card.Spent</td>
                                         </tr>
-                                        } *@
-                                        <tr>
-                                            <td>1234</td>
-                                            <td>RD$ 50,000.00</td>
-                                            <td>RD$ 34,716.40</td>
-                                            <td>RD$ 15,283.60</td>
-                                        </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>
@@ -147,22 +141,16 @@
                                         <tr>
                                             <th>Balance prestado</th>
                                             <th>Balance pagado</th>
-                                            <th>Balance restante</th>
                                         </tr>
                                     </thead>
                                     <tbody class="border-start border-end">
-                                        @*                                        @foreach (ClientViewModel homeClient in Model)
+                                        @foreach (var loans in ViewBag.MoneyLoans)
                                         {
                                         <tr>
-                                        <td>@homeClient.BorrowedBalance</td>
-                                        <td>@homeClient.BalancePaid</td>
+                                            <td>@loans.BorrowedBalance</td>
+                                            <td>@loans.BalancePaid</td>
                                         </tr>
-                                        } *@
-                                        <tr>
-                                            <td>RD$ 50,000.00</td>
-                                            <td>RD$ 15,283.60</td>
-                                            <td>RD$ 34,716.40</td>
-                                        </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>

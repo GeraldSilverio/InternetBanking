@@ -8,12 +8,19 @@ namespace WebApp.InternetBanking.Controllers
     {
         private readonly IUserServices _userServices;
         private readonly ISavingAccountService _accountService;
+        private readonly ICreditCardsService _cardsService;
+        private readonly IMoneyLoanService _moneyLoanService;
 
-        public ClientController(IUserServices userServices, ISavingAccountService accountService)
+        public ClientController(IUserServices userServices
+            , ISavingAccountService accountService
+            , ICreditCardsService cardsService
+            , IMoneyLoanService moneyLoanService)
         {
             
             _userServices = userServices;
             _accountService = accountService;
+            _cardsService = cardsService;
+            _moneyLoanService = moneyLoanService;
             
         }
 
@@ -21,6 +28,8 @@ namespace WebApp.InternetBanking.Controllers
         {
 
             ViewBag.SavingAccounts = await _accountService.GetAll();
+            ViewBag.CreditCards = await _cardsService.GetAll();
+            ViewBag.MoneyLoans = await _moneyLoanService.GetAll();
             return View();
         }
     }
