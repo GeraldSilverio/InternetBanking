@@ -41,7 +41,7 @@ namespace InternetBanking.Core.Application.Services
             }
             return response;
         }
-     
+
         public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordViewModel model, string origin)
         {
             ForgotPasswordRequest forgotRequest = _mapper.Map<ForgotPasswordRequest>(model);
@@ -70,18 +70,21 @@ namespace InternetBanking.Core.Application.Services
             return await _accountService.ResetPasswordAsync(forgotRequest);
         }
 
-        public async Task<UserStatusViewModel> GetUserById(string id)
+        public UserStatusViewModel GetUserById(string id)
         {
-            var request = await _accountService.GetUserByIdAsync(id);
+            var request = _accountService.GetUserByIdAsync(id);
             var user = _mapper.Map<UserStatusViewModel>(request);
             return user;
         }
 
-        public async Task<EditUserViewModel> GetUserViewModelById(string id)
+        public EditUserViewModel GetUserViewModelById(string id)
         {
-            var request = await _accountService.GetUserByIdAsync(id);
+
+            var request = _accountService.GetUserByIdAsync(id);
             var user = _mapper.Map<EditUserViewModel>(request);
             return user;
         }
+
+
     }
 }

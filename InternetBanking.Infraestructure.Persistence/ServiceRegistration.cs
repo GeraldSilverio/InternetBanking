@@ -20,7 +20,8 @@ namespace InternetBanking.Infraestructure.Persistence
             {
                 services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                m => m.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName)));
+                m => m.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName)),
+                ServiceLifetime.Scoped);
             }
             #endregion
 
@@ -31,6 +32,7 @@ namespace InternetBanking.Infraestructure.Persistence
             services.AddTransient<IMoneyLoanRepository, MoneyLoanRepository>();
             services.AddTransient<IPaymentRepository, PaymentRepository>();
             services.AddTransient<ISavingAccountRepository, SavingAccountRepository>();
+            services.AddScoped<ApplicationContext>();
             #endregion
         }
     }

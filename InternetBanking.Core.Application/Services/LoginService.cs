@@ -31,6 +31,14 @@ namespace InternetBanking.Core.Application.Services
         {
             AuthenticationRequest authenticationRequest = _mapper.Map<AuthenticationRequest>(viewModel);
             AuthenticationResponse authenticationResponse = await _accountService.AuthenticateAsync(authenticationRequest);
+
+            if (authenticationResponse.IsActive != true && authenticationResponse.HasError != true)
+            {
+                authenticationResponse.HasError = true;
+                authenticationResponse.Error = 
+                    $"¡La cuenta con el usuario '{authenticationResponse.UserName}' se encuentra inactiva, comuniquese con un administrador!";
+            }
+
             return authenticationResponse;
         }
 

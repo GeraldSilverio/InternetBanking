@@ -1,6 +1,7 @@
 ﻿using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Domain.Entities;
 using InternetBanking.Infraestructure.Persistence.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace InternetBanking.Infraestructure.Persistence.Repositories
 {
@@ -13,9 +14,14 @@ namespace InternetBanking.Infraestructure.Persistence.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<SavingAccount> GetByIdUser(string idUser)
+        {
+            return await _dbContext.SavingAccounts.FirstOrDefaultAsync(x => x.IdUser == idUser && x.IsPrincipal == true);
+        }
+
         public bool HaveAccount(string idUser)
         {
-            var haveAccount = _dbContext.SavingAccounts.Any(x=> x.IdUser == idUser); 
+            var haveAccount = _dbContext.SavingAccounts.Any(x => x.IdUser == idUser);
             return haveAccount;
         }
     }

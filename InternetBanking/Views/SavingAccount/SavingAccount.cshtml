@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="col-12 mt-5">
         <div class="d-flex justify-content-end mb-2">
-            <a asp-controller="Products" asp-action="NewAccount" class="btn text-white bg-gradient" style="background-color:#09385B; outline-color:#D3D9DE;">Abrir Nueva Cuenta</a>
+            <a asp-controller="SavingAccount" asp-action="NewAccount" class="btn text-white bg-gradient" style="background-color:#09385B; outline-color:#D3D9DE;">Abrir Nueva Cuenta</a>
         </div>
         <div class="card">
             <div class="card-header" style="background-color:#09385B">
@@ -23,7 +23,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach(SavingAccountViewModel account in Model)
+                        @foreach (SavingAccountViewModel account in Model)
                         {
                             <tr>
                                 <td>@account.FullName</td>
@@ -31,14 +31,18 @@
                                 <td>@account.AccountCode</td>
                                 <td>$@account.Balance</td>
                                 <td>
-                                    @if(account.IsPrincial !=true)
+                                    @if (account.IsPrincial != true)
                                     {
-                                        <a class="btn btn-outline-danger">ELIMINAR</a>
+                                        <a class="btn btn-outline-danger" asp-controller="SavingAccount" asp-action="DeleteAccount" asp-route-id="@account.Id">ELIMINAR</a>
+                                    }
+                                    else
+                                    {
+                                        <b class="text-secondary">Cuenta Principal</b>
                                     }
                                 </td>
                             </tr>
                         }
-                        
+
                     </tbody>
                 </table>
             </div>

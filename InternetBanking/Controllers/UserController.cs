@@ -2,8 +2,6 @@
 using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
-using InternetBanking.Core.Application.Helpers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.InternetBanking.Controllers
@@ -56,9 +54,9 @@ namespace WebApp.InternetBanking.Controllers
             }
         }
 
-        public async Task<IActionResult> EditUser(string id)
+        public IActionResult EditUser(string id)
         {
-            EditUserViewModel editUser = await _userService.GetUserViewModelById(id);
+            EditUserViewModel editUser =  _userService.GetUserViewModelById(id);
             return View("EditUser", editUser);
         }
         [HttpPost]
@@ -90,9 +88,9 @@ namespace WebApp.InternetBanking.Controllers
             return RedirectToRoute(new { controller = "User", action = "PasswordConfirm" });
         }
 
-        public async Task<IActionResult> DesactivateUser(string id)
+        public IActionResult DesactivateUser(string id)
         {
-            UserStatusViewModel viewModel = await _userService.GetUserById(id);
+            UserStatusViewModel viewModel =  _userService.GetUserById(id);
             return View("ActiveOrDesactiveUser", viewModel);
         }
 
@@ -118,9 +116,9 @@ namespace WebApp.InternetBanking.Controllers
             return RedirectToAction("UserAdministrator");
         }
 
-        public async Task<IActionResult> ActivateUser(string id)
+        public IActionResult ActivateUser(string id)
         {
-            UserStatusViewModel viewModel = await _userService.GetUserById(id);
+            UserStatusViewModel viewModel =  _userService.GetUserById(id);
             return View("ActiveOrDesactiveUser", viewModel);
         }
 

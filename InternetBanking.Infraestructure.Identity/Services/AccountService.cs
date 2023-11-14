@@ -142,6 +142,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             response.IdentityCard = user.IdentityCard;
             response.FirstName = user.FirstName;
             response.LastName = user.LastName;
+            response.IsActive = user.IsActive;
 
             var listRole = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
 
@@ -292,24 +293,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
 
         #endregion
 
-        public async Task<AuthenticationResponse> GetUserByIdAsync(string id)
-        {
-            var user = await _userManager.Users.Select(u => new AuthenticationResponse
-            {
-                Id = u.Id,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                UserName = u.UserName,
-                Email = u.Email,
-                IdentityCard = u.IdentityCard,
-                Roles = _userManager.GetRolesAsync(u).Result.ToList(),
-                IsVerified = u.EmailConfirmed,
-                IsActive = u.IsActive,
-
-            }).Where(u => u.Id == id).FirstOrDefaultAsync();
-
-            return user;
-        }
+        
 
         public List<AuthenticationResponse> GetAllUsersAsync()
         {
@@ -325,6 +309,25 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 IsActive = u.IsActive,
 
             }).ToList();
+
+            return user;
+        }
+        //Cambie esto a normal no asincrono
+        public AuthenticationResponse GetUserByIdAsync(string id)
+        {
+            var user = _userManager.Users.Select(u => new AuthenticationResponse
+            {
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                UserName = u.UserName,
+                Email = u.Email,
+                IdentityCard = u.IdentityCard,
+                Roles = _userManager.GetRolesAsync(u).Result.ToList(),
+                IsVerified = u.EmailConfirmed,
+                IsActive = u.IsActive,
+
+            }).Where(u => u.Id == id).FirstOrDefault();
 
             return user;
         }
