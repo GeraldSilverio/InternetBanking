@@ -1,6 +1,7 @@
 ﻿using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Domain.Entities;
 using InternetBanking.Infraestructure.Persistence.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace InternetBanking.Infraestructure.Persistence.Repositories
 {
@@ -12,5 +13,13 @@ namespace InternetBanking.Infraestructure.Persistence.Repositories
         {
             _dbContext = dbContext;
         }
+
+        public async Task<List<CreditsCard>> GetCreditCardsByUserIdAsync(string idUser)
+        {
+            return await _dbContext.CreditsCards
+                .Where(account => account.IdUser == idUser)
+                .ToListAsync();
+        }
+
     }
 }

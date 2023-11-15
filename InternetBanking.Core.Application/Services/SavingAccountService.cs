@@ -4,7 +4,6 @@ using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.ViewModels.SavingAccount;
 using InternetBanking.Core.Domain.Entities;
-using System.Security.Principal;
 
 namespace InternetBanking.Core.Application.Services
 {
@@ -65,6 +64,12 @@ namespace InternetBanking.Core.Application.Services
         {
             var account = await _savingAccountrepository.GetByIdUser(id);
             return _mapper.Map<SavingAccountViewModel>(account);
+        }
+
+        public async Task<List<SavingAccountViewModel>> GetAccountById(string id)
+        {
+            var account = await _savingAccountrepository.GetAccountsByUserId(id);
+            return _mapper.Map<List<SavingAccountViewModel>>(account);
         }
 
         public async Task UpdatePrincialAccount(decimal balance, string IdUser)

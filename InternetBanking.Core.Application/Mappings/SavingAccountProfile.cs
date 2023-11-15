@@ -10,6 +10,9 @@ namespace InternetBanking.Core.Application.Mappings
         {
             CreateMap<SavingAccount, CreateSavingAccountViewModel>()
                 .ReverseMap();
+
+            CreateMap<SavingAccount, SavingAccountViewModel>()
+                .ReverseMap();
         }
     }
 }

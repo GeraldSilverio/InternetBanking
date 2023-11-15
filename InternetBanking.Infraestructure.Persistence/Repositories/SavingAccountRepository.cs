@@ -19,6 +19,13 @@ namespace InternetBanking.Infraestructure.Persistence.Repositories
             return await _dbContext.SavingAccounts.FirstOrDefaultAsync(x => x.IdUser == idUser && x.IsPrincipal == true);
         }
 
+        public async Task<List<SavingAccount>> GetAccountsByUserId(string idUser)
+        {
+            return await _dbContext.SavingAccounts
+                .Where(account => account.IdUser == idUser)
+                .ToListAsync();
+        }
+
         public bool HaveAccount(string idUser)
         {
             var haveAccount = _dbContext.SavingAccounts.Any(x => x.IdUser == idUser);
