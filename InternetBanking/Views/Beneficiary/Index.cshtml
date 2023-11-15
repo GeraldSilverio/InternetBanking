@@ -1,5 +1,56 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿﻿@using InternetBanking.Core.Application.ViewModels.Beneficiary;
+@using Microsoft.AspNetCore.Http;
+@using InternetBanking.Core.Application.Helpers;
+@using InternetBanking.Core.Application.Dtos.Account;
+@inject IHttpContextAccessor httpContextAccessor
+@model List<BeneficiaryViewModel>
 @{
+    var User = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    ViewData["Title"] = "Seccion de amigos";
 }
+
+<div class="container-fluid">
+    <div class="row mb-1">
+        <div class="text-center">
+            <h2 class="text-white fw-bolder">SECCION DE AMIGOS</h2>
+        </div>
+    </div>
+    <div class="row-cols-1">
+        <div class="col-12 mb-3">
+            <a asp-controller="Friends" asp-action="Create" class="btn btn-sm btn-danger p-2 text-white bg-opacity-75 m-md-1 fw-bolder">Agregar amigo</a>
+        </div>
+    </div>
+    @if (Model == null || Model.Count == 0)
+    {
+        <h3 class="text-white fw-bolder">Parece que no has agregado a ningun amigo.</h3>
+    }
+    else
+    {
+        <div class="row justify-content-center">
+            <div class="col-5">
+                <table class="table table-white text-white table-striped-columns">
+                    <thead>
+                        <tr>
+                            <th scope="col">Amigos</th>
+                            <th scope="col">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (BeneficiaryViewModel beneficiary in ViewBag.Beneficiaries)
+                        {
+                            <tr>
+                                <td class="pt-4"></td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary p-2 text-white bg-opacity-75 m-md-1 fw-bolder" asp-controller="Home" asp-action="PublicationsById" asp-route-id="@friends.UserId2"><i class="fa-solid fa-eye"></i> Publicaciones</a>
+                                    <a class="btn btn-sm btn-danger p-2 text-white bg-opacity-75 m-md-1 fw-bolder" asp-controller="Friends" asp-action="Delete" asp-route-id="@friends.Id"><i class="fa-solid fa-trash-can"></i> Dejar de seguir</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    }
+
+</div>

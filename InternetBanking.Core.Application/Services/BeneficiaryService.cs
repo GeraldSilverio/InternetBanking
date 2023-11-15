@@ -61,5 +61,11 @@ namespace InternetBanking.Core.Application.Services
         {
             return await _beneficiaryRepository.IsBeneficiaryAdd(idUser, idBeneficiary);
         }
+
+        public async Task<List<BeneficiaryViewModel>> GetAllByUser(string id)
+        {
+            var beneficiaries = await _beneficiaryRepository.GetAllByUser(id);
+            return _mapper.Map<List<BeneficiaryViewModel>>(beneficiaries);
+        }
     }
 }
