@@ -12,10 +12,12 @@ namespace InternetBanking.Core.Application.Services
     {
         private readonly ICreditsCardRepository _creditsCardRepository;
         private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
         public CreditsCardService(ICreditsCardRepository creditsCardRepository, IMapper mapper, IAccountService accountService) : base(creditsCardRepository, mapper)
         {
             _creditsCardRepository = creditsCardRepository;
             _accountService = accountService;
+            _mapper = mapper;
         }
 
         public override async Task<SaveCardViewModel> Add(SaveCardViewModel model)
@@ -57,6 +59,12 @@ namespace InternetBanking.Core.Application.Services
             }
 
             return cardLists;
+        }
+
+        public async Task<List<CardViewModel>> GetCreditCardsById(string id)
+        {
+            var creditCards = await _creditsCardRepository.GetCreditCardsByUserIdAsync(id);
+            return _mapper.Map<List<CardViewModel>>(creditCards);
         }
     }
 }

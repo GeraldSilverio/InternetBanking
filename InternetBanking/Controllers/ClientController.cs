@@ -1,4 +1,7 @@
-﻿using InternetBanking.Core.Application.Interfaces.Services;
+﻿using InternetBanking.Core.Application.Dtos.Account;
+using InternetBanking.Core.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Http;
+using InternetBanking.Core.Application.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.InternetBanking.Controllers
@@ -10,26 +13,30 @@ namespace WebApp.InternetBanking.Controllers
         private readonly ISavingAccountService _accountService;
         private readonly ICreditCardsService _cardsService;
         private readonly IMoneyLoanService _moneyLoanService;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         public ClientController(IUserServices userServices
             , ISavingAccountService accountService
             , ICreditCardsService cardsService
-            , IMoneyLoanService moneyLoanService)
+            , IMoneyLoanService moneyLoanService
+            , IHttpContextAccessor contextAccessor)
         {
             
             _userServices = userServices;
             _accountService = accountService;
             _cardsService = cardsService;
             _moneyLoanService = moneyLoanService;
+            _contextAccessor = contextAccessor;
             
         }
 
         public async Task<IActionResult> Index()
         {
+            var User = _contextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
 
-            ViewBag.SavingAccounts = await _accountService.GetAll();
-            ViewBag.CreditCards = await _cardsService.GetAll();
-            ViewBag.MoneyLoans = await _moneyLoanService.GetAll();
+            ViewBag.SavingAccounts = await _accountService.GetAccountById(User.Id);
+            ViewBag.CreditCards = await _cardsService.GetCreditCardsById(User.Id);
+            ViewBag.MoneyLoans = await _moneyLoanService.GetMoneyLoansById(User.Id);
             return View();
         }
     }

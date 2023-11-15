@@ -66,6 +66,12 @@ namespace InternetBanking.Core.Application.Services
             return _mapper.Map<SavingAccountViewModel>(account);
         }
 
+        public async Task<List<SavingAccountViewModel>> GetAccountById(string id)
+        {
+            var account = await _savingAccountrepository.GetAccountsByUserId(id);
+            return _mapper.Map<List<SavingAccountViewModel>>(account);
+        }
+
         public async Task UpdatePrincialAccount(decimal balance, string IdUser)
         {
             var principalAccount = await _savingAccountrepository.GetByIdUser(IdUser);
