@@ -37,7 +37,7 @@
             </div>
 
             <div class="card-body">
-
+                <!--SECCION DE CUENTAS DE AHORRO-->
                 <div class="row justify-content-center">
                     <div class="col-6 mt-3">
                         <div class="card">
@@ -53,23 +53,27 @@
                                         </tr>
                                     </thead>
                                     <tbody class="border-start border-end">
-                                        @*                                         @foreach (ClientViewModel homeClient in Model)
+                                        @foreach (var homeClient in ViewBag.SavingAccounts)
                                         {
                                             <tr>
                                                 <td>@homeClient.AccountCode</td>
-                                                <td>@homeClient.Balance</td>
+                                                <td>
+                                                    <script>
+                                                        var balance = @homeClient.Balance;
+                                                        var formattedBalance = balance.toLocaleString('es-DO', { style: 'currency', currency: 'DOP' });
+                                                        document.write(formattedBalance);
+                                                    </script>
+                                                </td>
+
                                             </tr>
-                                        } *@
-                                        <tr>
-                                            <td>123456789</td>
-                                            <td>RD$ 50,000.00</td>
-                                        </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
 
+                    <!--SECCION DE BENEFICIARIOS-->
                     <div class="col-6 mt-3">
                         <div class="card">
                             <div class="card-header text-light text-center" style="background-color:#09385B">
@@ -95,6 +99,7 @@
                     </div>
                 </div>
 
+                <!--SECCION DE TARJETAS DE CREDITO-->
                 <div class="row justify-content-center">
                     <div class="col-6 mt-3 mb-3">
                         <div class="card">
@@ -112,27 +117,22 @@
                                         </tr>
                                     </thead>
                                     <tbody class="border-start border-end">
-                                        @*                                         @foreach (ClientViewModel homeClient in Model)
+                                        @foreach (var card in ViewBag.CreditCards)
                                         {
                                         <tr>
-                                        <td>@homeClient.CardNumber</td>
-                                        <td>@homeClient.CreditLimited</td>
-                                        <td>@homeClient.Available</td>
-                                        <td>@homeClient.Spent</td>
+                                            <td>@card.CardNumber</td>
+                                            <td>@card.CreditLimited</td>
+                                            <td>@card.Available</td>
+                                            <td>@card.Spent</td>
                                         </tr>
-                                        } *@
-                                        <tr>
-                                            <td>1234</td>
-                                            <td>RD$ 50,000.00</td>
-                                            <td>RD$ 34,716.40</td>
-                                            <td>RD$ 15,283.60</td>
-                                        </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
 
+                    <!--SECCION DE PRESTAMOS-->
                     <div class="col-6 mt-3">
                         <div class="card">
                             <div class="card-header text-light text-center" style="background-color:#09385B">
@@ -144,22 +144,16 @@
                                         <tr>
                                             <th>Balance prestado</th>
                                             <th>Balance pagado</th>
-                                            <th>Balance restante</th>
                                         </tr>
                                     </thead>
                                     <tbody class="border-start border-end">
-                                        @*                                        @foreach (ClientViewModel homeClient in Model)
+                                        @foreach (var loans in ViewBag.MoneyLoans)
                                         {
                                         <tr>
-                                        <td>@homeClient.BorrowedBalance</td>
-                                        <td>@homeClient.BalancePaid</td>
+                                            <td>@loans.BorrowedBalance</td>
+                                            <td>@loans.BalancePaid</td>
                                         </tr>
-                                        } *@
-                                        <tr>
-                                            <td>RD$ 50,000.00</td>
-                                            <td>RD$ 15,283.60</td>
-                                            <td>RD$ 34,716.40</td>
-                                        </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>

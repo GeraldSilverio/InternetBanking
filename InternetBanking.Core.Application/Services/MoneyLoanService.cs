@@ -11,10 +11,15 @@ namespace InternetBanking.Core.Application.Services
     {
         private readonly ISavingAccountService _savingAccountService;
         private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
+        private readonly IMoneyLoanRepository _moneyLoanRepository;
+
         public MoneyLoanService(IMoneyLoanRepository moneyLoanRepository, IMapper mapper, ISavingAccountService savingAccountService, IAccountService accountService) : base(moneyLoanRepository, mapper)
         {
             _savingAccountService = savingAccountService;
             _accountService = accountService;
+            _mapper = mapper;
+            _moneyLoanRepository = moneyLoanRepository;
         }
 
         public override async Task<NewMoneyLoanViewModel> Add(NewMoneyLoanViewModel model)
@@ -49,6 +54,12 @@ namespace InternetBanking.Core.Application.Services
             }
 
             return moneyLoansList;
+        }
+
+        public async Task<List<MoneyLoanViewModel>> GetMoneyLoansById(string id)
+        {
+            var moneyLoanList = await _moneyLoanRepository.GetMoneyLoanByUserIdAsync(id);
+            return _mapper.Map<List<MoneyLoanViewModel>>(moneyLoanList);
         }
     }
 }

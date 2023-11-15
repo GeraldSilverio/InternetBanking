@@ -7,5 +7,6 @@ namespace InternetBanking.Core.Application.Interfaces.Repositories
         bool HaveAccount(string idUser);
 
         Task<SavingAccount> GetByIdUser(string idUser);
+        Task<List<SavingAccount>> GetAccountsByUserId(string idUser);
     }
 }
