@@ -313,7 +313,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             return userResponse;
         }
 
-        public async Task<List<AuthenticationResponse>> GetAllClients()
+        /*public async Task<List<AuthenticationResponse>> GetAllClients()
         {
             var client = _userManager.Users.Select(u => new AuthenticationResponse
             {
@@ -329,7 +329,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             }).Where(u => u.Roles.FirstOrDefault().ToString() != "Admin").ToList();
 
             return client;
-        }
+        }*/
 
         #endregion
 

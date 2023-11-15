@@ -45,7 +45,7 @@ namespace InternetBanking.Infraestructure.Identity
             #endregion
 
             #region Identity Service
-            services.AddScoped<IAccountService, AccountService>();
+            services.AddTransient<IAccountService, AccountService>();
             #endregion
         }
     }

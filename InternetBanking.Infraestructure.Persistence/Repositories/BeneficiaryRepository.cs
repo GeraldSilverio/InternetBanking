@@ -9,7 +9,7 @@ namespace InternetBanking.Infraestructure.Persistence.Repositories
     {
         private readonly ApplicationContext _dbContext;
 
-        public BeneficiaryRepository (ApplicationContext dbContext) : base (dbContext)
+        public BeneficiaryRepository(ApplicationContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
@@ -20,18 +20,18 @@ namespace InternetBanking.Infraestructure.Persistence.Repositories
             return beneficiaries;
         }
 
-        public async Task<bool> IsBeneficiaryAdd(string idUser, string idBeneficiary)
+        public async Task<bool> IsBeneficiaryAdd(string idUser, string idBeneficiary, int accountCode)
         {
             var beneficiaries = await _dbContext.Beneficiaries.ToListAsync();
 
             foreach (var beneficiary in beneficiaries)
             {
-                if (beneficiary.IdUser == idUser && beneficiary.IdBeneficiary == idBeneficiary)
+                if (beneficiary.IdUser == idUser && beneficiary.IdBeneficiary == idBeneficiary && beneficiary.AccountCode == accountCode)
                 {
-                    return false;
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
     }
 }

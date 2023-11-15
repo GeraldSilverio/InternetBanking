@@ -25,7 +25,7 @@ namespace InternetBanking.Core.Application.Services
         public override async Task<NewMoneyLoanViewModel> Add(NewMoneyLoanViewModel model)
         {
             model.MoneyLoanCode = GenerateCode.GenerateAccountCode(model.CurrentDate);
-            var moneyloan =await base.Add(model);
+            var moneyloan = await base.Add(model);
             await _savingAccountService.UpdatePrincialAccount(moneyloan.BorrowedBalance, moneyloan.IdUser);
             return moneyloan;
         }
@@ -34,7 +34,7 @@ namespace InternetBanking.Core.Application.Services
         {
             var moneyLoansList = new List<MoneyLoanViewModel>();
             var moneyLoans = await base.GetAll();
-            
+
 
             foreach (var moneyLoan in moneyLoans)
             {
@@ -48,7 +48,7 @@ namespace InternetBanking.Core.Application.Services
                     MoneyLoanCode = moneyLoan.MoneyLoanCode,
                     BorrowedBalance = moneyLoan.BorrowedBalance,
                     BalancePaid = moneyLoan.BalancePaid,
-                    Debt = moneyLoan.BorrowedBalance -moneyLoan.BalancePaid,
+                    Debt = moneyLoan.BorrowedBalance - moneyLoan.BalancePaid,
                 };
                 moneyLoansList.Add(moneyLoanView);
             }
@@ -59,7 +59,13 @@ namespace InternetBanking.Core.Application.Services
         public async Task<List<MoneyLoanViewModel>> GetMoneyLoansById(string id)
         {
             var moneyLoanList = await _moneyLoanRepository.GetMoneyLoanByUserIdAsync(id);
-            return _mapper.Map<List<MoneyLoanViewModel>>(moneyLoanList);
+            return moneyLoanList.Select(moneyLoan => new MoneyLoanViewModel()
+            {
+                MoneyLoanCode = moneyLoan.MoneyLoanCode,
+                BorrowedBalance = moneyLoan.BorrowedBalance,
+                BalancePaid = moneyLoan.BalancePaid,
+                Debt = moneyLoan.BorrowedBalance - moneyLoan.BalancePaid,
+            }).ToList();
         }
     }
 }

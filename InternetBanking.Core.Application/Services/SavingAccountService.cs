@@ -78,5 +78,10 @@ namespace InternetBanking.Core.Application.Services
             principalAccount.Balance += balance;
             await _savingAccountrepository.UpdateAsync(principalAccount, principalAccount.Id);
         }
+
+        public async Task<SavingAccount> GetByAccountCode(int accountCode)
+        {
+            return await _savingAccountrepository.GetByAccountCode(accountCode);
+        }
     }
 }

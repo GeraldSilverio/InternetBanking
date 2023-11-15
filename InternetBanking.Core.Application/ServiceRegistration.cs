@@ -13,13 +13,14 @@ namespace InternetBanking.Core.Application
 
             #region Services
             services.AddTransient(typeof(IGenericService<,,>), typeof(GenericService<,,>));
-            services.AddScoped<ILoginService, LoginService>();
-            services.AddScoped<IUserServices, UserServices>();
-            services.AddScoped<ISavingAccountService, SavingAccountService>();
-            services.AddScoped<ICreditCardsService, CreditsCardService>();
-            services.AddScoped<ICreditCardsService, CreditsCardService>();
-            services.AddScoped<IMoneyLoanService, MoneyLoanService>();
-            services.AddScoped<IGetCountProduct, GetCountProducts>();
+            services.AddTransient<ILoginService, LoginService>();
+            services.AddTransient<IUserServices, UserServices>();
+            services.AddTransient<ISavingAccountService, SavingAccountService>();
+            services.AddTransient<ICreditCardsService, CreditsCardService>();
+            services.AddTransient<ICreditCardsService, CreditsCardService>();
+            services.AddTransient<IMoneyLoanService, MoneyLoanService>();
+            services.AddTransient<IGetCountProduct, GetCountProducts>();
+            services.AddTransient<IBeneficiaryService, BeneficiaryService>();
             #endregion
         }
     }

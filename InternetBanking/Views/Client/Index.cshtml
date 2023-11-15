@@ -1,6 +1,8 @@
 ﻿@using InternetBanking.Core.Application.ViewModels.Client;
 @using InternetBanking.Core.Application.Dtos.Account;
 @using InternetBanking.Core.Application.Helpers;
+@using InternetBanking.Core.Application.ViewModels.CreditCards;
+@using InternetBanking.Core.Application.ViewModels.MoneyLoan;
 @inject IHttpContextAccessor httpContextAccessor
 @model ClientViewModel
 @{
@@ -37,71 +39,10 @@
             </div>
 
             <div class="card-body">
-                <!--SECCION DE CUENTAS DE AHORRO-->
-                <div class="row justify-content-center">
-                    <div class="col-6 mt-3">
-                        <div class="card">
-                            <div class="card-header text-light text-center" style="background-color:#09385B">
-                                <h5 class="card-title mt-sm-2">Cuentas de ahorro</h5>
-                            </div>
-                            <div class="card-body d-inline-flex">
-                                <table class="table table-responsive">
-                                    <thead>
-                                        <tr>
-                                            <th>Numero de cuenta</th>
-                                            <th>Balance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="border-start border-end">
-                                        @foreach (var homeClient in ViewBag.SavingAccounts)
-                                        {
-                                            <tr>
-                                                <td>@homeClient.AccountCode</td>
-                                                <td>
-                                                    <script>
-                                                        var balance = @homeClient.Balance;
-                                                        var formattedBalance = balance.toLocaleString('es-DO', { style: 'currency', currency: 'DOP' });
-                                                        document.write(formattedBalance);
-                                                    </script>
-                                                </td>
-
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--SECCION DE BENEFICIARIOS-->
-                    <div class="col-6 mt-3">
-                        <div class="card">
-                            <div class="card-header text-light text-center" style="background-color:#09385B">
-                                <h5 class="card-title mt-sm-2">Beneficiarios</h5>
-                            </div>
-                            <div class="card-body d-inline-flex">
-                                <table class="table table-responsive">
-                                    <thead>
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>Numero de cuenta</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="border-start border-end">
-                                        <tr>
-                                            <td>Fulanito de tal</td>
-                                            <td>123456789</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                
                 <!--SECCION DE TARJETAS DE CREDITO-->
                 <div class="row justify-content-center">
-                    <div class="col-6 mt-3 mb-3">
+                    <div class="col-6 mt-3 ">
                         <div class="card">
                             <div class="card-header text-light text-center" style="background-color:#09385B">
                                 <h5 class="card-title mt-sm-2">Tarjetas de credito</h5>
@@ -113,17 +54,17 @@
                                             <th>Numero</th>
                                             <th>Limite</th>
                                             <th>Disponible</th>
-                                            <th>Gastado</th>
+                                            <th>Deuda</th>
                                         </tr>
                                     </thead>
                                     <tbody class="border-start border-end">
-                                        @foreach (var card in ViewBag.CreditCards)
+                                        @foreach (CardViewModel card in ViewBag.CreditCards)
                                         {
                                         <tr>
                                             <td>@card.CardNumber</td>
                                             <td>@card.CreditLimited</td>
                                             <td>@card.Available</td>
-                                            <td>@card.Spent</td>
+                                            <td>@card.Debt</td>
                                         </tr>
                                         }
                                     </tbody>
@@ -144,14 +85,16 @@
                                         <tr>
                                             <th>Balance prestado</th>
                                             <th>Balance pagado</th>
+                                            <th>Balance por pagar</th>
                                         </tr>
                                     </thead>
                                     <tbody class="border-start border-end">
-                                        @foreach (var loans in ViewBag.MoneyLoans)
+                                        @foreach (MoneyLoanViewModel loans in ViewBag.MoneyLoans)
                                         {
                                         <tr>
                                             <td>@loans.BorrowedBalance</td>
                                             <td>@loans.BalancePaid</td>
+                                            <td>@loans.Debt</td>
                                         </tr>
                                         }
                                     </tbody>
@@ -161,6 +104,42 @@
                     </div>
                 </div>
             </div>
+
+            <!--SECCION DE CUENTAS DE AHORRO-->
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header text-light text-center" style="background-color:#09385B">
+                            <h5 class="card-title mt-sm-2">Cuentas de ahorro</h5>
+                        </div>
+                        <div class="card-body d-inline-flex">
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Numero de cuenta</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="border-start border-end">
+                                    @foreach (var homeClient in ViewBag.SavingAccounts)
+                                    {
+                                        <tr>
+                                            <td>@homeClient.AccountCode</td>
+                                            <td>
+                                                <script>
+                                                    var balance = @homeClient.Balance;
+                                                    var formattedBalance = balance.toLocaleString('es-DO', { style: 'currency', currency: 'DOP' });
+                                                    document.write(formattedBalance);
+                                                </script>
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
         </div>
 
