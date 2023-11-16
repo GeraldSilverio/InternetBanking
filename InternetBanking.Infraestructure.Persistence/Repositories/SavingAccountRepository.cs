@@ -14,6 +14,11 @@ namespace InternetBanking.Infraestructure.Persistence.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<SavingAccount>GetByAccountCode(int accountCode)
+        {
+            return await _dbContext.SavingAccounts.FirstOrDefaultAsync(x=> x.AccountCode == accountCode);
+        }
+
         public async Task<SavingAccount> GetByIdUser(string idUser)
         {
             return await _dbContext.SavingAccounts.FirstOrDefaultAsync(x => x.IdUser == idUser && x.IsPrincipal == true);

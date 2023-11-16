@@ -26,7 +26,6 @@ namespace InternetBanking.Infraestructure.Identity
                     options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"),
                     m => m.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName));
                 });
-
             }
             #endregion
 
@@ -45,7 +44,7 @@ namespace InternetBanking.Infraestructure.Identity
             #endregion
 
             #region Identity Service
-            services.AddScoped<IAccountService, AccountService>();
+            services.AddTransient<IAccountService, AccountService>();
             #endregion
         }
     }

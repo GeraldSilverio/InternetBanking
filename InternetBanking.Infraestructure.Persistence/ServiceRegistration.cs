@@ -1,4 +1,6 @@
 ﻿using InternetBanking.Core.Application.Interfaces.Repositories;
+using InternetBanking.Core.Application.Interfaces.Services;
+using InternetBanking.Core.Application.Services;
 using InternetBanking.Infraestructure.Persistence.Contexts;
 using InternetBanking.Infraestructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +34,7 @@ namespace InternetBanking.Infraestructure.Persistence
             services.AddTransient<IMoneyLoanRepository, MoneyLoanRepository>();
             services.AddTransient<IPaymentRepository, PaymentRepository>();
             services.AddTransient<ISavingAccountRepository, SavingAccountRepository>();
-            services.AddScoped<ApplicationContext>();
+            services.AddTransient<IPaymentService, PaymentService>();
             #endregion
         }
     }

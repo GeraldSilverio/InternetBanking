@@ -39,7 +39,7 @@ namespace InternetBanking.Core.Application.Services
         public override async Task<List<CardViewModel>> GetAll()
         {
             var cardLists = new List<CardViewModel>();
-            var cards  = await _creditsCardRepository.GetAllAsync();
+            var cards = await _creditsCardRepository.GetAllAsync();
 
             foreach (var card in cards)
             {
@@ -64,7 +64,13 @@ namespace InternetBanking.Core.Application.Services
         public async Task<List<CardViewModel>> GetCreditCardsById(string id)
         {
             var creditCards = await _creditsCardRepository.GetCreditCardsByUserIdAsync(id);
-            return _mapper.Map<List<CardViewModel>>(creditCards);
+            return creditCards.Select(creditCard => new CardViewModel()
+            {
+                CardNumber = creditCard.CardNumber,
+                CreditLimited = creditCard.CreditLimited,
+                Available = creditCard.Available,
+                Debt = creditCard.CreditLimited - creditCard.Available
+            }).ToList();
         }
     }
 }

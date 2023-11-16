@@ -10,24 +10,85 @@ namespace WebApp.InternetBanking.Controllers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IBeneficiaryService _beneficiaryService;
-        private readonly IAccountService _accountService;
 
         public BeneficiaryController(IBeneficiaryService beneficiaryService, IHttpContextAccessor httpContextAccessor, IAccountService accountService)
         {
             _httpContextAccessor = httpContextAccessor;
             _beneficiaryService = beneficiaryService;
-            _accountService = accountService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var User = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
-            var Beneficiary = await _beneficiaryService.GetAllByUser(User.Id);
+            try
+            {
+                var User = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
 
-            ViewBag.Beneficiaries = await _accountService.GetAllClients();
+                var Beneficiaries = await _beneficiaryService.GetAllByUser(User.Id);
 
-            List<BeneficiaryViewModel>  beneficiaryViewModel = Beneficiary.ToList();
-            return View(beneficiaryViewModel);
+                return View(Beneficiaries);
+
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+
+
         }
+        #region Create
+        public IActionResult AddBeneficiary()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddBeneficiary(SaveBeneficiaryViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                var beneficiary = await _beneficiaryService.Add(model);
+                if (beneficiary.HasError)
+                {
+                    return View(beneficiary);
+                }
+                return RedirectToRoute(new { controller = "Beneficiary", action = "Index" });
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+
+        public async Task<IActionResult> DeleteBeneficiary(int id)
+        {
+            try
+            {
+                var beneficiary = await _beneficiaryService.GetById(id);
+                return View(beneficiary);
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteBeneficiaryPost(int id)
+        {
+            try
+            {
+                await _beneficiaryService.Delete(id);
+                return RedirectToRoute(new { controller = "Beneficiary", action = "Index" });
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+
+
+        #endregion
     }
 }

@@ -10,31 +10,31 @@ namespace WebApp.InternetBanking.Controllers
     public class ClientController : Controller
     {
         private readonly IUserServices _userServices;
-        private readonly ISavingAccountService _accountService;
+        private readonly ISavingAccountService _savingAccountService;
         private readonly ICreditCardsService _cardsService;
         private readonly IMoneyLoanService _moneyLoanService;
         private readonly IHttpContextAccessor _contextAccessor;
 
         public ClientController(IUserServices userServices
-            , ISavingAccountService accountService
+            , ISavingAccountService savingAccountService
             , ICreditCardsService cardsService
             , IMoneyLoanService moneyLoanService
             , IHttpContextAccessor contextAccessor)
         {
-            
+
             _userServices = userServices;
-            _accountService = accountService;
+            _savingAccountService = savingAccountService;
             _cardsService = cardsService;
             _moneyLoanService = moneyLoanService;
             _contextAccessor = contextAccessor;
-            
+
         }
 
         public async Task<IActionResult> Index()
         {
             var User = _contextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
 
-            ViewBag.SavingAccounts = await _accountService.GetAccountById(User.Id);
+            ViewBag.SavingAccounts = await _savingAccountService.GetAccountsByUserId(User.Id);
             ViewBag.CreditCards = await _cardsService.GetCreditCardsById(User.Id);
             ViewBag.MoneyLoans = await _moneyLoanService.GetMoneyLoansById(User.Id);
             return View();
