@@ -311,6 +311,23 @@ namespace InternetBanking.Infraestructure.Identity.Services
             return userResponse;
         }
 
+        /*public async Task<List<AuthenticationResponse>> GetAllClients()
+        {
+            var client = _userManager.Users.Select(u => new AuthenticationResponse
+            {
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                IdentityCard = u.IdentityCard,
+                Roles = _userManager.GetRolesAsync(u).Result.ToList(),
+                IsVerified = u.EmailConfirmed,
+                IsActive = u.IsActive,
+
+            }).Where(u => u.Roles.FirstOrDefault().ToString() != "Admin").ToList();
+
+            return client;
+        }*/
 
         #endregion
 

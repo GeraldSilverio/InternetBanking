@@ -12,16 +12,21 @@ namespace InternetBanking.Core.Application.Services
     {
         private readonly ISavingAccountService _savingAccountService;
         private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
+        private readonly IMoneyLoanRepository _moneyLoanRepository;
+
         public MoneyLoanService(IMoneyLoanRepository moneyLoanRepository, IMapper mapper, ISavingAccountService savingAccountService, IAccountService accountService) : base(moneyLoanRepository, mapper)
         {
             _savingAccountService = savingAccountService;
             _accountService = accountService;
+            _mapper = mapper;
+            _moneyLoanRepository = moneyLoanRepository;
         }
 
         public override async Task<NewMoneyLoanViewModel> Add(NewMoneyLoanViewModel model)
         {
             model.MoneyLoanCode = GenerateCode.GenerateAccountCode(model.CurrentDate);
-            var moneyloan =await base.Add(model);
+            var moneyloan = await base.Add(model);
             await _savingAccountService.UpdatePrincialAccount(moneyloan.BorrowedBalance, moneyloan.IdUser);
             return moneyloan;
         }
@@ -30,7 +35,7 @@ namespace InternetBanking.Core.Application.Services
         {
             var moneyLoansList = new List<MoneyLoanViewModel>();
             var moneyLoans = await base.GetAll();
-            
+
 
             foreach (var moneyLoan in moneyLoans)
             {
@@ -44,7 +49,7 @@ namespace InternetBanking.Core.Application.Services
                     MoneyLoanCode = moneyLoan.MoneyLoanCode,
                     BorrowedBalance = moneyLoan.BorrowedBalance,
                     BalancePaid = moneyLoan.BalancePaid,
-                    Debt = moneyLoan.BorrowedBalance -moneyLoan.BalancePaid,
+                    Debt = moneyLoan.BorrowedBalance - moneyLoan.BalancePaid,
                 };
                 moneyLoansList.Add(moneyLoanView);
             }
@@ -57,6 +62,18 @@ namespace InternetBanking.Core.Application.Services
 
 
             return moneyLoansList;
+        }
+
+        public async Task<List<MoneyLoanViewModel>> GetMoneyLoansById(string id)
+        {
+            var moneyLoanList = await _moneyLoanRepository.GetMoneyLoanByUserIdAsync(id);
+            return moneyLoanList.Select(moneyLoan => new MoneyLoanViewModel()
+            {
+                MoneyLoanCode = moneyLoan.MoneyLoanCode,
+                BorrowedBalance = moneyLoan.BorrowedBalance,
+                BalancePaid = moneyLoan.BalancePaid,
+                Debt = moneyLoan.BorrowedBalance - moneyLoan.BalancePaid,
+            }).ToList();
         }
     }
 }

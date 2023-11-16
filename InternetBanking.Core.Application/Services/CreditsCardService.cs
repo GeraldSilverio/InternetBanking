@@ -13,10 +13,12 @@ namespace InternetBanking.Core.Application.Services
     {
         private readonly ICreditsCardRepository _creditsCardRepository;
         private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
         public CreditsCardService(ICreditsCardRepository creditsCardRepository, IMapper mapper, IAccountService accountService) : base(creditsCardRepository, mapper)
         {
             _creditsCardRepository = creditsCardRepository;
             _accountService = accountService;
+            _mapper = mapper;
         }
 
         public override async Task<SaveCardViewModel> Add(SaveCardViewModel model)
@@ -38,7 +40,7 @@ namespace InternetBanking.Core.Application.Services
         public async Task<List<CardViewModel>> GetAllWithFilters(FilterIdentityCardViewModel filters)
         {
             var cardLists = new List<CardViewModel>();
-            var cards  = await _creditsCardRepository.GetAllAsync();
+            var cards = await _creditsCardRepository.GetAllAsync();
 
             foreach (var card in cards)
             {
@@ -64,6 +66,18 @@ namespace InternetBanking.Core.Application.Services
             }
 
             return cardLists;
+        }
+
+        public async Task<List<CardViewModel>> GetCreditCardsById(string id)
+        {
+            var creditCards = await _creditsCardRepository.GetCreditCardsByUserIdAsync(id);
+            return creditCards.Select(creditCard => new CardViewModel()
+            {
+                CardNumber = creditCard.CardNumber,
+                CreditLimited = creditCard.CreditLimited,
+                Available = creditCard.Available,
+                Debt = creditCard.CreditLimited - creditCard.Available
+            }).ToList();
         }
     }
 }

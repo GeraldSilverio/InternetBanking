@@ -15,6 +15,7 @@ namespace InternetBanking.Core.Application.Interfaces.Services
         Task UpdateStatusAsync(string id, bool status);
         Task UpdateUserAsync(UpdateUserRequest request, string id);
         Task<AuthenticationResponse> GetUserByIdAsync(string id);
-        
+        //Task<List<AuthenticationResponse>> GetAllClients();
+
     }
 }

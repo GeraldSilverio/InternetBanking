@@ -7,5 +7,6 @@ namespace InternetBanking.Core.Application.Interfaces.Services
     public interface IMoneyLoanService:IGenericService<MoneyLoan, NewMoneyLoanViewModel, MoneyLoanViewModel>
     {
         Task<List<MoneyLoanViewModel>> GetAllWithFilters(FilterIdentityCardViewModel filters);
+        Task<List<MoneyLoanViewModel>> GetMoneyLoansById(string id);
     }
 }

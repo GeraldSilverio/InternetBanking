@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using InternetBanking.Core.Application.ViewModels.Beneficiary;
+using InternetBanking.Core.Domain.Entities;
 
 namespace InternetBanking.Core.Application.Mappings
 {
@@ -6,7 +8,13 @@ namespace InternetBanking.Core.Application.Mappings
     {
         public BeneficiaryProfile()
         {
-            
+            CreateMap<Beneficiary, SaveBeneficiaryViewModel>()
+
+                .ReverseMap()
+                .ForMember(x => x.LastModified, opt => opt.Ignore())
+                .ForMember(x => x.Created, opt => opt.Ignore())
+                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore())
+                .ForMember(x => x.CreatedBy, opt => opt.Ignore());
         }
     }
 }

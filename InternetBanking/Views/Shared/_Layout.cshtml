@@ -82,7 +82,7 @@
 
                                         <ul class="dropdown-menu" aria-labelledby="dropdownuser">
                                             <li>
-                                                <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Expresos</a>
+                                                <a class="dropdown-item" asp-area="" asp-controller="Payment" asp-action="ExpressPayment">Expresos</a>
                                             </li>
                                             <li>
                                                 <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Tarjeta de credito</a>
@@ -97,18 +97,17 @@
 
                                     </div>
                                 </li>
-
+                                 <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Beneficiary" asp-action="Index">Beneficiario</a>
+                                </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="" asp-action="">Avance de efectivo</a>
+                                    <a class="nav-link text-white" asp-controller="Client" asp-action="Index">Avance de Efectivo</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Client" asp-action="Index">Transferencia</a>
                                 </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="" asp-action="">Beneficiarios</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="" asp-action="">Transferencias</a>
-                                </li>
+                               
 
                             }
 

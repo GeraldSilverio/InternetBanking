@@ -1,0 +1,50 @@
+﻿﻿@using InternetBanking.Core.Application.ViewModels.Beneficiary;
+@using Microsoft.AspNetCore.Http;
+@using InternetBanking.Core.Application.Helpers;
+@using InternetBanking.Core.Application.Dtos.Account;
+@inject IHttpContextAccessor httpContextAccessor
+@model List<BeneficiaryViewModel>
+@{
+    var User = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    ViewData["Title"] = "Beneficiarios-";
+}
+
+<div class="container-fluid">
+    <div class="col-12 mt-5">
+        <div class="d-flex justify-content-end mb-2">
+            <a asp-controller="Beneficiary" asp-action="AddBeneficiary" class="btn text-white bg-gradient" style="background-color:#09385B; outline-color:#D3D9DE;">Agregar Beneficiario</a>
+        </div>
+        <div class="card">
+            <div class="card-header" style="background-color:#09385B">
+                <h3 class="card-title text-light text-center">Beneficiarios Agregados</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Numero de Cuenta</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (BeneficiaryViewModel beneficiary in Model)
+                        {
+                            <tr>
+                                <td>@beneficiary.FirstName</td>
+                                <td>@beneficiary.LastName</td>
+                                <td>@beneficiary.AccountCode</td>
+                                <td>
+                                    <a class="btn btn-danger" asp-controller="Beneficiary" asp-action="DeleteBeneficiary" asp-route-id="@beneficiary.Id">Eliminar</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+

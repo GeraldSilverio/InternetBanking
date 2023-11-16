@@ -1,0 +1,70 @@
+﻿@using InternetBanking.Core.Application.ViewModels.Payment;
+@using InternetBanking.Core.Application.ViewModels.SavingAccount;
+@model SavePaymentViewModel
+
+@{
+    ViewData["Title"] = "Pago Expreso";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+            <div class="col-6">
+                <div class="card mt-3">
+                    <div class="card-body mt-3">
+                        <form class=" mb-3" method="post" asp-controller="Payment" asp-action="ExpressPayment">
+
+                            <div class="mb-3">
+                                <label>Seleccione la cuenta de origen</label>
+                                <select class="form-select" asp-for="OriginAccount">
+                                    @foreach (SavingAccountViewModel account in ViewBag.Accounts)
+                                    {
+                                        <option asp-for="OriginAccount" value="@account.AccountCode">Cuenta: @account.AccountCode</option>
+                                    }
+
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label>Monto a Pagar</label>
+                                <input type="number" class="form-control" asp-for="Amount" autocomplete="off">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label>Cuenta de Destino</label>
+                                <input type="number" class="form-control" asp-for="DestinationAccount" autocomplete="off" maxlength="9">
+                            </div>
+
+
+                            <button type="submit" class="btn btn-outline-primary float-end ms-2">Pagar</button>
+                            <a class="btn btn-secondary float-end" asp-controller="Client" asp-action="Index">Volver</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+
+    .card {
+        border: 0.2px solid #09385B;
+        border-radius: 4px 4px 10px 10px;
+        box-shadow: 0 0 10px #6BA2CD;
+    }
+
+    label {
+        color: #1B4A6F;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .input-blue {
+        color: #1B4A6F;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+</style>
