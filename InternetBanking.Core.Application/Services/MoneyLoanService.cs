@@ -64,11 +64,12 @@ namespace InternetBanking.Core.Application.Services
             return moneyLoansList;
         }
 
-        public async Task<List<MoneyLoanViewModel>> GetMoneyLoansById(string id)
+        public async Task<List<MoneyLoanViewModel>> GetMoneyLoansByUserId(string id)
         {
             var moneyLoanList = await _moneyLoanRepository.GetMoneyLoanByUserIdAsync(id);
             return moneyLoanList.Select(moneyLoan => new MoneyLoanViewModel()
             {
+                Id = moneyLoan.Id,
                 MoneyLoanCode = moneyLoan.MoneyLoanCode,
                 BorrowedBalance = moneyLoan.BorrowedBalance,
                 BalancePaid = moneyLoan.BalancePaid,
