@@ -5,7 +5,8 @@
 @using InternetBanking.Core.Application.ViewModels.CreditCards;
 @model EditUserViewModel
 @{
-    ViewData["Title"] = "Registro Usuario";   
+    ViewData["Title"] = "Registro Usuario";
+    var newMoneyLoan = ViewBag.NewMoneyLoan as NewMoneyLoanViewModel;
 }
 
 <div class="container-fluid">
@@ -64,7 +65,7 @@
                         {
                             <div class="mb-3">
                                 <label>Agregar balance a cuenta principal</label>
-                                <input type="number" class="form-control" asp-for="Balance">
+                                <input type="text" id="balanceInput" class="form-control" asp-for="Balance">
                                 <span asp-validation-for="Balance" class="text-danger"></span>
                             </div>
                         }
@@ -91,7 +92,7 @@
                         <form id="formAccount" class="mb-3" method="post" asp-controller="SavingAccount" asp-action="NewAccount">
                             <div class="mb-3">
                                 <label>BALANCE DE LA CUENTA</label>
-                                <input type="number" class="form-control" name="balance">
+                                <input type="text" class="form-control" id="balanceInput" name="balance" placeholder="0.00">
                             </div>
                             <input type="hidden" name="userId" value="@Model.Id">
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Crear cuenta</button>
@@ -116,7 +117,7 @@
                         <form id="formMoneyloan" class="mb-3" method="post" asp-controller="MoneyLoan" asp-action="NewMoneyLoan">
                             <div class="mb-3">
                                 <label>Monto a Prestar</label>
-                                <input type="number" class="form-control" name="borrowedBalance">
+                                <input type="text" id="balanceInput" class="form-control" name="borrowedBalance" placeholder="0.01">
                             </div>
                             <input type="hidden" name="userId" value="@Model.Id">
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Asignar Prestamo</button>
@@ -164,6 +165,11 @@
 
 
 <script>
+
+    document.getElementById('balanceInput').addEventListener('input', function (e) {
+        const value = /^[0-9]*\.?[0-9]{0,2}$/;
+    });
+
     const btnAccount = document.getElementById('btnAccount');
     const btnCreditCard = document.getElementById('btnCreditCard');
     const btnMoneyLoan = document.getElementById('btnMoneyLoan');

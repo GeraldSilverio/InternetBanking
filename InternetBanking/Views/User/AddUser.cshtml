@@ -65,7 +65,7 @@
                                 <input type="text" class="form-control" asp-for="IdentityCard" autocomplete="off" maxlength="11">
                                 <span asp-validation-for="IdentityCard" class="text-danger"></span>
                                 <small class="form-text text-muted">
-                                    La cedula debe contener el siguiente formato 000--0000000-0 en total 11 caracteres sin guiones
+                                    La cedula debe contener un total 11 caracteres sin guiones
                                 </small>
                             </div>
 
@@ -96,7 +96,7 @@
 
                             <div class="mb-3">
                                 <label>BALANCE DE LA CUENTA</label>
-                                <input type="number" class="form-control" asp-for="BalanceAccount" autocomplete="off" disabled id="balancecliente">
+                                <input type="text" id="balanceInput" class="form-control" asp-for="BalanceAccount" autocomplete="off" disabled id="balancecliente">
                             </div>
 
                            
@@ -134,6 +134,11 @@
 </style>
 
 <script>
+
+    document.getElementById('balanceInput').addEventListener('input', function (e) {
+        const value = /^[0-9]*\.?[0-9]{0,2}$/;       
+    });
+
     document.addEventListener("DOMContentLoaded", function () {
         var selectRole = document.getElementById("selectRole");
         var balanceCliente = document.getElementById("balancecliente");

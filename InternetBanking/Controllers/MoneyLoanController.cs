@@ -24,22 +24,21 @@ namespace WebApp.InternetBanking.Controllers
             return View(await _moneyLoanService.GetAllWithFilters(fvm));
         }
 
-        public IActionResult NewMoneyLoan()
-        {
-            ViewBag.Users = _accountService.GetAllUsersAsync();
-            return View();
-        }
-
         [HttpPost]
         public async Task<IActionResult> NewMoneyLoan(string userId,decimal borrowedBalance)
         {
             try
             {
+                if (borrowedBalance == decimal.Zero)
+                {
+                    borrowedBalance = 0.01m;
+                }
+
                 var model = new NewMoneyLoanViewModel()
                 {
                     IdUser = userId,
                     BorrowedBalance = borrowedBalance,
-                };
+                };               
 
                 await _moneyLoanService.Add(model);
                 return RedirectToRoute(new { controller = "MoneyLoan", action = "Index" });
