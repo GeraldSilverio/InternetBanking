@@ -2,6 +2,7 @@
 using InternetBanking.Core.Application.Helpers;
 using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Application.Interfaces.Services;
+using InternetBanking.Core.Application.ViewModels.Filter;
 using InternetBanking.Core.Application.ViewModels.SavingAccount;
 using InternetBanking.Core.Domain.Entities;
 using System.Security.Principal;
@@ -31,7 +32,7 @@ namespace InternetBanking.Core.Application.Services
             return base.Add(model);
         }
 
-        public override async Task<List<SavingAccountViewModel>> GetAll()
+        public async Task<List<SavingAccountViewModel>> GetAllWithFilters(FilterIdentityCardViewModel filters)
         {
             var accountList = new List<SavingAccountViewModel>();
             var savingAccount = await _savingAccountrepository.GetAllAsync();
@@ -50,6 +51,12 @@ namespace InternetBanking.Core.Application.Services
                     IsPrincial = account.IsPrincipal
                 };
                 accountList.Add(accountView);
+            }
+
+            if (!string.IsNullOrEmpty(filters.IdentityCard))
+            {
+                string identityCardToLower = filters.IdentityCard.ToLower();
+                accountList = accountList.Where(lr => lr.IdentityCard.ToLower().Contains(identityCardToLower)).ToList();
             }
 
             return accountList;

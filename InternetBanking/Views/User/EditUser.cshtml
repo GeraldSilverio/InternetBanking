@@ -1,88 +1,140 @@
-﻿@using InternetBanking.Core.Application.ViewModels.User
-@using InternetBanking.Core.Application.Enums
+﻿@using InternetBanking.Core.Application.ViewModels.User;
+@using InternetBanking.Core.Application.Enums;
+@using InternetBanking.Core.Application.ViewModels.SavingAccount;
+@using InternetBanking.Core.Application.ViewModels.MoneyLoan;
+@using InternetBanking.Core.Application.ViewModels.CreditCards;
 @model EditUserViewModel
 @{
-    ViewData["Title"] = "Registro Usuario";
+    ViewData["Title"] = "Registro Usuario";   
 }
-
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
-            <div class="col-6">
-                <div class="card mt-3">
-                    @if (Model.HasError)
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <p>@Model.Error</p>
-                            <button type="button" class=" btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="col-lg-6">
+            <div class="card mt-3">
+                @if (Model.HasError)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <p>@Model.Error</p>
+                        <button type="button" class=" btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                <div class="card-header bg-blue-card-header mb-2">
+                    <h4 class="text-light mb-1">Editando a '@Model.FirstName @Model.LastName'</h4>
+                </div>
+                <div class="card-body mt-3">
+                    <form class="mb-3" method="post" asp-controller="User" asp-action="EditUser">
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label>Nombre</label>
+                                <input type="text" class="form-control" asp-for="FirstName" placeholder="Ingrese su nombre" autocomplete="off" maxlength="40">
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label>Apellidos</label>
+                                <input type="text" class="form-control" asp-for="LastName" placeholder="Ingrese su apellido" autocomplete="off">
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
                         </div>
-                    }
-                    <div class="card-body mt-3">
-                        <form class=" mb-3" method="post" asp-controller="User" asp-action="EditUser">
 
-                            <div class="row mb-3">
-
-                                <div class="col">
-                                    <label>Nombre</label>
-                                    <input type="text" class="form-control" asp-for="FirstName" placeholder="Ingrese su nombre" autocomplete="off" maxlength="40">
-                                    <span asp-validation-for="FirstName" class="text-danger"></span>
-                                </div>
-
-                                <div class="col">
-                                    <label>Apellidos</label>
-                                    <input type="text" class="form-control" asp-for="LastName" placeholder="Ingrese su apellido" autocomplete="off">
-                                    <span asp-validation-for="LastName" class="text-danger"></span>
-                                </div>
-
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label>Correo Electronico</label>
+                                <input type="text" class="form-control" asp-for="Email" placeholder="Ingrese su correo" autocomplete="off" maxlength="40">
+                                <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
-                            <div class="row mb-3">
-
-                                <div class="col">
-                                    <label>Correo Electronico</label>
-                                    <input type="text" class="form-control" asp-for="Email" placeholder="Ingrese su correo" autocomplete="off" maxlength="40">
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
-
-                                <div class="col">
-                                    <label>Nombre Usuario</label>
-                                    <input type="text" class="form-control" asp-for="UserName" placeholder="Ingrese su nombre de usuario" autocomplete="off">
-                                    <span asp-validation-for="UserName" class="text-danger"></span>
-                                </div>
-
+                            <div class="col">
+                                <label>Nombre Usuario</label>
+                                <input type="text" class="form-control" asp-for="UserName" placeholder="Ingrese su nombre de usuario" autocomplete="off">
+                                <span asp-validation-for="UserName" class="text-danger"></span>
                             </div>
+                        </div>
 
+                        <div class="mb-3">
+                            <label>Cedula</label>
+                            <input type="text" class="form-control" asp-for="IdentityCard" autocomplete="off" maxlength="11">
+                            <span asp-validation-for="IdentityCard" class="text-danger"></span>
+                            <small class="form-text text-muted">
+                                La cedula debe contener el siguiente formato 000--0000000-0 en total 11 caracteres sin guiones
+                            </small>
+                        </div>
+
+                        @if (Model.Roles.Contains(Roles.Client.ToString()))
+                        {
                             <div class="mb-3">
-                                <label>Cedula</label>
-                                <input type="text" class="form-control" asp-for="IdentityCard" autocomplete="off" maxlength="11">
-                                <span asp-validation-for="IdentityCard" class="text-danger"></span>
-                                <small class="form-text text-muted">
-                                    La cedula debe contener el siguiente formato 000--0000000-0 en total 11 caracteres sin guiones
-                                </small>
+                                <label>Agregar balance a cuenta principal</label>
+                                <input type="number" step="0.01" min="0" class="form-control" asp-for="Balance">
+                                <span asp-validation-for="Balance" class="text-danger"></span>
                             </div>
+                        }
 
-                            @if (Model.Roles.Contains(Roles.Client.ToString()))
-                            {
-                                <div class="mb-3">
-                                    <label>Agregar balance a cuenta principal</label>
-                                    <input type="number" class="form-control" asp-for="Balance">
-                                    <span asp-validation-for="Balance" class="text-danger"></span>
+                        <button type="submit" class="btn btn-outline-primary float-end ms-2">Confirmar</button>
+                        <a class="btn btn-secondary float-end" asp-controller="User" asp-action="UserAdministrator">Volver</a>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-                                </div>
-                            }
+        @* Card de cuentas *@
+        @if (Model.Roles.Contains(Roles.Client.ToString()))
+        {
+            <div class="col-lg-6">
+                <div class="card mt-3">
+                    <div class="card-header bg-blue-card-header mb-2">
+                        <h4 class="text-light pb-2">Añadir un producto</h4>
+                        <button id="btnAccount" class="btn btn-secondary">Cuenta de Ahorro</button>
+                        <button id="btnCreditCard" class="btn btn-secondary">Tarjeta de Credito</button>
+                        <button id="btnMoneyLoan" class="btn btn-secondary">Prestamo</button>
+                    </div>
+                    <div class="card-body mt-2">
+                        <form id="formAccount" class="mb-3" method="post" asp-controller="SavingAccount" asp-action="NewAccount">
+                            <div class="mb-3">
+                                <label>BALANCE DE LA CUENTA</label>
+                                <input type="number" step="0.01" min="0" class="form-control" name="balance">
+                            </div>
+                            <input type="hidden" name="userId" value="@Model.Id">
+                            <button type="submit" class="btn btn-outline-primary float-end ms-2">Crear cuenta</button>
+                        </form>
 
-                            <button type="submit" class="btn btn-outline-primary float-end ms-2">Confirmar</button>
-                            <a class="btn btn-secondary float-end" asp-controller="User" asp-action="UserAdministrator">Volver</a>
+                        <form id="formCreditCard" class="mb-3" method="post" asp-controller="CreditCards" asp-action="NewCreditCard">
+                            <div class="mb-3">
+                                <label>Seleccione el tipo de tarjeta</label>
+                                <select class="form-select" name="selectCard">
+                                    <option value="CLASSIC">CLASICA --Limite: $5,000</option>
+                                    <option value="ELITE"> ELITE --Limite: $15,000</option>
+                                    <option value="GOLD">GOLD, --Limite: $25,000</option>
+                                    <option value="PLATINUM">PLATINUM --Limite: $40,000</option>
+                                    <option value="DIAMOND"> DIAMOND --Limite: $75,000</option>
+                                    <option value="BLACK"> BLACK --Limite: $100,000</option>
+                                </select>
+                            </div>
+                            <input type="hidden" name="userId" value="@Model.Id">
+                            <button type="submit" class="btn btn-outline-primary float-end ms-2">Crear cuenta</button>
+                        </form>
+
+                        <form id="formMoneyloan" class="mb-3" method="post" asp-controller="MoneyLoan" asp-action="NewMoneyLoan">
+                            <div class="mb-3">
+                                <label>Monto a Prestar</label>
+                                <input type="number" step="0.01" min="0" class="form-control" name="borrowedBalance">
+                            </div>
+                            <input type="hidden" name="userId" value="@Model.Id">
+                            <button type="submit" class="btn btn-outline-primary float-end ms-2">Asignar Prestamo</button>
                         </form>
                     </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
 </div>
 
 
 <style>
+
+    .bg-blue-card-header {
+        background-color: #09385B;
+        color: white;
+    }
 
     .card {
         border: 0.2px solid #09385B;
@@ -102,4 +154,58 @@
         font-weight: bold;
     }
 
+    .btn-color-active {
+        background-color: #09385B;
+        color: white;
+        font-weight:bold;
+    }
+
 </style>
+
+
+<script>
+    const btnAccount = document.getElementById('btnAccount');
+    const btnCreditCard = document.getElementById('btnCreditCard');
+    const btnMoneyLoan = document.getElementById('btnMoneyLoan');
+
+    const formAccount = document.getElementById('formAccount');
+    const formCreditCard = document.getElementById('formCreditCard');
+    const formMoneyloan = document.getElementById('formMoneyloan');
+
+    formAccount.style.display = 'none';
+    formCreditCard.style.display = 'none';
+    formMoneyloan.style.display = 'none';
+
+    function removecolor() {
+        btnAccount.classList.remove('btn-color-active');
+        btnCreditCard.classList.remove('btn-color-active');
+        btnMoneyLoan.classList.remove('btn-color-active');        
+    }
+
+    btnAccount.addEventListener('click', () => {
+        formAccount.style.display = 'block';
+        formCreditCard.style.display = 'none';
+        formMoneyloan.style.display = 'none';
+
+        removecolor();
+        btnAccount.classList.add('btn-color-active');
+    });
+
+    btnCreditCard.addEventListener('click', () => {
+        formAccount.style.display = 'none';
+        formCreditCard.style.display = 'block';
+        formMoneyloan.style.display = 'none';
+
+        removecolor();
+        btnCreditCard.classList.add('btn-color-active');
+    });
+
+    btnMoneyLoan.addEventListener('click', () => {
+        formAccount.style.display = 'none';
+        formCreditCard.style.display = 'none';
+        formMoneyloan.style.display = 'block';
+
+        removecolor();
+        btnMoneyLoan.classList.add('btn-color-active');
+    });
+</script>

@@ -1,5 +1,7 @@
 ﻿using InternetBanking.Core.Application.Interfaces.Services;
+using InternetBanking.Core.Application.ViewModels.Filter;
 using InternetBanking.Core.Application.ViewModels.MoneyLoan;
+using InternetBanking.Core.Application.ViewModels.SavingAccount;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +19,9 @@ namespace WebApp.InternetBanking.Controllers
             _accountService = accountService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(FilterIdentityCardViewModel fvm)
         {
-            return View(await _moneyLoanService.GetAll());
+            return View(await _moneyLoanService.GetAllWithFilters(fvm));
         }
 
         public IActionResult NewMoneyLoan()
@@ -29,15 +31,16 @@ namespace WebApp.InternetBanking.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> NewMoneyLoan(NewMoneyLoanViewModel model)
+        public async Task<IActionResult> NewMoneyLoan(string userId,decimal borrowedBalance)
         {
             try
             {
-                if(!ModelState.IsValid)
+                var model = new NewMoneyLoanViewModel()
                 {
-                    ViewBag.Users = _accountService.GetAllUsersAsync();
-                    return View(model);
-                }
+                    IdUser = userId,
+                    BorrowedBalance = borrowedBalance,
+                };
+
                 await _moneyLoanService.Add(model);
                 return RedirectToRoute(new { controller = "MoneyLoan", action = "Index" });
             }

@@ -1,4 +1,5 @@
 ﻿using InternetBanking.Core.Application.Interfaces.Services;
+using InternetBanking.Core.Application.ViewModels.Filter;
 using InternetBanking.Core.Application.ViewModels.SavingAccount;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,9 @@ namespace WebApp.InternetBanking.Controllers
             _accountService = accountService;
         }
 
-        public async Task<IActionResult> SavingAccount()
+        public async Task<IActionResult> SavingAccount(FilterIdentityCardViewModel fVm)
         {
-            var accounts = await _savingAccountService.GetAll();
+            var accounts = await _savingAccountService.GetAllWithFilters(fVm);
             return View(accounts);
         }
 
@@ -30,10 +31,16 @@ namespace WebApp.InternetBanking.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> NewAccount(CreateSavingAccountViewModel model)
+        public async Task<IActionResult> NewAccount(string userId, decimal balance)
         {
             try
             {
+                var model = new CreateSavingAccountViewModel()
+                {
+                    IdUser = userId,
+                    Balance = balance,
+                };
+
                 await _savingAccountService.Add(model);
                 return RedirectToRoute(new { controller = "SavingAccount", action = "SavingAccount" });
             }catch(Exception ex)
