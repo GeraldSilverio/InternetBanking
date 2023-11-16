@@ -6,11 +6,6 @@ using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.ViewModels.Beneficiary;
 using InternetBanking.Core.Domain.Entities;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InternetBanking.Core.Application.Services
 {
