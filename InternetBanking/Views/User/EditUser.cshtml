@@ -56,7 +56,7 @@
                             <input type="text" class="form-control" asp-for="IdentityCard" autocomplete="off" maxlength="11">
                             <span asp-validation-for="IdentityCard" class="text-danger"></span>
                             <small class="form-text text-muted">
-                                La cedula debe contener el siguiente formato 000--0000000-0 en total 11 caracteres sin guiones
+                                La cedula debe contener un total 11 caracteres sin guiones
                             </small>
                         </div>
 
@@ -64,7 +64,7 @@
                         {
                             <div class="mb-3">
                                 <label>Agregar balance a cuenta principal</label>
-                                <input type="number" step="0.01" min="0" class="form-control" asp-for="Balance">
+                                <input type="number" class="form-control" asp-for="Balance">
                                 <span asp-validation-for="Balance" class="text-danger"></span>
                             </div>
                         }
@@ -91,7 +91,7 @@
                         <form id="formAccount" class="mb-3" method="post" asp-controller="SavingAccount" asp-action="NewAccount">
                             <div class="mb-3">
                                 <label>BALANCE DE LA CUENTA</label>
-                                <input type="number" step="0.01" min="0" class="form-control" name="balance">
+                                <input type="number" class="form-control" name="balance">
                             </div>
                             <input type="hidden" name="userId" value="@Model.Id">
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Crear cuenta</button>
@@ -116,7 +116,7 @@
                         <form id="formMoneyloan" class="mb-3" method="post" asp-controller="MoneyLoan" asp-action="NewMoneyLoan">
                             <div class="mb-3">
                                 <label>Monto a Prestar</label>
-                                <input type="number" step="0.01" min="0" class="form-control" name="borrowedBalance">
+                                <input type="number" class="form-control" name="borrowedBalance">
                             </div>
                             <input type="hidden" name="userId" value="@Model.Id">
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Asignar Prestamo</button>

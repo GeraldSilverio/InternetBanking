@@ -63,7 +63,7 @@ namespace InternetBanking.Core.Application.Services
         public async Task UpdateUser(EditUserViewModel vm, string id)
         {
             var request = _mapper.Map<UpdateUserRequest>(vm);
-            await _accountService.UpdateUserAsync(request, id);
+            await _accountService.UpdateUserAsync(request, id); 
             await _savingAccountService.UpdatePrincialAccount(vm.Balance, id);
         }
 
