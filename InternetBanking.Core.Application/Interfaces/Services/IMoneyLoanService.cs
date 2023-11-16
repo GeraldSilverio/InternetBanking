@@ -8,6 +8,5 @@ namespace InternetBanking.Core.Application.Interfaces.Services
     {
         Task<List<MoneyLoanViewModel>> GetMoneyLoansByUserId(string id);
         Task<List<MoneyLoanViewModel>> GetAllWithFilters(FilterIdentityCardViewModel filters);
-        Task<List<MoneyLoanViewModel>> GetMoneyLoansById(string id);
     }
 }
