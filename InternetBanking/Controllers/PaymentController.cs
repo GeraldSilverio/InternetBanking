@@ -12,14 +12,16 @@ namespace WebApp.InternetBanking.Controllers
         private readonly ISavingAccountService _savingAccountService;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IBeneficiaryService _beneficiaryService;
-        private AuthenticationResponse user;
-        public PaymentController(IPaymentService paymentService, ISavingAccountService savingAccountService, IHttpContextAccessor contextAccessor, IBeneficiaryService beneficiaryService)
+        private readonly IMoneyLoanService _moneyLoanService;
+        private readonly AuthenticationResponse? user;
+        public PaymentController(IPaymentService paymentService, ISavingAccountService savingAccountService, IHttpContextAccessor contextAccessor, IBeneficiaryService beneficiaryService, IMoneyLoanService moneyLoanService)
         {
             _paymentService = paymentService;
             _savingAccountService = savingAccountService;
             _contextAccessor = contextAccessor;
             _beneficiaryService = beneficiaryService;
             user = _contextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+            _moneyLoanService = moneyLoanService;
         }
         #region ExpressPayment
         public async Task<IActionResult> ExpressPayment()
@@ -135,6 +137,49 @@ namespace WebApp.InternetBanking.Controllers
             }
 
         }
+        #endregion
+
+        #region MoneyLoanPayment
+        public async Task<IActionResult> MoneyLoanPayment()
+        {
+            try
+            {
+                ViewBag.Accounts = await _savingAccountService.GetAccountsByUserId(user.Id);
+                ViewBag.MoneyLoans = await _moneyLoanService.GetMoneyLoansByUserId(user.Id);
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MoneyLoanPayment(SavePaymentViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.Accounts = await _savingAccountService.GetAccountsByUserId(user.Id);
+                    ViewBag.MoneyLoans = await _moneyLoanService.GetMoneyLoansByUserId(user.Id);
+                    return View(model);
+                }
+                var payment = await _paymentService.MoneyLoanPayment(model);
+                if (payment.HasError)
+                {
+                    ViewBag.Accounts = await _savingAccountService.GetAccountsByUserId(user.Id);
+                    ViewBag.MoneyLoans = await _moneyLoanService.GetMoneyLoansByUserId(user.Id);
+                    return View(payment);
+                }
+                return RedirectToRoute(new { controller = "Client", action = "Index" });
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+
         #endregion
     }
 }

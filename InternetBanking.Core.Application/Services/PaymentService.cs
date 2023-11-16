@@ -19,8 +19,10 @@ namespace InternetBanking.Core.Application.Services
         private readonly IAccountService _accountService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
-        private AuthenticationResponse user;
-        public PaymentService(IPaymentRepository paymentRepository, IMapper mapper, ISavingAccountService savingAccountService, IAccountService accountService, IHttpContextAccessor httpContextAccessor, IBeneficiaryService beneficiaryService) : base(paymentRepository, mapper)
+        private readonly IMoneyLoanService _moneyLoanService;
+
+        private readonly AuthenticationResponse? user;
+        public PaymentService(IPaymentRepository paymentRepository, IMapper mapper, ISavingAccountService savingAccountService, IAccountService accountService, IHttpContextAccessor httpContextAccessor, IBeneficiaryService beneficiaryService, IMoneyLoanService moneyLoanService) : base(paymentRepository, mapper)
         {
             _savingAccountService = savingAccountService;
             _accountService = accountService;
@@ -28,6 +30,7 @@ namespace InternetBanking.Core.Application.Services
             _mapper = mapper;
             user = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
             _beneficiaryService = beneficiaryService;
+            _moneyLoanService = moneyLoanService;
         }
 
 
@@ -111,9 +114,61 @@ namespace InternetBanking.Core.Application.Services
             model.TypeOfPayment = TypeOfPayment.Beneficiary.ToString();
             return model;
         }
+        #endregion
 
+        #region MoneyPayment
+        public async Task<SavePaymentViewModel> MoneyLoanPayment(SavePaymentViewModel viewModel)
+        {
+            try
+            {
+                viewModel.IdUser = user.Id;
+                var originAccount = _mapper.Map<CreateSavingAccountViewModel>(await _savingAccountService.GetByAccountCode(viewModel.OriginAccount));
+                var moneyLoan = await _moneyLoanService.GetById(viewModel.DestinationAccount);
+                decimal vaApagar = moneyLoan.BalancePaid + viewModel.Amount;
 
+                if (moneyLoan.BalancePaid == moneyLoan.BorrowedBalance)
+                {
+                    viewModel.HasError = true;
+                    viewModel.Error = "YA HAS PAGADO EL MONTO TOTAL DEL PRESTAMO";
+                    return viewModel;
+                }
 
+                //Validar que la cuenta tenga el dinero suficiente.
+                if (originAccount.Balance < viewModel.Amount)
+                {
+                    viewModel.HasError = true;
+                    viewModel.Error = "LA CUENTA NO POSEE EL DINERO SUFICIENTE PARA REALIZAR EL PAGO";
+                    return viewModel;
+                }
+
+                //Validar que no le pague mas de lo que se le debe
+                if (vaApagar > moneyLoan.BorrowedBalance)
+                {
+                    //Lo estaria pagando de mas
+                    var residuo = vaApagar - moneyLoan.BorrowedBalance;
+                    //Actulizamos lo que se va a cobrar
+                    moneyLoan.BalancePaid += residuo;
+                    originAccount.Balance -= residuo;
+                }
+                else
+                {
+                    moneyLoan.BalancePaid += viewModel.Amount;
+                    originAccount.Balance -= viewModel.Amount;
+                }
+               
+                //Efectuar las transacciones.
+                await _moneyLoanService.Update(moneyLoan, moneyLoan.Id);
+                await _savingAccountService.Update(originAccount, originAccount.Id);
+                //Agregar el registro del pago.
+                return await base.Add(viewModel);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return viewModel;
+            }
+
+        }
         #endregion
     }
 }

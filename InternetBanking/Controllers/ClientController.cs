@@ -36,7 +36,7 @@ namespace WebApp.InternetBanking.Controllers
 
             ViewBag.SavingAccounts = await _savingAccountService.GetAccountsByUserId(User.Id);
             ViewBag.CreditCards = await _cardsService.GetCreditCardsById(User.Id);
-            ViewBag.MoneyLoans = await _moneyLoanService.GetMoneyLoansById(User.Id);
+            ViewBag.MoneyLoans = await _moneyLoanService.GetMoneyLoansByUserId(User.Id);
             return View();
         }
     }

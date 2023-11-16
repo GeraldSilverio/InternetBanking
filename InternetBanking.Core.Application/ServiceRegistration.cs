@@ -21,6 +21,7 @@ namespace InternetBanking.Core.Application
             services.AddTransient<IMoneyLoanService, MoneyLoanService>();
             services.AddTransient<IGetCountProduct, GetCountProducts>();
             services.AddTransient<IBeneficiaryService, BeneficiaryService>();
+            services.AddTransient<IPaymentService, PaymentService>();
             #endregion
         }
     }
