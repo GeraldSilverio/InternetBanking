@@ -11,5 +11,6 @@
         public string? Error { get; set; }
         public bool HasError { get; set; }
         public string? FullName { get; set; }
+        public string? TypeOfPayment {  get; set; }
     }
 }
