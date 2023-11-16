@@ -6,10 +6,16 @@
 
 <div class="container-fluid">
     <div class="col-12 mt-5">
-        <div class="d-flex justify-content-end mb-2">
-            <a asp-controller="CreditCards" asp-action="NewCreditCard" class="btn text-white bg-gradient" style="background-color:#09385B; outline-color:#D3D9DE;">Nueva Tarjeta</a>
-        </div>
         <div class="card">
+            <div class="card-header d-flex justify-content-between " style="background-color:#09385B">
+                <form method="post" asp-controller="CreditCards" asp-action="Index" class="d-flex align-items-cente ms-auto">
+                    <div class="me-3">
+                        <input type="text" class="form-control" id="filterName" name="IdentityCard" placeholder="Ingrese una Cédula">
+                    </div>
+                    <button type="submit" class="btn btn-outline-light">Filtrar por cedula</button>
+                </form>
+            </div>
+
             <div class="card-header" style="background-color:#09385B">
                 <h3 class="card-title text-light text-center">INFORMACION DE LAS TARJETAS DE CREDITOS</h3>
             </div>
@@ -60,12 +66,12 @@
                                 <td>@card.Debt</td>
                                 @if (card.Debt != 0)
                                 {
-                                    <td><b class="text-secondary">No se puede eliminar, aun debe dinerp</b></td>
+                                    <td><b class="text-secondary">No se puede eliminar, aun debe dinero</b></td>
                                 }
                                 else
                                 {
                                     <td>
-                                        <a class="btn btn-danger" asp-controller="CreditCards" asp-action="DeleteCard" asp-route-id="@card.Id">Eliminar</a>
+                                        <a class="btn btn-outline-dangerr" asp-controller="CreditCards" asp-action="DeleteCard" asp-route-id="@card.Id">Eliminar</a>
                                     </td>
                                 }
 

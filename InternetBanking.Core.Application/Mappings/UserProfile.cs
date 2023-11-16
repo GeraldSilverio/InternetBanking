@@ -9,26 +9,39 @@ namespace InternetBanking.Core.Application.Mappings
     {
         public UserProfile()
         {
+
+            #region User Profile
+
             CreateMap<RegisterRequest, SaveUserViewModel>()
                 .ForMember(u => u.HasError, opt => opt.Ignore())
                 .ForMember(u => u.Error, opt => opt.Ignore())
                 .ReverseMap();
 
-            CreateMap<AuthenticationRequest, LoginViewModel>()
-                .ForMember(u => u.HasError, opt => opt.Ignore())
-                .ForMember(u => u.Error, opt => opt.Ignore())
-                .ReverseMap();
+            CreateMap<UpdateUserRequest, EditUserViewModel>()
+              .ForMember(u => u.HasError, opt => opt.Ignore())
+              .ForMember(u => u.Error, opt => opt.Ignore())
+              .ReverseMap();
+
+            CreateMap<RegisterResponse, AuthenticationResponse>();
 
             CreateMap<AuthenticationResponse, UsersViewModel>();
 
             CreateMap<AuthenticationResponse, UserStatusViewModel>()
                 .ReverseMap();
 
-            CreateMap<AuthenticationResponse, EditUserViewModel>()
+            CreateMap<EditUserViewModel, AuthenticationResponse>()
                 .ReverseMap();
-                
 
-            CreateMap<RegisterResponse, AuthenticationResponse>();
+
+
+            #endregion
+
+            #region Login Profile
+
+            CreateMap<AuthenticationRequest, LoginViewModel>()
+                .ForMember(u => u.HasError, opt => opt.Ignore())
+                .ForMember(u => u.Error, opt => opt.Ignore())
+                .ReverseMap();
 
             CreateMap<ResetPasswordRequest, ResetPasswordViewModel>()
                .ForMember(x => x.HasError, opt => opt.Ignore())
@@ -40,6 +53,7 @@ namespace InternetBanking.Core.Application.Mappings
               .ForMember(x => x.HasError, opt => opt.Ignore())
               .ReverseMap();
 
+            #endregion
         }
     }
 }

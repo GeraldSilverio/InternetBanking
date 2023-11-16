@@ -1,6 +1,6 @@
 ﻿using InternetBanking.Core.Application.Interfaces.Services;
-using InternetBanking.Core.Application.Services;
 using InternetBanking.Core.Application.ViewModels.CreditCards;
+using InternetBanking.Core.Application.ViewModels.Filter;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.InternetBanking.Controllers
@@ -16,9 +16,9 @@ namespace WebApp.InternetBanking.Controllers
             _accountService = accountService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(FilterIdentityCardViewModel fvm)
         {
-            return View(await _creditCardsService.GetAll());
+            return View(await _creditCardsService.GetAllWithFilters(fvm));
         }
         public IActionResult NewCreditCard()
         {
@@ -27,15 +27,23 @@ namespace WebApp.InternetBanking.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> NewCreditCard(SaveCardViewModel model)
+        public async Task<IActionResult> NewCreditCard(string userId,string selectCard)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                ViewBag.Users = _accountService.GetAllUsersAsync();
-                return View(model);
+                var model = new SaveCardViewModel()
+                {
+                    IdUser = userId,
+                    SelectCard = selectCard,
+                };
+                await _creditCardsService.Add(model);
+                return RedirectToRoute(new { controller = "CreditCards", action = "Index" });
             }
-            await _creditCardsService.Add(model);
-            return RedirectToRoute(new {controller = "CreditCards",action ="Index"});
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+
         }
 
         public async Task<IActionResult> DeleteCard(int id)

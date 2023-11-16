@@ -2,6 +2,7 @@
 using InternetBanking.Core.Application.Helpers;
 using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Application.Interfaces.Services;
+using InternetBanking.Core.Application.ViewModels.Filter;
 using InternetBanking.Core.Application.ViewModels.MoneyLoan;
 using InternetBanking.Core.Domain.Entities;
 
@@ -30,7 +31,7 @@ namespace InternetBanking.Core.Application.Services
             return moneyloan;
         }
 
-        public override async Task<List<MoneyLoanViewModel>> GetAll()
+        public async Task<List<MoneyLoanViewModel>> GetAllWithFilters(FilterIdentityCardViewModel filters)
         {
             var moneyLoansList = new List<MoneyLoanViewModel>();
             var moneyLoans = await base.GetAll();
@@ -52,6 +53,13 @@ namespace InternetBanking.Core.Application.Services
                 };
                 moneyLoansList.Add(moneyLoanView);
             }
+
+            if (!string.IsNullOrEmpty(filters.IdentityCard))
+            {
+                string identityCardToLower = filters.IdentityCard.ToLower();
+                moneyLoansList = moneyLoansList.Where(lr => lr.UserIdentityCard.ToLower().Contains(identityCardToLower)).ToList();
+            }
+
 
             return moneyLoansList;
         }

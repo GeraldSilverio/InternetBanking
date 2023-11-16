@@ -4,6 +4,7 @@ using InternetBanking.Core.Application.Helpers;
 using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.ViewModels.CreditCards;
+using InternetBanking.Core.Application.ViewModels.Filter;
 using InternetBanking.Core.Domain.Entities;
 
 namespace InternetBanking.Core.Application.Services
@@ -36,7 +37,7 @@ namespace InternetBanking.Core.Application.Services
             return await base.Add(model);
         }
 
-        public override async Task<List<CardViewModel>> GetAll()
+        public async Task<List<CardViewModel>> GetAllWithFilters(FilterIdentityCardViewModel filters)
         {
             var cardLists = new List<CardViewModel>();
             var cards = await _creditsCardRepository.GetAllAsync();
@@ -56,6 +57,12 @@ namespace InternetBanking.Core.Application.Services
                     Debt = card.CreditLimited - card.Available
                 };
                 cardLists.Add(cardViewModel);
+            }
+
+            if (!string.IsNullOrEmpty(filters.IdentityCard))
+            {
+                string identityCardToLower = filters.IdentityCard.ToLower();
+                cardLists = cardLists.Where(lr => lr.IdentityCard.ToLower().Contains(identityCardToLower)).ToList();
             }
 
             return cardLists;

@@ -1,4 +1,5 @@
-﻿using InternetBanking.Core.Application.ViewModels.SavingAccount;
+﻿using InternetBanking.Core.Application.ViewModels.Filter;
+using InternetBanking.Core.Application.ViewModels.SavingAccount;
 using InternetBanking.Core.Domain.Entities;
 
 namespace InternetBanking.Core.Application.Interfaces.Services
@@ -9,5 +10,7 @@ namespace InternetBanking.Core.Application.Interfaces.Services
         Task UpdatePrincialAccount(decimal balance, string IdUser);
         Task<SavingAccount> GetByAccountCode(int accountCode);
         Task<List<SavingAccountViewModel>> GetAccountsByUserId(string idUser);
+
+        Task<List<SavingAccountViewModel>> GetAllWithFilters(FilterIdentityCardViewModel filters);
     }
 }
