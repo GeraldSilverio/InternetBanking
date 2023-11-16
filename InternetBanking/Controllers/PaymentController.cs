@@ -11,16 +11,19 @@ namespace WebApp.InternetBanking.Controllers
         private readonly IPaymentService _paymentService;
         private readonly ISavingAccountService _savingAccountService;
         private readonly IHttpContextAccessor _contextAccessor;
-        public PaymentController(IPaymentService paymentService, ISavingAccountService savingAccountService, IHttpContextAccessor contextAccessor)
+        private readonly IBeneficiaryService _beneficiaryService;
+        private AuthenticationResponse user;
+        public PaymentController(IPaymentService paymentService, ISavingAccountService savingAccountService, IHttpContextAccessor contextAccessor, IBeneficiaryService beneficiaryService)
         {
             _paymentService = paymentService;
             _savingAccountService = savingAccountService;
             _contextAccessor = contextAccessor;
+            _beneficiaryService = beneficiaryService;
+            user = _contextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
         }
-
+        #region ExpressPayment
         public async Task<IActionResult> ExpressPayment()
         {
-            var user = _contextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
             ViewBag.Accounts = await _savingAccountService.GetAccountsByUserId(user.Id);
             return View();
         }
@@ -33,16 +36,19 @@ namespace WebApp.InternetBanking.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    return View("ExpressPayment", model);
+                    ViewBag.Accounts = await _savingAccountService.GetAccountsByUserId(user.Id);
+                    return View(model);
+
                 }
 
-                var payment = await _paymentService.ValidatePayment(model);
+                var payment = await _paymentService.ValidateExpressPayment(model);
 
                 if (payment.HasError)
                 {
-                    return View("ExpressPayment", payment);
+                    ViewBag.Accounts = await _savingAccountService.GetAccountsByUserId(user.Id);
+                    return View(payment);
                 }
-                return View("ConfirmExpressPayment", payment);
+                return View("ConfirmPayment", payment);
             }
             catch (Exception ex)
             {
@@ -50,17 +56,17 @@ namespace WebApp.InternetBanking.Controllers
             }
 
         }
-
-        public IActionResult ConfirmExpressPayment()
+        public IActionResult ConfirmPayment()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> ConfirmExpressPayment(SavePaymentViewModel model)
         {
             try
             {
-                await _paymentService.ExpressPayment(model);
+                await _paymentService.Payment(model);
                 return RedirectToRoute(new { controller = "Client", action = "Index" });
             }
             catch (Exception ex)
@@ -69,5 +75,66 @@ namespace WebApp.InternetBanking.Controllers
             }
 
         }
+
+        #endregion
+
+        #region BeneficiaryPayment
+
+        public async Task<IActionResult> Beneficiary()
+        {
+            try
+            {
+                ViewBag.Accounts = await _savingAccountService.GetAccountsByUserId(user.Id);
+                ViewBag.Beneficiaries = await _beneficiaryService.GetAllByUser(user.Id);
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Beneficiary(SavePaymentViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.Accounts = await _savingAccountService.GetAccountsByUserId(user.Id);
+                    ViewBag.Beneficiaries = await _beneficiaryService.GetAllByUser(user.Id);
+                    return View("Beneficiary", model);
+                }
+                var payment = await _paymentService.ValidateBeneficiaryPayment(model);
+                if (payment.HasError)
+                {
+                    ViewBag.Accounts = await _savingAccountService.GetAccountsByUserId(user.Id);
+                    ViewBag.Beneficiaries = await _beneficiaryService.GetAllByUser(user.Id);
+                    return View("Beneficiary", model);
+                }
+                return View("ConfirmPayment", model);
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmBeneficiaryPayment(SavePaymentViewModel model)
+        {
+            try
+            {
+                await _paymentService.Payment(model);
+                return RedirectToRoute(new { controller = "Client", action = "Index" });
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+
+        }
+        #endregion
     }
 }

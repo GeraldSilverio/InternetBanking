@@ -15,12 +15,14 @@ namespace InternetBanking.Core.Application.Services
         private readonly IAccountService _accountService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISavingAccountService _savingAccountService;
+        private readonly IMapper _mapper;
         public BeneficiaryService(IBeneficiaryRepository beneficiaryRepository, IAccountService accountService, IMapper mapper, IHttpContextAccessor httpContextAccessor, ISavingAccountService savingAccountService) : base(beneficiaryRepository, mapper)
         {
             _beneficiaryRepository = beneficiaryRepository;
             _accountService = accountService;
             _httpContextAccessor = httpContextAccessor;
             _savingAccountService = savingAccountService;
+            _mapper = mapper;
         }
 
         public override async Task<SaveBeneficiaryViewModel> Add(SaveBeneficiaryViewModel model)
@@ -80,6 +82,11 @@ namespace InternetBanking.Core.Application.Services
                 benefiaciresList.Add(beneficiaryView);
             }
             return benefiaciresList;
+        }
+
+        public async Task<BeneficiaryViewModel> GetByAccountCode(int accountCode)
+        {
+            return _mapper.Map<BeneficiaryViewModel>(await _beneficiaryRepository.GetByAccountCode(accountCode));
         }
     }
 }

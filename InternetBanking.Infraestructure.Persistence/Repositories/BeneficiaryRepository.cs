@@ -20,6 +20,11 @@ namespace InternetBanking.Infraestructure.Persistence.Repositories
             return beneficiaries;
         }
 
+        public async Task<Beneficiary> GetByAccountCode(int accountCode)
+        {
+            return await _dbContext.Beneficiaries.FirstOrDefaultAsync(x => x.AccountCode == accountCode);
+        }
+
         public async Task<bool> IsBeneficiaryAdd(string idUser, string idBeneficiary, int accountCode)
         {
             var beneficiaries = await _dbContext.Beneficiaries.ToListAsync();
