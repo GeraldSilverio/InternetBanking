@@ -10,7 +10,6 @@ namespace WebApp.InternetBanking.Controllers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IBeneficiaryService _beneficiaryService;
-
         public BeneficiaryController(IBeneficiaryService beneficiaryService, IHttpContextAccessor httpContextAccessor, IAccountService accountService)
         {
             _httpContextAccessor = httpContextAccessor;
