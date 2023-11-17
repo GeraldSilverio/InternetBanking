@@ -23,6 +23,7 @@ namespace InternetBanking.Core.Application
             services.AddTransient<IBeneficiaryService, BeneficiaryService>();
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<IEffectiveProgressService, EffectiveProgressService>();
+            services.AddTransient<ITransactionService, TransactionService>();
             #endregion
         }
     }

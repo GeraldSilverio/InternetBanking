@@ -1,20 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace InternetBanking.Core.Application.ViewModels.Payment
+﻿namespace InternetBanking.Core.Application.ViewModels.Payment.Transaction
 {
-    public class SavePaymentViewModel
+    public class SaveTransactionViewModel
     {
         public int Id { get; set; }
         public string? IdUser { get; set; }
         public int OriginAccount { get; set; }
         public int DestinationAccount { get; set; }
-
-        [Range(1, (double)decimal.MaxValue, ErrorMessage = "Debe ingresar un monto")]
         public decimal Amount { get; set; }
         public DateTime DateOfPaid { get; set; } = DateTime.Now;
         public string? Error { get; set; }
         public bool HasError { get; set; }
-        public string? FullName { get; set; }
-        public string? TypeOfPayment { get; set; }
     }
 }

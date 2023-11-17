@@ -39,7 +39,7 @@ namespace InternetBanking.Core.Application.Services
                 case nameof(CreditCards.DIAMOND): model.CreditLimited = (int)CreditCards.DIAMOND; break;
                 case nameof(CreditCards.BLACK): model.CreditLimited = (int)CreditCards.BLACK; break;
             }
-            model.Available = +model.CreditLimited;
+            model.Available =+ model.CreditLimited;
             return await base.Add(model);
         }
 

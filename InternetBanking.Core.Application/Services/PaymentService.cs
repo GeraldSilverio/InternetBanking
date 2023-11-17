@@ -183,7 +183,6 @@ namespace InternetBanking.Core.Application.Services
                 viewModel.IdUser = user.Id;
                 var originAccount = await _savingAccountService.GetById(viewModel.OriginAccount);
                 var creditCard = await _creditCardsService.GetById(viewModel.DestinationAccount);
-                var payment = viewModel.Amount - creditCard.Debt;
 
                 if (originAccount.Balance < viewModel.Amount)
                 {
@@ -192,15 +191,9 @@ namespace InternetBanking.Core.Application.Services
                     return viewModel;
                 } 
 
-                if(viewModel.Amount == decimal.Zero)
+                if (viewModel.Amount > creditCard.Debt)
                 {
-                    viewModel.HasError = true;
-                    viewModel.Error = "EL MONTO NO PUEDE SER CERO";
-                    return viewModel;
-                }
-
-                if (viewModel.Amount > payment)
-                {
+                    var payment = viewModel.Amount - creditCard.Debt;
                     originAccount.Balance -= viewModel.Amount;     
                     originAccount.Balance += payment;
                     creditCard.Debt = 0.00m;

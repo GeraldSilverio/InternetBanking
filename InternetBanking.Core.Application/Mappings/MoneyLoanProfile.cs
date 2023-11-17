@@ -15,7 +15,13 @@ namespace InternetBanking.Core.Application.Mappings
             .ForMember(x => x.CreatedBy, opt => opt.Ignore())
             .ForMember(x => x.LastModified, opt => opt.Ignore())
             .ForMember(x => x.LastModifiedBy, opt => opt.Ignore());
-            CreateMap<MoneyLoan,MoneyLoanViewModel>();
+            
+            CreateMap<MoneyLoan,MoneyLoanViewModel>()
+                .ReverseMap()
+                .ForMember(x => x.Created, opt => opt.Ignore())
+                .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+                .ForMember(x => x.LastModified, opt => opt.Ignore())
+                .ForMember(x => x.LastModifiedBy, opt => opt.Ignore());
         }
     }
 }
