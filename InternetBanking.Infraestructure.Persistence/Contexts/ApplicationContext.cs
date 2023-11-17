@@ -16,6 +16,7 @@ namespace InternetBanking.Infraestructure.Persistence.Contexts
             modelBuilder.ApplyConfiguration(new MoneyLoanConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
             modelBuilder.ApplyConfiguration(new SavingAccountConfiguration());
+            modelBuilder.ApplyConfiguration(new EffectiveProgressConfiguration());
         }
 
         
@@ -26,6 +27,7 @@ namespace InternetBanking.Infraestructure.Persistence.Contexts
         public DbSet<MoneyLoan> MoneyLoans { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<SavingAccount> SavingAccounts { get; set; }
+        public DbSet<EffectiveProgress> EffectiveProgress { get; set; }
         #endregion
 
 

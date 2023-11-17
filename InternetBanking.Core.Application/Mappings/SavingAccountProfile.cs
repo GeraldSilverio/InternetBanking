@@ -12,7 +12,11 @@ namespace InternetBanking.Core.Application.Mappings
                 .ReverseMap();
 
             CreateMap<SavingAccount, SavingAccountViewModel>()
-                .ReverseMap();
+               .ReverseMap()
+               .ForMember(x => x.Created, opt => opt.Ignore())
+               .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+               .ForMember(x => x.LastModified, opt => opt.Ignore())
+               .ForMember(x => x.LastModifiedBy, opt => opt.Ignore());
         }
     }
 }

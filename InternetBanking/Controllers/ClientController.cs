@@ -35,7 +35,7 @@ namespace WebApp.InternetBanking.Controllers
             var User = _contextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
 
             ViewBag.SavingAccounts = await _savingAccountService.GetAccountsByUserId(User.Id);
-            ViewBag.CreditCards = await _cardsService.GetCreditCardsById(User.Id);
+            ViewBag.CreditCards = await _cardsService.GetCreditCardsByUserId(User.Id);
             ViewBag.MoneyLoans = await _moneyLoanService.GetMoneyLoansById(User.Id);
             return View();
         }

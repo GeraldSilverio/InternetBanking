@@ -7,6 +7,6 @@ namespace InternetBanking.Core.Application.Interfaces.Services
     public interface ICreditCardsService:IGenericService<CreditsCard, SaveCardViewModel, CardViewModel>
     {
         Task<List<CardViewModel>> GetAllWithFilters(FilterIdentityCardViewModel filters);
-        Task<List<CardViewModel>> GetCreditCardsById(string id);
+        Task<List<CardViewModel>> GetCreditCardsByUserId(string id);
     }
 }

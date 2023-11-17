@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using InternetBanking.Core.Application.Dtos.Account;
 using InternetBanking.Core.Application.Helpers;
 using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.ViewModels.Filter;
 using InternetBanking.Core.Application.ViewModels.SavingAccount;
 using InternetBanking.Core.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace InternetBanking.Core.Application.Services
 {
@@ -13,11 +15,14 @@ namespace InternetBanking.Core.Application.Services
         private readonly ISavingAccountRepository _savingAccountrepository;
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
-        public SavingAccountService(ISavingAccountRepository savingAccountRepository, IMapper mapper, ISavingAccountRepository savingAccountrepository, IAccountService accountService) : base(savingAccountRepository, mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private AuthenticationResponse user;
+        public SavingAccountService(ISavingAccountRepository savingAccountRepository, IMapper mapper, ISavingAccountRepository savingAccountrepository, IAccountService accountService, IHttpContextAccessor httpContextAccessor) : base(savingAccountRepository, mapper)
         {
             _savingAccountrepository = savingAccountrepository;
             _accountService = accountService;
             _mapper = mapper;
+            user = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
         }
 
         public override Task<CreateSavingAccountViewModel> Add(CreateSavingAccountViewModel model)
@@ -61,12 +66,6 @@ namespace InternetBanking.Core.Application.Services
             return accountList;
         }
 
-        public override Task<CreateSavingAccountViewModel> GetById(int id)
-        {
-
-            return base.GetById(id);
-        }
-
         public async Task<SavingAccountViewModel> GetByIdUser(string id)
         {
             var account = await _savingAccountrepository.GetByIdUser(id);
@@ -88,8 +87,17 @@ namespace InternetBanking.Core.Application.Services
 
         public async Task<List<SavingAccountViewModel>> GetAccountsByUserId(string idUser)
         {
-            var accounts = await _savingAccountrepository.GetAccountsByUserId(idUser);
-            return _mapper.Map<List<SavingAccountViewModel>>(accounts); 
+            var accounts = await _savingAccountrepository.GetAccountsByUserId(idUser);             
+            return accounts.Select(a => new SavingAccountViewModel()
+            {
+                Id = a.Id,
+                Balance = a.Balance,
+                IdUser = a.IdUser,
+                AccountCode = a.AccountCode,
+                IsPrincial = a.IsPrincipal,
+                FullName =  user.FirstName + "" + user.LastName,
+                IdentityCard = user.IdentityCard
+            }).ToList();
         }
     }
 }

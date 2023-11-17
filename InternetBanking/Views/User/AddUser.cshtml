@@ -135,10 +135,6 @@
 
 <script>
 
-    document.getElementById('balanceInput').addEventListener('input', function (e) {
-        const value = /^[0-9]*\.?[0-9]{0,2}$/;       
-    });
-
     document.addEventListener("DOMContentLoaded", function () {
         var selectRole = document.getElementById("selectRole");
         var balanceCliente = document.getElementById("balancecliente");
@@ -151,5 +147,10 @@
             }
             balanceCliente.disabled = (selectRole.value !== "1");
         });
+    });
+
+
+    document.getElementById('balanceInput').addEventListener('input', function (e) {
+        const value = /^[0-9]*\.?[0-9]{0,2}$/;
     });
 </script>
