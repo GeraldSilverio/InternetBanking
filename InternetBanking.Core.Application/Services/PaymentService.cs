@@ -9,7 +9,6 @@ using InternetBanking.Core.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using InternetBanking.Core.Application.ViewModels.SavingAccount;
 using InternetBanking.Core.Application.Enums;
-using System.Runtime.CompilerServices;
 
 namespace InternetBanking.Core.Application.Services
 {
@@ -128,7 +127,7 @@ namespace InternetBanking.Core.Application.Services
                 viewModel.IdUser = user.Id;
                 var originAccount = _mapper.Map<CreateSavingAccountViewModel>(await _savingAccountService.GetByAccountCode(viewModel.OriginAccount));
                 var moneyLoan = await _moneyLoanService.GetById(viewModel.DestinationAccount);
-                decimal vaApagar = moneyLoan.BalancePaid + viewModel.Amount;
+                decimal totalToPay = moneyLoan.BalancePaid + viewModel.Amount;
 
                 if (moneyLoan.BalancePaid == moneyLoan.BorrowedBalance)
                 {
@@ -146,13 +145,13 @@ namespace InternetBanking.Core.Application.Services
                 }
 
                 //Validar que no le pague mas de lo que se le debe
-                if (vaApagar > moneyLoan.BorrowedBalance)
+                if (totalToPay > moneyLoan.BorrowedBalance)
                 {
                     //Lo estaria pagando de mas
-                    var residuo = vaApagar - moneyLoan.BorrowedBalance;
+                    decimal excessAmount = totalToPay - moneyLoan.BorrowedBalance;
                     //Actulizamos lo que se va a cobrar
-                    moneyLoan.BalancePaid += residuo;
-                    originAccount.Balance -= residuo;
+                    moneyLoan.BalancePaid += viewModel.Amount - excessAmount;
+                    originAccount.Balance -= viewModel.Amount - excessAmount;
                 }
                 else
                 {
@@ -183,7 +182,6 @@ namespace InternetBanking.Core.Application.Services
                 viewModel.IdUser = user.Id;
                 var originAccount = await _savingAccountService.GetById(viewModel.OriginAccount);
                 var creditCard = await _creditCardsService.GetById(viewModel.DestinationAccount);
-                var payment = viewModel.Amount - creditCard.Debt;
 
                 if (originAccount.Balance < viewModel.Amount)
                 {
@@ -192,15 +190,10 @@ namespace InternetBanking.Core.Application.Services
                     return viewModel;
                 } 
 
-                if(viewModel.Amount == decimal.Zero)
-                {
-                    viewModel.HasError = true;
-                    viewModel.Error = "EL MONTO NO PUEDE SER CERO";
-                    return viewModel;
-                }
 
-                if (viewModel.Amount > payment)
+                if (viewModel.Amount > creditCard.Debt)
                 {
+                    decimal payment = viewModel.Amount - creditCard.Debt;
                     originAccount.Balance -= viewModel.Amount;     
                     originAccount.Balance += payment;
                     creditCard.Debt = 0.00m;

@@ -15,7 +15,7 @@ namespace WebApp.InternetBanking.Controllers
         private readonly ICreditCardsService _creditCardsService;
         private readonly ISavingAccountService _savingAccountService;
         IHttpContextAccessor _httpContextAccessor;
-        private AuthenticationResponse user;
+        private AuthenticationResponse? user;
         public EffectiveProgressController(IEffectiveProgressService effectiveProgressService, IHttpContextAccessor httpContextAccessor,
             ICreditCardsService creditCardsService, ISavingAccountService savingAccountService)
         {
@@ -48,7 +48,10 @@ namespace WebApp.InternetBanking.Controllers
                 viewModel.IdUser = user.Id;
                 if (!ModelState.IsValid)
                 {
-                    return RedirectToAction("Index");
+
+                    ViewBag.CreditCard = await _creditCardsService.GetCreditCardsByUserId(user.Id);
+                    ViewBag.Account = await _savingAccountService.GetAccountsByUserId(user.Id);
+                    return View("AddEffectiveProgress",viewModel);
                 }
 
                 var effectiveProgress = await _effectiveProgressService.AddEffectiveProgress(viewModel);
