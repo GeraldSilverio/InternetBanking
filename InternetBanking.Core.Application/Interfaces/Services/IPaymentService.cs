@@ -9,5 +9,6 @@ namespace InternetBanking.Core.Application.Interfaces.Services
         Task Payment(SavePaymentViewModel viewModel);
         Task<SavePaymentViewModel> MoneyLoanPayment(SavePaymentViewModel viewModel);
         Task <SavePaymentViewModel> ValidateBeneficiaryPayment(SavePaymentViewModel viewModel);
+        Task<SavePaymentViewModel> CreditCardPayment(SavePaymentViewModel viewModel);
     }
 }

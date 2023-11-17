@@ -6,9 +6,8 @@ namespace InternetBanking.Core.Domain.Entities
     {
         public string IdUser { get; set; } = null!;
         public int CardNumber { get; set; }
-        //Limite de la tarjeta
-        public decimal CreditLimited { get; set; }
-        //Balance disponible
+        public decimal CreditLimited { get; set; }  
         public decimal Available { get; set; }
+        public decimal Debt { get ; set; }
     }
 }

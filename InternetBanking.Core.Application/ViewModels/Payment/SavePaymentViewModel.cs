@@ -1,11 +1,15 @@
-﻿namespace InternetBanking.Core.Application.ViewModels.Payment
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace InternetBanking.Core.Application.ViewModels.Payment
 {
     public class SavePaymentViewModel
     {
         public int Id { get; set; }
         public string? IdUser { get; set; }
         public int OriginAccount { get; set; }
-        public int DestinationAccount { get; set; }
+        public int DestinationAccount { get; set; } 
+        
+        [Range(1, (double)decimal.MaxValue, ErrorMessage = "Debe ingresar un monto")]
         public decimal Amount { get; set; }
         public DateTime DateOfPaid { get; set; } = DateTime.Now;
         public string? Error { get; set; }

@@ -2,10 +2,12 @@
 using InternetBanking.Core.Application.Helpers;
 using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.ViewModels.Beneficiary;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.InternetBanking.Controllers
 {
+    [Authorize(Roles = "Client")]
     public class BeneficiaryController : Controller
     {
         private readonly IHttpContextAccessor _httpContextAccessor;

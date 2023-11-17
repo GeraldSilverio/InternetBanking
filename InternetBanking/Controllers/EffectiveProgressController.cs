@@ -2,9 +2,13 @@
 using InternetBanking.Core.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using InternetBanking.Core.Application.Helpers;
+using InternetBanking.Core.Application.ViewModels.Payment.EffectiveProgress;
+using InternetBanking.Core.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.InternetBanking.Controllers
 {
+    [Authorize(Roles = "Client")]
     public class EffectiveProgressController : Controller
     {
         private readonly IEffectiveProgressService _effectiveProgressService;
@@ -27,7 +31,7 @@ namespace WebApp.InternetBanking.Controllers
             {
                 ViewBag.CreditCard = await _creditCardsService.GetCreditCardsByUserId(user.Id);
                 ViewBag.Account = await _savingAccountService.GetAccountsByUserId(user.Id);
-                return View();
+                return View("AddEffectiveProgress");
 
             }
             catch (Exception ex)
@@ -36,13 +40,28 @@ namespace WebApp.InternetBanking.Controllers
             }
         }
 
-        public async Task<IActionResult> EffectiveProgress()
+        [HttpPost]
+        public async Task<IActionResult> EffectiveProgress(SaveEffectiveProgressViewModel viewModel)
         {
             try
             {
-                ViewBag.CreditCard = await _creditCardsService.GetCreditCardsByUserId(user.Id);
-                ViewBag.Account = await _savingAccountService.GetAccountsByUserId(user.Id);             
-                return View("AddEffectiveProgress");
+                viewModel.IdUser = user.Id;
+                if (!ModelState.IsValid)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                var effectiveProgress = await _effectiveProgressService.AddEffectiveProgress(viewModel);
+                if (effectiveProgress.HasError)
+                {
+                    effectiveProgress.HasError = viewModel.HasError;
+                    effectiveProgress.Error = viewModel.Error;
+                    ViewBag.CreditCard = await _creditCardsService.GetCreditCardsByUserId(user.Id);
+                    ViewBag.Account = await _savingAccountService.GetAccountsByUserId(user.Id);
+
+                    return View("AddEffectiveProgress", effectiveProgress);
+                }
+                return RedirectToRoute(new { controller = "Client", action = "Index" });
             }
             catch (Exception ex)
             {

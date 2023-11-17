@@ -12,6 +12,9 @@
         <div class="col-12 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
             <div class="col-6">
                 <div class="card mt-3">
+                    <div class="card-header bg-blue-card-header text-light text-center">
+                        <h4>Realizar pago a Beneficiario</h4>
+                    </div>
                     <div class="card-body mt-3">
                         @if (Model != null && Model.HasError)
                         {
@@ -36,7 +39,7 @@
 
                             <div class="mb-3">
                                 <label>Monto a Pagar</label>
-                                <input type="number" class="form-control" asp-for="Amount" autocomplete="off">
+                                <input type="text" id="balanceInput" placeholder="0.00" class="form-control" asp-for="Amount" autocomplete="off">
                             </div>
 
                             <div class="mb-3">
@@ -83,4 +86,16 @@
         font-weight: bold;
     }
 
+    .bg-blue-card-header {
+        background-color: #09385B;
+        color: white;
+    }
+ 
+
 </style>
+
+<script>
+    document.getElementById('balanceInput').addEventListener('input', function (e) {
+        const value = /^[0-9]*\.?[0-9]{0,2}$/;
+    });
+</script>

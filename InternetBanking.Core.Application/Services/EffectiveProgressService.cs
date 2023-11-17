@@ -3,7 +3,6 @@ using InternetBanking.Core.Application.Dtos.Account;
 using InternetBanking.Core.Application.Helpers;
 using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Application.Interfaces.Services;
-using InternetBanking.Core.Application.ViewModels.Beneficiary;
 using InternetBanking.Core.Application.ViewModels.CreditCards;
 using InternetBanking.Core.Application.ViewModels.Payment.EffectiveProgress;
 using InternetBanking.Core.Application.ViewModels.SavingAccount;
@@ -16,28 +15,46 @@ namespace InternetBanking.Core.Application.Services
     {
         private readonly ICreditCardsService _creditCardsService;
         private readonly ISavingAccountService _savingAccountService;
-        private readonly IAccountService _accountService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private AuthenticationResponse User;
         private readonly IMapper _mapper;
         public EffectiveProgressService
             (IEffectiveProgressRepository effectiveProgressRepository, IMapper mapper, ICreditCardsService creditCardsService, ISavingAccountService savingAccountService,
-            IAccountService accountService, IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor)
             : base(effectiveProgressRepository,mapper)
         {            
             _creditCardsService = creditCardsService;
             _savingAccountService = savingAccountService;
-            _accountService = accountService;
             _httpContextAccessor = httpContextAccessor;
             User = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
         }
 
-        public async Task AddEffectiveProgress(SaveEffectiveProgressViewModel model)
+        public async Task<SaveEffectiveProgressViewModel> AddEffectiveProgress(SaveEffectiveProgressViewModel model)
         {
             try
             {
-                var originAccount = _mapper.Map<SaveCardViewModel>(await _savingAccountService.GetByAccountCode(model.OriginAccount));
-                var destinationAccount = _mapper.Map<CreateSavingAccountViewModel>(await _savingAccountService.GetByAccountCode(model.DestinationAccount));
+                model.IdUser = User.Id;
+                var originAccount = await _creditCardsService.GetById(model.OriginAccount);
+                var destinationAccount = await _savingAccountService.GetById(model.DestinationAccount);
+
+                if (model.Amount >= originAccount.CreditLimited)
+                {
+                    model.HasError = true;
+                    model.Error = "EL MONTO INGRESADO EXCEDE EL LÍMITE DE LA TARJETA SELECCIONADA";
+
+                    return model;
+                }
+
+                //Agregar una validacion que si el usuario manda el monto en 0 decirle que el monto debe ser mayor a 100 por ejemplo
+
+                originAccount.Debt = model.Amount + (model.Amount * 0.0625m);
+                originAccount.Available = originAccount.CreditLimited - model.Amount;
+                destinationAccount.Balance += model.Amount;
+
+                await _creditCardsService.Update(originAccount,originAccount.Id);
+                await _savingAccountService.Update(destinationAccount, destinationAccount.Id);
+
+                return await base.Add(model);
             }
             catch (Exception ex)
             {
@@ -45,27 +62,6 @@ namespace InternetBanking.Core.Application.Services
             }
 
         }
-
-        //public async Task<List<EffectiveProgress>> GetAllByUser(string id)
-        //{
-        //    var effectivelist = new List<EffectiveProgress>();
-        //    var effective = await _beneficiaryRepository.GetAllByUser(id);
-        //    foreach (var e in effective)
-        //    {
-        //        var beneficiary = await _accountService.GetUserByIdAsync(benef.IdBeneficiary);
-        //        var beneficiaryView = new EffectiveProgress()
-        //        {
-        //            Id = e.Id,
-        //            IdBeneficiary = e.IdBeneficiary,
-        //            FirstName = beneficiary.FirstName,
-        //            LastName = beneficiary.LastName,
-        //            AccountCode = benef.AccountCode,
-        //            IdUser = benef.IdUser,
-        //        };
-        //        effectivelist.Add(beneficiaryView);
-        //    }
-        //    return effectivelist;
-        //}
 
     }
 }

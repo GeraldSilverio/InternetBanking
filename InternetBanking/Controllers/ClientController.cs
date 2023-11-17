@@ -2,10 +2,11 @@
 using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.InternetBanking.Controllers
 {
-
+    [Authorize(Roles = "Client")]
     public class ClientController : Controller
     {
         private readonly IUserServices _userServices;
@@ -35,7 +36,7 @@ namespace WebApp.InternetBanking.Controllers
         {
 
             ViewBag.SavingAccounts = await _savingAccountService.GetAccountsByUserId(user.Id);
-            ViewBag.CreditCards = await _cardsService.GetCreditCardsById(user.Id);
+            ViewBag.CreditCards = await _cardsService.GetCreditCardsByUserId(user.Id);
             ViewBag.MoneyLoans = await _moneyLoanService.GetMoneyLoansByUserId(user.Id);
             return View();
         }

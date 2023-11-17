@@ -83,7 +83,7 @@ namespace InternetBanking.Core.Application.Services
                 CardNumber = creditCard.CardNumber,
                 CreditLimited = creditCard.CreditLimited,
                 Available = creditCard.Available,
-                Debt = creditCard.CreditLimited - creditCard.Available,
+                Debt = creditCard.Debt,
                 FullName = user.FirstName + " " + user.LastName, 
                 IdentityCard = user.IdentityCard
             }).ToList();

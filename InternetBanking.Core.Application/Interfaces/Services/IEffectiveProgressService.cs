@@ -5,5 +5,6 @@ namespace InternetBanking.Core.Application.Interfaces.Services
 {
     public interface IEffectiveProgressService : IGenericService<EffectiveProgress, SaveEffectiveProgressViewModel, EffectiveProgress>
     {
+        Task<SaveEffectiveProgressViewModel> AddEffectiveProgress(SaveEffectiveProgressViewModel model);
     }
 }

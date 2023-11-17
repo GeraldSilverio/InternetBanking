@@ -11,6 +11,9 @@
         <div class="col-12 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
             <div class="col-6">
                 <div class="card mt-3">
+                    <div class="card-header bg-blue-card-header text-light text-center">
+                        <h4>Realizar Avance efectivo</h4>
+                    </div>
                     <div class="card-body mt-3">
                         @if (Model != null && Model.HasError)
                         {
@@ -19,17 +22,22 @@
                                 <button type="button" class=" btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         }
-                        <form class=" mb-3" method="post" asp-controller="EffectiveProgres" asp-action="EffectiveProgress">
+                        <form class=" mb-3" method="post" asp-controller="EffectiveProgress" asp-action="EffectiveProgress">
 
                             <div class="mb-3">
                                 <label>Seleccione la tarjera de crédito para realizar el avance</label>
                                 <select class="form-select" asp-for="OriginAccount">
                                     @foreach (CardViewModel card in ViewBag.CreditCard)
                                     {
-                                        <option asp-for="OriginAccount" value="@card.CardNumber"><b class="text-primary">Cuenta: </b>@card.CardNumber <b class="text-primary">Límite: </b>@card.CreditLimited</option>
+                                        <option asp-for="OriginAccount" value="@card.Id">Cuenta: @card.CardNumber Límite: @card.Available</option>
                                     }
 
                                 </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Monto a Pagar</label>
+                                <input type="text" id="balanceInput" class="form-control" asp-for="Amount" autocomplete="off">
                             </div>
 
                             <div class="mb-3">
@@ -37,19 +45,17 @@
                                 <select class="form-select" asp-for="DestinationAccount">
                                     @foreach (SavingAccountViewModel account in ViewBag.Account)
                                     {
-                                        <option asp-for="DestinationAccount" value="@account.AccountCode"><b>Cuenta: </b>@account.AccountCode <b>Balamce: </b>@account.Balance</option>
+                                        <option asp-for="DestinationAccount" value="@account.Id">Cuenta: @account.AccountCode Balance: @account.Balance</option>
                                     }
                                 </select>
                             </div>
+                      
 
-                            <div class="mb-3">
-                                <label>Monto a Pagar</label>
-                                <input type="number" class="form-control" asp-for="Amount" autocomplete="off">
-                            </div>
+                            <input type="hidden" asp-for="IdUser" />
 
 
-                            <button type="submit" class="btn btn-outline-primary float-end ms-2">Agregar Beneficiario</button>
-                            <a class="btn btn-secondary float-end" asp-controller="Beneficiary" asp-action="Index">Volver</a>
+                            <button type="submit" class="btn btn-outline-primary float-end ms-2">Realizar avance</button>
+                            <a class="btn btn-secondary float-end" asp-controller="Client" asp-action="Index">Volver</a>
                         </form>
                     </div>
                 </div>
@@ -79,4 +85,17 @@
         font-weight: bold;
     }
 
+    .bg-blue-card-header {
+        background-color: #09385B;
+        color: white;
+    }
+
+
 </style>
+
+
+<script>
+    document.getElementById('balanceInput').addEventListener('input', function (e) {
+        const value = /^[0-9]*\.?[0-9]{0,2}$/;
+    });
+</script>

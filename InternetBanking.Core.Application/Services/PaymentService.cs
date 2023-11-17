@@ -9,6 +9,7 @@ using InternetBanking.Core.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using InternetBanking.Core.Application.ViewModels.SavingAccount;
 using InternetBanking.Core.Application.Enums;
+using System.Runtime.CompilerServices;
 
 namespace InternetBanking.Core.Application.Services
 {
@@ -17,12 +18,14 @@ namespace InternetBanking.Core.Application.Services
         private readonly ISavingAccountService _savingAccountService;
         private readonly IBeneficiaryService _beneficiaryService;
         private readonly IAccountService _accountService;
+        private readonly ICreditCardsService _creditCardsService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
         private readonly IMoneyLoanService _moneyLoanService;
 
         private readonly AuthenticationResponse? user;
-        public PaymentService(IPaymentRepository paymentRepository, IMapper mapper, ISavingAccountService savingAccountService, IAccountService accountService, IHttpContextAccessor httpContextAccessor, IBeneficiaryService beneficiaryService, IMoneyLoanService moneyLoanService) : base(paymentRepository, mapper)
+        public PaymentService(IPaymentRepository paymentRepository, IMapper mapper, ISavingAccountService savingAccountService, IAccountService accountService, IHttpContextAccessor httpContextAccessor, 
+            IBeneficiaryService beneficiaryService, IMoneyLoanService moneyLoanService, ICreditCardsService creditCardsService) : base(paymentRepository, mapper)
         {
             _savingAccountService = savingAccountService;
             _accountService = accountService;
@@ -31,6 +34,7 @@ namespace InternetBanking.Core.Application.Services
             user = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
             _beneficiaryService = beneficiaryService;
             _moneyLoanService = moneyLoanService;
+            _creditCardsService = creditCardsService;
         }
 
 
@@ -160,6 +164,56 @@ namespace InternetBanking.Core.Application.Services
                 await _moneyLoanService.Update(moneyLoan, moneyLoan.Id);
                 await _savingAccountService.Update(originAccount, originAccount.Id);
                 //Agregar el registro del pago.
+                return await base.Add(viewModel);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return viewModel;
+            }
+
+        }
+        #endregion
+
+        #region Credit Card Payment
+        public async Task<SavePaymentViewModel> CreditCardPayment(SavePaymentViewModel viewModel)
+        {
+            try
+            {
+                viewModel.IdUser = user.Id;
+                var originAccount = await _savingAccountService.GetById(viewModel.OriginAccount);
+                var creditCard = await _creditCardsService.GetById(viewModel.DestinationAccount);
+                var payment = viewModel.Amount - creditCard.Debt;
+
+                if (originAccount.Balance < viewModel.Amount)
+                {
+                    viewModel.HasError = true;
+                    viewModel.Error = "LA CUENTA DE AHORRO SELECCIONADA NO POSEE EL DINERO SUFICIENTE PARA ESTE DEPOSITO";
+                    return viewModel;
+                } 
+
+                if(viewModel.Amount == decimal.Zero)
+                {
+                    viewModel.HasError = true;
+                    viewModel.Error = "EL MONTO NO PUEDE SER CERO";
+                    return viewModel;
+                }
+
+                if (viewModel.Amount > payment)
+                {
+                    originAccount.Balance -= viewModel.Amount;     
+                    originAccount.Balance += payment;
+                    creditCard.Debt = 0.00m;
+                }
+                else
+                {
+                    originAccount.Balance -= viewModel.Amount;
+                    creditCard.Debt -= viewModel.Amount;
+                }
+
+                await _savingAccountService.Update(originAccount, originAccount.Id);
+                await _creditCardsService.Update(creditCard, creditCard.Id);
+
                 return await base.Add(viewModel);
             }
             catch (Exception ex)
