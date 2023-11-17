@@ -19,7 +19,7 @@ namespace InternetBanking.Infraestructure.Persistence.Contexts
             modelBuilder.ApplyConfiguration(new EffectiveProgressConfiguration());
         }
 
-        
+
 
         #region DbSets
         public DbSet<Beneficiary> Beneficiaries { get; set; }
@@ -28,6 +28,7 @@ namespace InternetBanking.Infraestructure.Persistence.Contexts
         public DbSet<Payment> Payments { get; set; }
         public DbSet<SavingAccount> SavingAccounts { get; set; }
         public DbSet<EffectiveProgress> EffectiveProgress { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
         #endregion
 
 

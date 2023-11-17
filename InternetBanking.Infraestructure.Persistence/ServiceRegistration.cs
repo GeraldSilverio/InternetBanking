@@ -33,6 +33,7 @@ namespace InternetBanking.Infraestructure.Persistence
             services.AddTransient<IPaymentRepository, PaymentRepository>();
             services.AddTransient<ISavingAccountRepository, SavingAccountRepository>();
             services.AddTransient<IEffectiveProgressRepository, EffectiveProgressRepository>();
+            services.AddTransient<ITransactionRepository, TransactionRepository>();
             #endregion
         }
     }
