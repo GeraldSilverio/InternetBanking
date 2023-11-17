@@ -28,23 +28,26 @@
                             <div class="mb-3">
                                 <label>Seleccione la cuenta de origen</label>
                                 <select class="form-select" asp-for="OriginAccount">
+                                    <option value="0" selected>Seleccione una cuenta para pagar</option>
                                     @foreach (SavingAccountViewModel account in ViewBag.Account)
                                     {
                                         <option asp-for="OriginAccount" value="@account.Id">Cuenta: @account.AccountCode Balance: @account.Balance</option>
                                     }
                                 </select>
+                                <span asp-validation-for="OriginAccount" class="text-danger"></span>
                             </div>
 
 
                             <div class="mb-3">
                                 <label asp-for="Amount">Monto a Pagar</label>
-                                <input type="text" id="balanceInput" class="form-control" placeholder="0.00" asp-for="Amount" autocomplete="off">
+                                <input value="0"type="text" id="balanceInput" class="form-control" placeholder="0.00" asp-for="Amount" autocomplete="off">
                                 <span asp-validation-for="Amount" class="text-danger"></span>
                             </div>
 
                             <div class="mb-3">
                                 <label>Seleccione la tarjera de crédito para realizar el avance</label>
                                 <select class="form-select" asp-for="DestinationAccount">
+                                    <option value="0" selected>Seleccione la tarjeta que quiere pagar</option>
                                     @foreach (CardViewModel card in ViewBag.CreditCard)
                                     {
                                         @if(card.Debt != decimal.Zero)
@@ -55,6 +58,7 @@
                                     }
 
                                 </select>
+                                <span asp-validation-for="DestinationAccount" class="text-danger"></span>
                             </div>
 
                             <button type="button"class="btn btn-outline-primary float-end ms-2" data-toggle="modal" data-target="#exampleModalCenter">

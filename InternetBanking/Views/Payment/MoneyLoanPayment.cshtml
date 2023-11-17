@@ -28,26 +28,28 @@
                             <div class="mb-3">
                                 <label>Seleccione la cuenta de origen</label>
                                 <select class="form-select" asp-for="OriginAccount">
-                                    <option selected> Selecciona la cuenta de origen</option>
+                                    <option value="0" selected> Selecciona la cuenta de origen</option>
                                     @foreach (SavingAccountViewModel account in ViewBag.Accounts)
                                     {
                                         <option asp-for="OriginAccount" value="@account.AccountCode">Cuenta: @account.AccountCode</option>
                                     }
 
                                 </select>
+                                <span asp-validation-for="OriginAccount" class="text-danger"></span>
                             </div>
 
 
                             <div class="mb-3">
                                 <label>Monto a Pagar</label>
-                                <input type="text" id="balanceInput" placeholder="0.00" class="form-control" asp-for="Amount" autocomplete="off">
+                                <input value="0" type="text" id="balanceInput" placeholder="0.00" class="form-control" asp-for="Amount" autocomplete="off">
                             </div>
+                            <span asp-validation-for="Amount" class="text-danger"></span>
 
 
                             <div class="mb-3">
                                 <label>Seleccione el prestamo que desea pagar</label>
                                 <select class="form-select" asp-for="DestinationAccount">
-                                    <option selected> Selecciona el beneficiario</option>
+                                    <option value="0" selected> Selecciona el beneficiario</option>
                                     @foreach (MoneyLoanViewModel moneyLoan in ViewBag.MoneyLoans)
                                     {
                                         <option asp-for="DestinationAccount" value="@moneyLoan.Id">Numero Prestamo: @moneyLoan.MoneyLoanCode Deuda: @moneyLoan.Debt</option>
@@ -55,6 +57,7 @@
 
                                 </select>
                             </div>
+                            <span asp-validation-for="DestinationAccount" class="text-danger"></span>
                             
 
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Pagar</button>

@@ -214,7 +214,11 @@ namespace WebApp.InternetBanking.Controllers
                 viewModel.IdUser = user.Id;
                 if (!ModelState.IsValid)
                 {
-                    return RedirectToAction("CreditCardPayment");
+
+                    ViewBag.CreditCard = await _creditCardsService.GetCreditCardsByUserId(user.Id);
+                    ViewBag.Account = await _savingAccountService.GetAccountsByUserId(user.Id);
+                    return View(viewModel);
+
                 }
 
                 var payment = await _paymentService.CreditCardPayment(viewModel);
