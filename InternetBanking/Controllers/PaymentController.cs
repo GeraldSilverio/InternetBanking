@@ -5,12 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 using InternetBanking.Core.Application.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using InternetBanking.Core.Application.Enums;
+using InternetBanking.Core.Application.Strategy.Context;
+using InternetBanking.Core.Application.Strategy.Methods;
 
 namespace WebApp.InternetBanking.Controllers
 {
     [Authorize(Roles = "Client")]
     public class PaymentController : Controller
     {
+        private readonly PaymentContext _paymentContext;
         private readonly IPaymentService _paymentService;
         private readonly ISavingAccountService _savingAccountService;
         private readonly IHttpContextAccessor _contextAccessor;
@@ -20,7 +23,7 @@ namespace WebApp.InternetBanking.Controllers
         private readonly AuthenticationResponse? user;
 
         public PaymentController(IPaymentService paymentService, ISavingAccountService savingAccountService, IHttpContextAccessor contextAccessor,
-            IBeneficiaryService beneficiaryService, IMoneyLoanService moneyLoanService, ICreditCardsService creditCardsService)
+            IBeneficiaryService beneficiaryService, IMoneyLoanService moneyLoanService, ICreditCardsService creditCardsService, PaymentContext paymentContext)
         {
             _paymentService = paymentService;
             _savingAccountService = savingAccountService;
@@ -29,6 +32,7 @@ namespace WebApp.InternetBanking.Controllers
             user = _contextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
             _moneyLoanService = moneyLoanService;
             _creditCardsService = creditCardsService;
+            _paymentContext = paymentContext;
         }
         #region ExpressPayment
         public async Task<IActionResult> ExpressPayment()
@@ -76,7 +80,8 @@ namespace WebApp.InternetBanking.Controllers
             try
             {
                 model.TypeOfPayment = TypeOfPayment.Express.ToString();
-                await _paymentService.Payment(model);
+                _paymentContext.SetStrategy(new BeneficiaryExpressPayment(_savingAccountService, _paymentService));
+                await _paymentContext.MakePayment(model);
                 return RedirectToRoute(new { controller = "Client", action = "Index" });
             }
             catch (Exception ex)
@@ -138,7 +143,8 @@ namespace WebApp.InternetBanking.Controllers
             try
             {
                 model.TypeOfPayment = TypeOfPayment.Beneficiary.ToString();
-                await _paymentService.Payment(model);
+                _paymentContext.SetStrategy(new BeneficiaryExpressPayment(_savingAccountService, _paymentService));
+                await _paymentContext.MakePayment(model);
                 return RedirectToRoute(new { controller = "Client", action = "Index" });
             }
             catch (Exception ex)
@@ -148,6 +154,11 @@ namespace WebApp.InternetBanking.Controllers
 
         }
         #endregion
+
+
+
+
+
 
         #region MoneyLoanPayment
         public async Task<IActionResult> MoneyLoanPayment()
@@ -175,7 +186,10 @@ namespace WebApp.InternetBanking.Controllers
                     ViewBag.MoneyLoans = await _moneyLoanService.GetMoneyLoansByUserId(user.Id);
                     return View(model);
                 }
-                var payment = await _paymentService.MoneyLoanPayment(model);
+                model.IdUser = user.Id;
+                _paymentContext.SetStrategy(new MoneyLoanPayment(_savingAccountService, _moneyLoanService, _paymentService));
+                var payment = await _paymentContext.MakePayment(model);
+
                 if (payment.HasError)
                 {
                     ViewBag.Accounts = await _savingAccountService.GetAccountsByUserId(user.Id);
@@ -223,7 +237,11 @@ namespace WebApp.InternetBanking.Controllers
                     return View(viewModel);
 
                 }
-                var payment = await _paymentService.CreditCardPayment(viewModel);
+
+                viewModel.IdUser = user.Id;
+                _paymentContext.SetStrategy(new CreditCardPayment(_paymentService, _savingAccountService, _creditCardsService));
+                var payment = await _paymentContext.MakePayment(viewModel);
+
                 if (payment.HasError)
                 {
                     payment.HasError = viewModel.HasError;

@@ -8,7 +8,7 @@ namespace InternetBanking.Core.Application.Interfaces.Services
     {
         Task<SavingAccountViewModel> GetByIdUser(string id);
         Task UpdatePrincialAccount(decimal balance, string IdUser);
-        Task<SavingAccount> GetByAccountCode(int accountCode);
+        Task<CreateSavingAccountViewModel> GetByAccountCode(int accountCode);
         Task<List<SavingAccountViewModel>> GetAccountsByUserId(string idUser);
 
         Task<List<SavingAccountViewModel>> GetAllWithFilters(FilterIdentityCardViewModel filters);

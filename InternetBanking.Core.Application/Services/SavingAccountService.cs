@@ -80,9 +80,9 @@ namespace InternetBanking.Core.Application.Services
             await _savingAccountrepository.UpdateAsync(principalAccount, principalAccount.Id);
         }
 
-        public async Task<SavingAccount> GetByAccountCode(int accountCode)
+        public async Task<CreateSavingAccountViewModel> GetByAccountCode(int accountCode)
         {
-            return await _savingAccountrepository.GetByAccountCode(accountCode);
+            return _mapper.Map<CreateSavingAccountViewModel>(await _savingAccountrepository.GetByAccountCode(accountCode));
         }
 
         public async Task<List<SavingAccountViewModel>> GetAccountsByUserId(string idUser)

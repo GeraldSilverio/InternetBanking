@@ -1,5 +1,8 @@
 ﻿using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.Services;
+using InternetBanking.Core.Application.Strategy.Context;
+using InternetBanking.Core.Application.Strategy.Interfaces;
+using InternetBanking.Core.Application.Strategy.Methods;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -24,6 +27,12 @@ namespace InternetBanking.Core.Application
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<IEffectiveProgressService, EffectiveProgressService>();
             services.AddTransient<ITransactionService, TransactionService>();
+            #endregion
+
+            #region Strategy
+            services.AddTransient<IPayment, MoneyLoanPayment>();
+            services.AddTransient<IPayment, CreditCardPayment>();
+            services.AddTransient<PaymentContext>();
             #endregion
         }
     }
