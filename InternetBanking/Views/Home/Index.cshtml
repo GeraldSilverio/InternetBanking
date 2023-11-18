@@ -6,7 +6,7 @@
 @model HomeView
 <div class="container">
 
-
+    <h1 class="text-center" style="color:#09385B" >Welcome Back</h1>
     <div class="row mt-5">
 
 
@@ -41,7 +41,7 @@
                 </div>
                 <div class="card-body d-inline-flex">
                     <i class="fa-solid fa-money-bill mt-1"></i>
-                    <p class="card-text ms-2"><strong>54 PAGOS REALIZADOS HOY </strong></p>
+                    <p class="card-text ms-2"><strong>@Model.PaymentsPerDay PAGOS REALIZADOS HOY </strong></p>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
                 </div>
                 <div class="card-body d-inline-flex">
                     <i class="fa-solid fa-money-bill mt-1"></i>
-                    <p class="card-text ms-2"><strong>1290 PAGOS TOTALES </strong></p>
+                    <p class="card-text ms-2"><strong>@Model.Payments PAGOS TOTALES </strong></p>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="card-body d-inline-flex">
                     <i class="fa-solid fa-money-bill-transfer mt-1"></i>
-                    <p class="card-text ms-2"><strong>135 TRANSACCIONES HOY </strong></p>
+                    <p class="card-text ms-2"><strong>@Model.TransactionsPerDay TRANSACCIONES HOY </strong></p>
                 </div>
             </div>
         </div>
@@ -77,7 +77,7 @@
                 </div>
                 <div class="card-body d-inline-flex">
                     <i class="fa-solid fa-money-bill-transfer mt-1"></i>
-                    <p class="card-text ms-2"><strong>2568 TRANSACCIONES TOTALES </strong></p>
+                    <p class="card-text ms-2"><strong>@Model.Transactions TRANSACCIONES TOTALES </strong></p>
                 </div>
             </div>
         </div>

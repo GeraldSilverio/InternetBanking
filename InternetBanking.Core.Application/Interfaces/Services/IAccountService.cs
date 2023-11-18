@@ -13,7 +13,7 @@ namespace InternetBanking.Core.Application.Interfaces.Services
         List<AuthenticationResponse> GetAllUsersAsync();
         Task SignOutAsync();
         Task UpdateStatusAsync(string id, bool status);
-        Task UpdateUserAsync(EditUserViewModel vm, string id);
+        Task UpdateUserAsync(UpdateUserRequest request, string id);
         Task<AuthenticationResponse> GetUserByIdAsync(string id);
         //Task<List<AuthenticationResponse>> GetAllClients();
 

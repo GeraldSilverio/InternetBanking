@@ -85,13 +85,13 @@
                                                 <a class="dropdown-item" asp-area="" asp-controller="Payment" asp-action="ExpressPayment">Expresos</a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Tarjeta de credito</a>
+                                                <a class="dropdown-item" asp-area="" asp-controller="Payment" asp-action="CreditCardPayment">Tarjeta de credito</a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Prestamo</a>
+                                                <a class="dropdown-item" asp-area="" asp-controller="Payment" asp-action="MoneyLoanPayment">Prestamo</a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Beneficiarios</a>
+                                                <a class="dropdown-item" asp-area="" asp-controller="Payment" asp-action="Beneficiary">Beneficiarios</a>
                                             </li>
                                         </ul>
 
@@ -101,10 +101,10 @@
                                     <a class="nav-link text-white" asp-controller="Beneficiary" asp-action="Index">Beneficiario</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Client" asp-action="Index">Avance de Efectivo</a>
+                                    <a class="nav-link text-white" asp-controller="EffectiveProgress" asp-action="Index">Avance de Efectivo</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Client" asp-action="Index">Transferencia</a>
+                                    <a class="nav-link text-white" asp-controller="Transaction" asp-action="Index">Transferencia</a>
                                 </li>
 
                                
@@ -144,6 +144,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

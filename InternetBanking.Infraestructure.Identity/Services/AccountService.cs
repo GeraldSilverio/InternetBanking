@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using InternetBanking.Infraestructure.Identity.Contexts;
 using InternetBanking.Core.Application.Helpers;
 using Microsoft.AspNetCore.Http;
-using InternetBanking.Core.Application.ViewModels.User;
 
 namespace InternetBanking.Infraestructure.Identity.Services
 {
@@ -109,12 +108,6 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 response.Error = $"Credenciales incorrectas para '{request.UserName}'";
                 return response;
             }
-            if (!user.EmailConfirmed)
-            {
-                response.HasError = true;
-                response.Error = $"El nombre de usuario '{request.UserName}' no se encuentra registrado";
-                return response;
-            }
 
             response.Id = user.Id;
             response.UserName = user.UserName;
@@ -177,8 +170,10 @@ namespace InternetBanking.Infraestructure.Identity.Services
         #region Forgot Password
         public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordRequest request, string origin)
         {
-            ForgotPasswordResponse response = new();
-            response.HasError = false;
+            ForgotPasswordResponse response = new()
+            {
+                HasError = false
+            };
 
             var account = await _userManager.FindByEmailAsync(request.Email);
 
@@ -234,7 +229,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             if (!result.Succeeded)
             {
                 response.HasError = true;
-                response.Error = $"An error occurred while reset password";
+                response.Error = $"Un error al tratar de crear la contraseña";
                 return response;
             }
 
@@ -257,16 +252,16 @@ namespace InternetBanking.Infraestructure.Identity.Services
             await _userManager.UpdateAsync(user);
         }
 
-        public async Task UpdateUserAsync(EditUserViewModel vm, string id)
+        public async Task UpdateUserAsync(UpdateUserRequest request, string id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
             #region User Attributes
-            user.FirstName = vm.FirstName;
-            user.LastName = vm.LastName;
-            user.Email = vm.Email;
-            user.NormalizedEmail = vm.Email;
-            user.PhoneNumber = vm.Phone;
-            user.IdentityCard = vm.IdentityCard;
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.Email = request.Email;
+            user.NormalizedEmail = request.Email;
+            user.PhoneNumber = request.Phone;
+            user.IdentityCard = request.IdentityCard;
             #endregion
             await _userManager.UpdateAsync(user);
         }
@@ -284,6 +279,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 LastName = u.LastName,
                 Email = u.Email,
                 IdentityCard = u.IdentityCard,
+                Phone = u.PhoneNumber,
                 Roles = _userManager.GetRolesAsync(u).Result.ToList(),
                 IsVerified = u.EmailConfirmed,
                 IsActive = u.IsActive,
@@ -292,7 +288,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
 
             return user;
         }
-        //Cambie esto a normal no asincrono
+       
         public async Task<AuthenticationResponse> GetUserByIdAsync(string id)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -303,6 +299,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
                 LastName = user.LastName,
                 UserName = user.UserName,
                 Email = user.Email,
+                Phone = user.PhoneNumber,
                 IdentityCard = user.IdentityCard,
                 Roles = _userManager.GetRolesAsync(user).Result.ToList(),
                 IsVerified = user.EmailConfirmed,
@@ -312,24 +309,6 @@ namespace InternetBanking.Infraestructure.Identity.Services
 
             return userResponse;
         }
-
-        /*public async Task<List<AuthenticationResponse>> GetAllClients()
-        {
-            var client = _userManager.Users.Select(u => new AuthenticationResponse
-            {
-                Id = u.Id,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Email = u.Email,
-                IdentityCard = u.IdentityCard,
-                Roles = _userManager.GetRolesAsync(u).Result.ToList(),
-                IsVerified = u.EmailConfirmed,
-                IsActive = u.IsActive,
-
-            }).Where(u => u.Roles.FirstOrDefault().ToString() != "Admin").ToList();
-
-            return client;
-        }*/
 
         #endregion
 

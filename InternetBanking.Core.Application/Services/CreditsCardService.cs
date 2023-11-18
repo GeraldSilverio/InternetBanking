@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using InternetBanking.Core.Application.Dtos.Account;
 using InternetBanking.Core.Application.Enums;
 using InternetBanking.Core.Application.Helpers;
 using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.ViewModels.CreditCards;
+using InternetBanking.Core.Application.ViewModels.Filter;
 using InternetBanking.Core.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace InternetBanking.Core.Application.Services
 {
@@ -13,11 +16,15 @@ namespace InternetBanking.Core.Application.Services
         private readonly ICreditsCardRepository _creditsCardRepository;
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
-        public CreditsCardService(ICreditsCardRepository creditsCardRepository, IMapper mapper, IAccountService accountService) : base(creditsCardRepository, mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private AuthenticationResponse user;
+        public CreditsCardService(ICreditsCardRepository creditsCardRepository, IMapper mapper, IAccountService accountService, IHttpContextAccessor httpContextAccessor) : base(creditsCardRepository, mapper)
         {
+            _httpContextAccessor = httpContextAccessor;
             _creditsCardRepository = creditsCardRepository;
             _accountService = accountService;
             _mapper = mapper;
+            user = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
         }
 
         public override async Task<SaveCardViewModel> Add(SaveCardViewModel model)
@@ -32,11 +39,11 @@ namespace InternetBanking.Core.Application.Services
                 case nameof(CreditCards.DIAMOND): model.CreditLimited = (int)CreditCards.DIAMOND; break;
                 case nameof(CreditCards.BLACK): model.CreditLimited = (int)CreditCards.BLACK; break;
             }
-            model.Available = +model.CreditLimited;
+            model.Available =+ model.CreditLimited;
             return await base.Add(model);
         }
 
-        public override async Task<List<CardViewModel>> GetAll()
+        public async Task<List<CardViewModel>> GetAllWithFilters(FilterIdentityCardViewModel filters)
         {
             var cardLists = new List<CardViewModel>();
             var cards = await _creditsCardRepository.GetAllAsync();
@@ -58,18 +65,27 @@ namespace InternetBanking.Core.Application.Services
                 cardLists.Add(cardViewModel);
             }
 
+            if (!string.IsNullOrEmpty(filters.IdentityCard))
+            {
+                string identityCardToLower = filters.IdentityCard.ToLower();
+                cardLists = cardLists.Where(lr => lr.IdentityCard.ToLower().Contains(identityCardToLower)).ToList();
+            }
+
             return cardLists;
         }
 
-        public async Task<List<CardViewModel>> GetCreditCardsById(string id)
+        public async Task<List<CardViewModel>> GetCreditCardsByUserId(string id)
         {
             var creditCards = await _creditsCardRepository.GetCreditCardsByUserIdAsync(id);
             return creditCards.Select(creditCard => new CardViewModel()
             {
+                Id = creditCard.Id,
                 CardNumber = creditCard.CardNumber,
                 CreditLimited = creditCard.CreditLimited,
                 Available = creditCard.Available,
-                Debt = creditCard.CreditLimited - creditCard.Available
+                Debt = creditCard.CreditLimited - creditCard.Available,
+                FullName = user.FirstName + " " + user.LastName, 
+                IdentityCard = user.IdentityCard
             }).ToList();
         }
     }

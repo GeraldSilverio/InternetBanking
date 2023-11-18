@@ -12,5 +12,8 @@ namespace InternetBanking.Core.Application.ViewModels.SavingAccount
         public decimal Balance { get; set; }
         public bool? IsPrincipal { get; set; } = false;
         public DateTime CurrentDate { get; set; } = DateTime.Now;
+
+        public bool HasError { get; set; }
+        public string? Error { get; set; }
     }
 }

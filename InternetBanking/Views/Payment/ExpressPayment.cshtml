@@ -11,29 +11,43 @@
         <div class="col-12 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
             <div class="col-6">
                 <div class="card mt-3">
+                    <div class="card-header bg-blue-card-header text-light text-center">
+                        <h4>Realizar pago a Expreso</h4>
+                    </div>
                     <div class="card-body mt-3">
+                        @if (Model != null && Model.HasError)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <p class="text-center">@Model.Error</p>
+                                <button type="button" class=" btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
                         <form class=" mb-3" method="post" asp-controller="Payment" asp-action="ExpressPayment">
 
                             <div class="mb-3">
                                 <label>Seleccione la cuenta de origen</label>
                                 <select class="form-select" asp-for="OriginAccount">
+                                    <option value="0" selected>Seleccione la cuenta de donde pagara</option>
                                     @foreach (SavingAccountViewModel account in ViewBag.Accounts)
                                     {
-                                        <option asp-for="OriginAccount" value="@account.AccountCode">Cuenta: @account.AccountCode</option>
+                                        <option asp-for="OriginAccount" value="@account.AccountCode">Cuenta: @account.AccountCode  Balance: @account.Balance</option>
                                     }
 
                                 </select>
+                                <span asp-validation-for="OriginAccount" class="text-danger"></span>
                             </div>
                             
                             <div class="mb-3">
                                 <label>Monto a Pagar</label>
-                                <input type="number" class="form-control" asp-for="Amount" autocomplete="off">
+                                <input value="0" type="text" id="balanceInput" placeholder="0.00" class="form-control" asp-for="Amount" autocomplete="off">
                             </div>
+                            <span asp-validation-for="Amount" class="text-danger"></span>
                             
                             <div class="mb-3">
                                 <label>Cuenta de Destino</label>
-                                <input type="number" class="form-control" asp-for="DestinationAccount" autocomplete="off" maxlength="9">
+                                <input value="0" type="text" id="balanceInput" placeholder="0.00" class="form-control" asp-for="DestinationAccount" autocomplete="off" maxlength="9">
                             </div>
+                            <span asp-validation-for="DestinationAccount" class="text-danger"></span>
 
 
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Pagar</button>
@@ -67,4 +81,16 @@
         font-weight: bold;
     }
 
+    .bg-blue-card-header {
+        background-color: #09385B;
+        color: white;
+    }
+
+
 </style>
+
+<script>
+    document.getElementById('balanceInput').addEventListener('input', function (e) {
+        const value = /^[0-9]*\.?[0-9]{0,2}$/;
+    });
+</script>

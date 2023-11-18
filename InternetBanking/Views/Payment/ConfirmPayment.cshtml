@@ -1,8 +1,10 @@
 ﻿@using InternetBanking.Core.Application.ViewModels.Payment;
+@using InternetBanking.Core.Application.Enums;
 @model SavePaymentViewModel
 
 @{
-    ViewData["Title"] = "Confirmar Pago";
+    bool isExpress = Model.TypeOfPayment == TypeOfPayment.Express.ToString();
+    ViewData["Title"] = isExpress ? "Confirmacion Pago Expreso" : "Confirmacion Pago Beneficiario";
 }
 
 <div class="container-fluid">
@@ -11,37 +13,37 @@
             <div class="col-6">
                 <div class="card mt-3">
                     <div class="card-header" style="background-color:#09385B">
-                        <h3 class="card-title text-light text-center">Estas seguro de realizar este pago?</h3>
+                        <h4 class="card-title text-light">@(isExpress ? "¿Está seguro de que desea realizar este pago expreso?" : "¿Está seguro de que desea realizar este pago al beneficiario")</h4>
                     </div>
                     <div class="card-body mt-3">
-                        <form class=" mb-3" method="post" asp-controller="Payment" asp-action="ConfirmExpressPayment">
+                        <form class=" mb-3" method="post" asp-controller="Payment" asp-action="@(isExpress ? "ConfirmExpressPayment" : "ConfirmBeneficiaryPayment")">
 
                             <div class="mb-3">
-                                Titular de la Cuenta: <strong>@Model.FullName</strong>
+                                <strong> Titular de la Cuenta:</strong> @Model.FullName
                             </div>
 
                             <div class="mb-3">
-                                Numero Cuenta: <strong>@Model.DestinationAccount</strong>
+                                <strong> Numero de Cuenta :</strong> @Model.DestinationAccount
                             </div>
-                            
+
                             <div class="mb-3">
-                                Monto a Pagar : <strong>@Model.Amount</strong>
+                                <strong> Monto a Pagar :</strong> $@Model.Amount RD
                             </div>
-                            
+
                             <div class="mb-3">
-                                Fecha de Pago: <strong>@Model.DateOfPaid</strong>
+                                <strong>Fecha del Pago :</strong> @Model.Date
                             </div>
 
                             <input asp-for="Amount" type="hidden" />
                             <input asp-for="OriginAccount" type="hidden" />
                             <input asp-for="DestinationAccount" type="hidden" />
-                            <input asp-for="DateOfPaid" type="hidden" />
+                            <input asp-for="Date" type="hidden" />
                             <input asp-for="IdUser" type="hidden" />
                             <input asp-for="Id" type="hidden" />
                             <input asp-for="HasError" type="hidden" />
                             <input asp-for="Error" type="hidden" />
 
-                           
+
 
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Confirmar Pago</button>
                             <a class="btn btn-secondary float-end" asp-controller="Client" asp-action="Index">Volver</a>

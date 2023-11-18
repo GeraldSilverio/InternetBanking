@@ -2,6 +2,7 @@
 using InternetBanking.Core.Application.Helpers;
 using InternetBanking.Core.Application.Interfaces.Repositories;
 using InternetBanking.Core.Application.Interfaces.Services;
+using InternetBanking.Core.Application.ViewModels.Filter;
 using InternetBanking.Core.Application.ViewModels.MoneyLoan;
 using InternetBanking.Core.Domain.Entities;
 
@@ -24,13 +25,17 @@ namespace InternetBanking.Core.Application.Services
 
         public override async Task<NewMoneyLoanViewModel> Add(NewMoneyLoanViewModel model)
         {
+            if (model.BorrowedBalance < 100m)
+            {
+
+            }
             model.MoneyLoanCode = GenerateCode.GenerateAccountCode(model.CurrentDate);
             var moneyloan = await base.Add(model);
             await _savingAccountService.UpdatePrincialAccount(moneyloan.BorrowedBalance, moneyloan.IdUser);
             return moneyloan;
         }
 
-        public override async Task<List<MoneyLoanViewModel>> GetAll()
+        public async Task<List<MoneyLoanViewModel>> GetAllWithFilters(FilterIdentityCardViewModel filters)
         {
             var moneyLoansList = new List<MoneyLoanViewModel>();
             var moneyLoans = await base.GetAll();
@@ -53,14 +58,22 @@ namespace InternetBanking.Core.Application.Services
                 moneyLoansList.Add(moneyLoanView);
             }
 
+            if (!string.IsNullOrEmpty(filters.IdentityCard))
+            {
+                string identityCardToLower = filters.IdentityCard.ToLower();
+                moneyLoansList = moneyLoansList.Where(lr => lr.UserIdentityCard.ToLower().Contains(identityCardToLower)).ToList();
+            }
+
+
             return moneyLoansList;
         }
 
-        public async Task<List<MoneyLoanViewModel>> GetMoneyLoansById(string id)
+        public async Task<List<MoneyLoanViewModel>> GetMoneyLoansByUserId(string id)
         {
             var moneyLoanList = await _moneyLoanRepository.GetMoneyLoanByUserIdAsync(id);
             return moneyLoanList.Select(moneyLoan => new MoneyLoanViewModel()
             {
+                Id = moneyLoan.Id,
                 MoneyLoanCode = moneyLoan.MoneyLoanCode,
                 BorrowedBalance = moneyLoan.BorrowedBalance,
                 BalancePaid = moneyLoan.BalancePaid,

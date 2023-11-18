@@ -62,9 +62,17 @@ namespace InternetBanking.Core.Application.Services
 
         public async Task UpdateUser(EditUserViewModel vm, string id)
         {
-            await _accountService.UpdateUserAsync(vm, id);
-            await _savingAccountService.UpdatePrincialAccount(vm.Balance, id);
+            var request = _mapper.Map<UpdateUserRequest>(vm);
+            await _accountService.UpdateUserAsync(request, id);
+
+            if (vm.Balance != decimal.Zero && vm.Balance != decimal.MinusOne)
+            {
+                await _savingAccountService.UpdatePrincialAccount(vm.Balance, id);         
+            }
+
         }
+
+
         public async Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordViewModel model)
         {
             ResetPasswordRequest forgotRequest = _mapper.Map<ResetPasswordRequest>(model);

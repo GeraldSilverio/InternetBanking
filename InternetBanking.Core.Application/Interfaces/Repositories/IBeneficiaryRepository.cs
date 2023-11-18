@@ -1,4 +1,5 @@
-﻿using InternetBanking.Core.Domain.Entities;
+﻿using InternetBanking.Core.Application.ViewModels.Beneficiary;
+using InternetBanking.Core.Domain.Entities;
 
 namespace InternetBanking.Core.Application.Interfaces.Repositories
 {
@@ -6,5 +7,6 @@ namespace InternetBanking.Core.Application.Interfaces.Repositories
     {
         Task<List<Beneficiary>> GetAllByUser(string idUser);
         Task<bool> IsBeneficiaryAdd(string idUser, string idBeneficiary,int accountCode);
+        Task<Beneficiary> GetByAccountCode(int accountCode);
     }
 }

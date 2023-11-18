@@ -10,29 +10,35 @@ namespace WebApp.InternetBanking.Controllers
     {
         private readonly IUserServices _userServices;
         private readonly IGetCountProduct _getCount;
+        private readonly IPaymentService _paymentService;
+        private readonly ITransactionService _transactionService;
 
-        public HomeController(IUserServices userServices, IGetCountProduct getCount)
+        public HomeController(IUserServices userServices, IGetCountProduct getCount, IPaymentService paymentService, ITransactionService transactionService)
         {
 
             _userServices = userServices;
             _getCount = getCount;
+            _paymentService = paymentService;
+            _transactionService = transactionService;
         }
 
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             var users = _userServices.GetAllAsync();
-            var homeView = new HomeView();
-            homeView.ActiveUser = users.Where(x => x.IsActive == true).Count();
-            homeView.InActiveUser = users.Where(x => x.IsActive == false).Count();
-            homeView.Products = _getCount.GetCount();
+            var homeView = new HomeView()
+            {
+                ActiveUser = users.Where(x => x.IsActive == true).Count(),
+                InActiveUser = users.Where(x => x.IsActive == false).Count(),
+                Products = _getCount.GetCount(),
+                PaymentsPerDay = _paymentService.GetPaymentPerDay(),
+                Payments = _paymentService.GetCountPayment(),
+                TransactionsPerDay = _transactionService.GetTransactionPerDay(),
+                Transactions = _transactionService.GetCountTransaction()
+            };
             return View(homeView);
         }
 
-        [Authorize(Roles = "Client")]
-        public IActionResult IndexClient()
-        {
-            return RedirectToRoute(new {controller = "Client", action = "Index"});
-        }
+
     }
 }

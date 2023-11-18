@@ -3,11 +3,18 @@
 @model List<SavingAccountViewModel>
 
 <div class="container-fluid">
-    <div class="col-12 mt-5">
-        <div class="d-flex justify-content-end mb-2">
-            <a asp-controller="SavingAccount" asp-action="NewAccount" class="btn text-white bg-gradient" style="background-color:#09385B; outline-color:#D3D9DE;">Abrir Nueva Cuenta</a>
-        </div>
+    <div class="col-12 mt-5">     
         <div class="card">
+
+            <div class="card-header d-flex justify-content-between " style="background-color:#09385B">
+                <form method="post" asp-controller="SavingAccount" asp-action="SavingAccount" class="d-flex align-items-cente ms-auto">
+                    <div class="me-3">
+                        <input type="text" class="form-control" id="filterName" name="IdentityCard" placeholder="Ingrese una Cédula">
+                    </div>
+                    <button type="submit" class="btn btn-outline-light">Filtrar por cedula</button>
+                </form>
+            </div>
+
             <div class="card-header" style="background-color:#09385B">
                 <h3 class="card-title text-light text-center">CUENTAS DE AHORROS DEL SISTEMA</h3>
             </div>
@@ -33,7 +40,7 @@
                                 <td>
                                     @if (account.IsPrincial != true)
                                     {
-                                        <a class="btn btn-outline-danger" asp-controller="SavingAccount" asp-action="DeleteAccount" asp-route-id="@account.Id">ELIMINAR</a>
+                                        <a class="btn btn-outline-danger" asp-controller="SavingAccount" asp-action="DeleteAccount" asp-route-id="@account.Id">Eliminar</a>
                                     }
                                     else
                                     {

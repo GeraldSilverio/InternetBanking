@@ -12,5 +12,10 @@ namespace InternetBanking.Infraestructure.Persistence.Repositories
         {
             _dbContext = dbContext;
         }
+
+        public int GetPaymentPerDay()
+        {
+            return _dbContext.Payments.Where(x=> x.Date == DateTime.Today.Date).Count();
+        }
     }
 }

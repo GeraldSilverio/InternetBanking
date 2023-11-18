@@ -6,6 +6,9 @@
         public string IdUser {  get; set; }
         public int MoneyLoanCode {  get; set; }
         public decimal BorrowedBalance {  get; set; }
+        public decimal BalancePaid {  get; set; }
         public DateTime CurrentDate { get; set; } = DateTime.Now;
+        public bool HasError { get; set; }
+        public string? Error { get; set; }
     }
 }

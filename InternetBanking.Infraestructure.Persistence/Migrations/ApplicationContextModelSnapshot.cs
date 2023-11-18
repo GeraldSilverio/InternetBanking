@@ -86,6 +86,9 @@ namespace InternetBanking.Infraestructure.Persistence.Migrations
                         .HasPrecision(12, 2)
                         .HasColumnType("Decimal");
 
+                    b.Property<decimal>("Debt")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("IdUser")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -102,6 +105,48 @@ namespace InternetBanking.Infraestructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("CreditsCard", (string)null);
+                });
+
+            modelBuilder.Entity("InternetBanking.Core.Domain.Entities.EffectiveProgress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("Decimal");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfPaid")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DestinationAccount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IdUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OriginAccount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EffectiveProgress", (string)null);
                 });
 
             modelBuilder.Entity("InternetBanking.Core.Domain.Entities.MoneyLoan", b =>
@@ -165,8 +210,8 @@ namespace InternetBanking.Infraestructure.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateOfPaid")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("Date");
 
                     b.Property<int>("DestinationAccount")
                         .HasColumnType("int");
@@ -183,6 +228,10 @@ namespace InternetBanking.Infraestructure.Persistence.Migrations
 
                     b.Property<int>("OriginAccount")
                         .HasColumnType("int");
+
+                    b.Property<string>("TypeOfPayment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -229,6 +278,47 @@ namespace InternetBanking.Infraestructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("SavingAccount", (string)null);
+                });
+
+            modelBuilder.Entity("InternetBanking.Core.Domain.Entities.Transaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DestinationAccount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IdUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OriginAccount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Transactions");
                 });
 #pragma warning restore 612, 618
         }

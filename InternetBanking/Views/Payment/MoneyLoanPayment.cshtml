@@ -1,0 +1,107 @@
+﻿@using InternetBanking.Core.Application.ViewModels.MoneyLoan;
+@using InternetBanking.Core.Application.ViewModels.Payment;
+@using InternetBanking.Core.Application.ViewModels.SavingAccount;
+@model SavePaymentViewModel
+
+@{
+    ViewData["Title"] = "Pago Prestamos";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+            <div class="col-6">
+                <div class="card mt-3">
+                    <div class="card-header bg-blue-card-header text-light text-center">
+                        <h4>Realizar pago a Prestamos</h4>
+                    </div>
+                    <div class="card-body mt-3">
+                        @if (Model != null && Model.HasError)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <p class="text-center">@Model.Error</p>
+                                <button type="button" class=" btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+                        <form class=" mb-3" method="post" asp-controller="Payment" asp-action="MoneyLoanPayment">
+
+                            <div class="mb-3">
+                                <label>Seleccione la cuenta de origen</label>
+                                <select class="form-select" asp-for="OriginAccount">
+                                    <option value="0" selected> Selecciona la cuenta de origen</option>
+                                    @foreach (SavingAccountViewModel account in ViewBag.Accounts)
+                                    {
+                                        <option asp-for="OriginAccount" value="@account.AccountCode">Cuenta: @account.AccountCode</option>
+                                    }
+
+                                </select>
+                                <span asp-validation-for="OriginAccount" class="text-danger"></span>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label>Monto a Pagar</label>
+                                <input value="0" type="text" id="balanceInput" placeholder="0.00" class="form-control" asp-for="Amount" autocomplete="off">
+                            </div>
+                            <span asp-validation-for="Amount" class="text-danger"></span>
+
+
+                            <div class="mb-3">
+                                <label>Seleccione el prestamo que desea pagar</label>
+                                <select class="form-select" asp-for="DestinationAccount">
+                                    <option value="0" selected> Selecciona el beneficiario</option>
+                                    @foreach (MoneyLoanViewModel moneyLoan in ViewBag.MoneyLoans)
+                                    {
+                                        <option asp-for="DestinationAccount" value="@moneyLoan.Id">Numero Prestamo: @moneyLoan.MoneyLoanCode Deuda: @moneyLoan.Debt</option>
+                                    }
+
+                                </select>
+                            </div>
+                            <span asp-validation-for="DestinationAccount" class="text-danger"></span>
+                            
+
+                            <button type="submit" class="btn btn-outline-primary float-end ms-2">Pagar</button>
+                            <a class="btn btn-secondary float-end" asp-controller="Client" asp-action="Index">Volver</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+
+    .card {
+        border: 0.2px solid #09385B;
+        border-radius: 4px 4px 10px 10px;
+        box-shadow: 0 0 10px #6BA2CD;
+    }
+
+    label {
+        color: #1B4A6F;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .input-blue {
+        color: #1B4A6F;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .bg-blue-card-header {
+        background-color: #09385B;
+        color: white;
+    }
+
+
+</style>
+
+
+<script>
+    document.getElementById('balanceInput').addEventListener('input', function (e) {
+        const value = /^[0-9]*\.?[0-9]{0,2}$/;
+    });
+</script>

@@ -4,7 +4,6 @@ using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.ViewModels.Login;
 using InternetBanking.Core.Application.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Crypto.Operators;
 using WebApp.InternetBanking.Middlewares;
 
 namespace WebApp.InternetBanking.Controllers
@@ -45,7 +44,7 @@ namespace WebApp.InternetBanking.Controllers
                 }
                 else
                 {
-                    return RedirectToRoute(new { controller = "Home", action = "IndexClient" });
+                    return RedirectToRoute(new { controller = "Client", action = "Index" });
                 }
                 
             }
