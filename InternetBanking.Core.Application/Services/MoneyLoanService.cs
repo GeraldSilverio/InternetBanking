@@ -25,6 +25,10 @@ namespace InternetBanking.Core.Application.Services
 
         public override async Task<NewMoneyLoanViewModel> Add(NewMoneyLoanViewModel model)
         {
+            if (model.BorrowedBalance < 100m)
+            {
+
+            }
             model.MoneyLoanCode = GenerateCode.GenerateAccountCode(model.CurrentDate);
             var moneyloan = await base.Add(model);
             await _savingAccountService.UpdatePrincialAccount(moneyloan.BorrowedBalance, moneyloan.IdUser);
