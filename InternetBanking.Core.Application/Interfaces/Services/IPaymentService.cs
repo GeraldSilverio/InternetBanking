@@ -5,8 +5,6 @@ namespace InternetBanking.Core.Application.Interfaces.Services
 {
     public interface IPaymentService : IGenericService<Payment, SavePaymentViewModel, PaymentViewModel>
     {
-        Task<SavePaymentViewModel> ValidateExpressPayment(SavePaymentViewModel model);
-        Task <SavePaymentViewModel> ValidateBeneficiaryPayment(SavePaymentViewModel viewModel);
         int GetCountPayment();
         int GetPaymentPerDay();
     }

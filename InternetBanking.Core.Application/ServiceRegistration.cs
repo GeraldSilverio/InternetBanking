@@ -1,5 +1,6 @@
 ﻿using InternetBanking.Core.Application.Interfaces.Services;
 using InternetBanking.Core.Application.Services;
+using InternetBanking.Core.Application.Services.ValidatePayment;
 using InternetBanking.Core.Application.Strategy.Context;
 using InternetBanking.Core.Application.Strategy.Interfaces;
 using InternetBanking.Core.Application.Strategy.Methods;
@@ -27,6 +28,7 @@ namespace InternetBanking.Core.Application
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<IEffectiveProgressService, EffectiveProgressService>();
             services.AddTransient<ITransactionService, TransactionService>();
+            services.AddTransient<IValidatePayment, ValidatePayment>();
             #endregion
 
             #region Strategy

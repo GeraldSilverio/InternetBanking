@@ -39,7 +39,7 @@
             </div>
 
             <div class="card-body">
-                
+
                 <div class="row justify-content-center">
                     <!--SECCION DE CUENTAS DE AHORRO-->
                     <div class="col-6">
@@ -94,11 +94,31 @@
                                     <tbody class="border-start border-end">
                                         @foreach (MoneyLoanViewModel loans in ViewBag.MoneyLoans)
                                         {
-                                        <tr>
-                                            <td>@loans.BorrowedBalance</td>
-                                            <td>@loans.BalancePaid</td>
-                                            <td>@loans.Debt</td>
-                                        </tr>
+                                            <tr>
+                                                <td>
+                                                    <script>
+                                                        var balance = @loans.BorrowedBalance;
+                                                        var formattedBalance = balance.toLocaleString('es-DO', { style: 'currency', currency: 'DOP' });
+                                                        document.write(formattedBalance);
+                                                    </script>
+
+                                                </td>
+                                                <td>
+                                                    <script>
+                                                        var balance = @loans.BalancePaid
+                                                                                                                var formattedBalance = balance.toLocaleString('es-DO', { style: 'currency', currency: 'DOP' });
+                                                        document.write(formattedBalance);
+                                                    </script>
+
+                                                </td>
+                                                <td>
+                                                    <script>
+                                                        var balance = @loans.Debt
+                                                                                                                var formattedBalance = balance.toLocaleString('es-DO', { style: 'currency', currency: 'DOP' });
+                                                        document.write(formattedBalance);
+                                                    </script>
+                                                </td>
+                                            </tr>
                                         }
                                     </tbody>
                                 </table>
@@ -130,10 +150,35 @@
                                         @foreach (CardViewModel card in ViewBag.CreditCards)
                                         {
                                             <tr>
-                                                <td>@card.CardNumber</td>
-                                                <td>@card.CreditLimited</td>
-                                                <td>@card.Available</td>
-                                                <td>@card.Debt</td>
+                                                <td>
+
+                                                    @card.CardNumber
+
+                                                <td>
+                                                    <script>
+                                                        var limite = @card.CreditLimited
+                                                        var formattedBalance = limite.toLocaleString('es-DO', { style: 'currency', currency: 'DOP' });
+                                                        document.write(formattedBalance);
+                                                    </script>
+
+
+                                                <td>
+                                                    <script>
+                                                        var disponible = @card.Available
+                                                        var formattedBalance = disponible.toLocaleString('es-DO', { style: 'currency', currency: 'DOP' });
+                                                        document.write(formattedBalance);
+                                                    </script>
+
+
+
+                                                <td>
+                                                    <script>
+                                                        var balance = @card.Debt
+                                                        var formattedBalance = balance.toLocaleString('es-DO', { style: 'currency', currency: 'DOP' });
+                                                        document.write(formattedBalance);
+                                                    </script>
+
+                                                </td>
                                             </tr>
                                         }
                                     </tbody>
@@ -146,8 +191,8 @@
 
             </div>
 
-     
+
+
+        </div>
 
     </div>
-
-</div>

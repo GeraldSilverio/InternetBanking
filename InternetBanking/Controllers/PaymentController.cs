@@ -20,10 +20,11 @@ namespace WebApp.InternetBanking.Controllers
         private readonly IBeneficiaryService _beneficiaryService;
         private readonly IMoneyLoanService _moneyLoanService;
         private readonly ICreditCardsService _creditCardsService;
+        private readonly IValidatePayment _validatePayment;
         private readonly AuthenticationResponse? user;
 
         public PaymentController(IPaymentService paymentService, ISavingAccountService savingAccountService, IHttpContextAccessor contextAccessor,
-            IBeneficiaryService beneficiaryService, IMoneyLoanService moneyLoanService, ICreditCardsService creditCardsService, PaymentContext paymentContext)
+            IBeneficiaryService beneficiaryService, IMoneyLoanService moneyLoanService, ICreditCardsService creditCardsService, PaymentContext paymentContext, IValidatePayment validatePayment)
         {
             _paymentService = paymentService;
             _savingAccountService = savingAccountService;
@@ -33,7 +34,9 @@ namespace WebApp.InternetBanking.Controllers
             _moneyLoanService = moneyLoanService;
             _creditCardsService = creditCardsService;
             _paymentContext = paymentContext;
+            _validatePayment = validatePayment;
         }
+
         #region ExpressPayment
         public async Task<IActionResult> ExpressPayment()
         {
@@ -53,8 +56,8 @@ namespace WebApp.InternetBanking.Controllers
                     return View(model);
 
                 }
-
-                var payment = await _paymentService.ValidateExpressPayment(model);
+                model.IdUser = user.Id;
+                var payment = await _validatePayment.ValidateExpressPayment(model);
 
                 if (payment.HasError)
                 {
@@ -80,6 +83,7 @@ namespace WebApp.InternetBanking.Controllers
             try
             {
                 model.TypeOfPayment = TypeOfPayment.Express.ToString();
+                model.IdUser = user.Id;
                 _paymentContext.SetStrategy(new BeneficiaryExpressPayment(_savingAccountService, _paymentService));
                 await _paymentContext.MakePayment(model);
                 return RedirectToRoute(new { controller = "Client", action = "Index" });
@@ -121,8 +125,8 @@ namespace WebApp.InternetBanking.Controllers
                     ViewBag.Beneficiaries = await _beneficiaryService.GetAllByUser(user.Id);
                     return View("Beneficiary", model);
                 }
-
-                var payment = await _paymentService.ValidateBeneficiaryPayment(model);
+                model.IdUser = user.Id;
+                var payment = await _validatePayment.ValidateBeneficiaryPayment(model);
                 if (payment.HasError)
                 {
                     ViewBag.Accounts = await _savingAccountService.GetAccountsByUserId(user.Id);
@@ -143,6 +147,7 @@ namespace WebApp.InternetBanking.Controllers
             try
             {
                 model.TypeOfPayment = TypeOfPayment.Beneficiary.ToString();
+                model.IdUser = user.Id;
                 _paymentContext.SetStrategy(new BeneficiaryExpressPayment(_savingAccountService, _paymentService));
                 await _paymentContext.MakePayment(model);
                 return RedirectToRoute(new { controller = "Client", action = "Index" });
@@ -154,11 +159,6 @@ namespace WebApp.InternetBanking.Controllers
 
         }
         #endregion
-
-
-
-
-
 
         #region MoneyLoanPayment
         public async Task<IActionResult> MoneyLoanPayment()
