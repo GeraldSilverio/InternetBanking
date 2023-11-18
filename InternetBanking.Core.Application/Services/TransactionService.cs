@@ -12,6 +12,7 @@ namespace InternetBanking.Core.Application.Services
     public class TransactionService : GenericService<Transaction, SaveTransactionViewModel, TransactionViewModel>, ITransactionService
     {
         private readonly ISavingAccountService _savingAccountService;
+        private readonly ITransactionRepository _transactionRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private AuthenticationResponse User;
         private readonly IMapper _mapper;
@@ -21,6 +22,7 @@ namespace InternetBanking.Core.Application.Services
             _savingAccountService = savingAccountService;
             _httpContextAccessor = httpContextAccessor;
             User = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+            _transactionRepository = transactionRepository;
         }
 
         public async Task<SaveTransactionViewModel> AddTransaction(SaveTransactionViewModel model)
@@ -58,6 +60,16 @@ namespace InternetBanking.Core.Application.Services
                 throw new Exception(ex.Message);
             }
 
+        }
+
+        public int GetCountTransaction()
+        {
+            return _transactionRepository.GetCount();
+        }
+
+        public int GetTransactionPerDay()
+        {
+            return _transactionRepository.GetTransactionPerDay();
         }
     }
 }

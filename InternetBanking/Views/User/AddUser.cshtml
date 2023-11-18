@@ -96,7 +96,7 @@
 
                             <div class="mb-3">
                                 <label>BALANCE DE LA CUENTA</label>
-                                <input type="text" id="balanceInput" class="form-control" asp-for="BalanceAccount" autocomplete="off" disabled id="balancecliente">
+                                <input type="text" name="balanceInput"  class="form-control" asp-for="BalanceAccount" autocomplete="off" disabled id="balancecliente">
                             </div>
 
                            
@@ -150,7 +150,7 @@
     });
 
 
-    document.getElementById('balanceInput').addEventListener('input', function (e) {
+    document.getElementsByName('balanceInput').addEventListener('input', function (e) {
         const value = /^[0-9]*\.?[0-9]{0,2}$/;
     });
 </script>

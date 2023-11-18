@@ -4,8 +4,7 @@ using InternetBanking.Core.Application.ViewModels.Payment;
 using Microsoft.AspNetCore.Mvc;
 using InternetBanking.Core.Application.Helpers;
 using Microsoft.AspNetCore.Authorization;
-using InternetBanking.Core.Application.Services;
-using InternetBanking.Core.Application.ViewModels.Payment.EffectiveProgress;
+using InternetBanking.Core.Application.Enums;
 
 namespace WebApp.InternetBanking.Controllers
 {
@@ -19,7 +18,8 @@ namespace WebApp.InternetBanking.Controllers
         private readonly IMoneyLoanService _moneyLoanService;
         private readonly ICreditCardsService _creditCardsService;
         private readonly AuthenticationResponse? user;
-        public PaymentController(IPaymentService paymentService, ISavingAccountService savingAccountService, IHttpContextAccessor contextAccessor, 
+
+        public PaymentController(IPaymentService paymentService, ISavingAccountService savingAccountService, IHttpContextAccessor contextAccessor,
             IBeneficiaryService beneficiaryService, IMoneyLoanService moneyLoanService, ICreditCardsService creditCardsService)
         {
             _paymentService = paymentService;
@@ -75,6 +75,7 @@ namespace WebApp.InternetBanking.Controllers
         {
             try
             {
+                model.TypeOfPayment = TypeOfPayment.Express.ToString();
                 await _paymentService.Payment(model);
                 return RedirectToRoute(new { controller = "Client", action = "Index" });
             }
@@ -115,6 +116,7 @@ namespace WebApp.InternetBanking.Controllers
                     ViewBag.Beneficiaries = await _beneficiaryService.GetAllByUser(user.Id);
                     return View("Beneficiary", model);
                 }
+
                 var payment = await _paymentService.ValidateBeneficiaryPayment(model);
                 if (payment.HasError)
                 {
@@ -135,6 +137,7 @@ namespace WebApp.InternetBanking.Controllers
         {
             try
             {
+                model.TypeOfPayment = TypeOfPayment.Beneficiary.ToString();
                 await _paymentService.Payment(model);
                 return RedirectToRoute(new { controller = "Client", action = "Index" });
             }
@@ -220,7 +223,6 @@ namespace WebApp.InternetBanking.Controllers
                     return View(viewModel);
 
                 }
-
                 var payment = await _paymentService.CreditCardPayment(viewModel);
                 if (payment.HasError)
                 {

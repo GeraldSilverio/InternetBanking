@@ -14,6 +14,7 @@ namespace InternetBanking.Core.Application.Services
 {
     public class PaymentService : GenericService<Payment, SavePaymentViewModel, PaymentViewModel>, IPaymentService
     {
+        private readonly IPaymentRepository _paymentRepositoy;
         private readonly ISavingAccountService _savingAccountService;
         private readonly IBeneficiaryService _beneficiaryService;
         private readonly IAccountService _accountService;
@@ -23,8 +24,8 @@ namespace InternetBanking.Core.Application.Services
         private readonly IMoneyLoanService _moneyLoanService;
 
         private readonly AuthenticationResponse? user;
-        public PaymentService(IPaymentRepository paymentRepository, IMapper mapper, ISavingAccountService savingAccountService, IAccountService accountService, IHttpContextAccessor httpContextAccessor, 
-            IBeneficiaryService beneficiaryService, IMoneyLoanService moneyLoanService, ICreditCardsService creditCardsService) : base(paymentRepository, mapper)
+        public PaymentService(IPaymentRepository paymentRepository, IMapper mapper, ISavingAccountService savingAccountService, IAccountService accountService, IHttpContextAccessor httpContextAccessor,
+            IBeneficiaryService beneficiaryService, IMoneyLoanService moneyLoanService, ICreditCardsService creditCardsService, IPaymentRepository paymentRepositoy) : base(paymentRepository, mapper)
         {
             _savingAccountService = savingAccountService;
             _accountService = accountService;
@@ -34,6 +35,7 @@ namespace InternetBanking.Core.Application.Services
             _beneficiaryService = beneficiaryService;
             _moneyLoanService = moneyLoanService;
             _creditCardsService = creditCardsService;
+            _paymentRepositoy = paymentRepositoy;
         }
 
 
@@ -124,6 +126,7 @@ namespace InternetBanking.Core.Application.Services
         {
             try
             {
+                viewModel.TypeOfPayment = TypeOfPayment.MoneyLoan.ToString();
                 viewModel.IdUser = user.Id;
                 var originAccount = _mapper.Map<CreateSavingAccountViewModel>(await _savingAccountService.GetByAccountCode(viewModel.OriginAccount));
                 var moneyLoan = await _moneyLoanService.GetById(viewModel.DestinationAccount);
@@ -158,7 +161,7 @@ namespace InternetBanking.Core.Application.Services
                     moneyLoan.BalancePaid += viewModel.Amount;
                     originAccount.Balance -= viewModel.Amount;
                 }
-               
+
                 //Efectuar las transacciones.
                 await _moneyLoanService.Update(moneyLoan, moneyLoan.Id);
                 await _savingAccountService.Update(originAccount, originAccount.Id);
@@ -179,6 +182,7 @@ namespace InternetBanking.Core.Application.Services
         {
             try
             {
+                viewModel.TypeOfPayment = TypeOfPayment.CreditCard.ToString();
                 viewModel.IdUser = user.Id;
                 var originAccount = await _savingAccountService.GetById(viewModel.OriginAccount);
                 var creditCard = await _creditCardsService.GetById(viewModel.DestinationAccount);
@@ -188,20 +192,22 @@ namespace InternetBanking.Core.Application.Services
                     viewModel.HasError = true;
                     viewModel.Error = "LA CUENTA DE AHORRO SELECCIONADA NO POSEE EL DINERO SUFICIENTE PARA ESTE DEPOSITO";
                     return viewModel;
-                } 
+                }
 
 
                 if (viewModel.Amount > creditCard.Debt)
                 {
-                    decimal payment = viewModel.Amount - creditCard.Debt;
-                    originAccount.Balance -= viewModel.Amount;     
-                    originAccount.Balance += payment;
-                    creditCard.Debt = 0.00m;
+                    viewModel.Amount = creditCard.Debt;
+                    originAccount.Balance -= viewModel.Amount;
+                    creditCard.Debt -= viewModel.Amount;
+                    creditCard.Available += viewModel.Amount;
+
                 }
                 else
                 {
                     originAccount.Balance -= viewModel.Amount;
                     creditCard.Debt -= viewModel.Amount;
+                    creditCard.Available += viewModel.Amount;
                 }
 
                 await _savingAccountService.Update(originAccount, originAccount.Id);
@@ -216,6 +222,18 @@ namespace InternetBanking.Core.Application.Services
             }
 
         }
+
+        public int GetCountPayment()
+        {
+            return _paymentRepositoy.GetCount();
+        }
+
+        public int GetPaymentPerDay()
+        {
+            return _paymentRepositoy.GetPaymentPerDay();
+        }
+
+
         #endregion
     }
 }

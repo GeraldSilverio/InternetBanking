@@ -8,6 +8,7 @@ namespace InternetBanking.Core.Domain.Entities
         public int OriginAccount { get; set; }
         public int DestinationAccount { get; set; }
         public decimal Amount { get; set; }
-        public DateTime DateOfPaid { get; set; }
+        public DateTime Date { get; set; }
+        public string TypeOfPayment { get; set; } = null!;
     }
 }

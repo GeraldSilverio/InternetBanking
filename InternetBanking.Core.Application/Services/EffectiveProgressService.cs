@@ -46,9 +46,9 @@ namespace InternetBanking.Core.Application.Services
                 }
 
                 //Agregar una validacion que si el usuario manda el monto en 0 decirle que el monto debe ser mayor a 100 por ejemplo
-
-                originAccount.Debt = model.Amount + (model.Amount * 0.0625m);
-                originAccount.Available = originAccount.CreditLimited - model.Amount;
+                decimal deuda = model.Amount + (model.Amount * 0.0625m);
+                originAccount.Debt += deuda;
+                originAccount.Available = originAccount.Available - deuda;
                 destinationAccount.Balance += model.Amount;
 
                 await _creditCardsService.Update(originAccount,originAccount.Id);

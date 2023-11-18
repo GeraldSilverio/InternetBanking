@@ -15,10 +15,11 @@ namespace InternetBanking.Infraestructure.Persistence.EntityConfigurations
             builder.Property(x => x.Amount).HasColumnType("Decimal")
                 .HasPrecision(16, 2);
 
+            builder.Property(x => x.Date).HasColumnType("Date").HasConversion(
+            v => v,
+            v => DateTime.SpecifyKind(v, DateTimeKind.Utc).Date);
 
-
-           
-
+            builder.Property(x => x.LastModifiedBy).IsRequired(false);
         }
     }
 }

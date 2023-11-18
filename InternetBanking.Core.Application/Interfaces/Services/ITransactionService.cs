@@ -6,5 +6,7 @@ namespace InternetBanking.Core.Application.Interfaces.Services
     public interface ITransactionService:IGenericService<Transaction,SaveTransactionViewModel,TransactionViewModel>
     {
         Task<SaveTransactionViewModel> AddTransaction(SaveTransactionViewModel model);
+        int GetCountTransaction();
+        int GetTransactionPerDay();
     }
 }

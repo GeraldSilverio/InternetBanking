@@ -1,4 +1,5 @@
-﻿using InternetBanking.Core.Domain.Entities;
+﻿using InternetBanking.Core.Domain.Commons;
+using InternetBanking.Core.Domain.Entities;
 using InternetBanking.Infraestructure.Persistence.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,24 @@ namespace InternetBanking.Infraestructure.Persistence.Contexts
             modelBuilder.ApplyConfiguration(new SavingAccountConfiguration());
             modelBuilder.ApplyConfiguration(new EffectiveProgressConfiguration());
         }
-
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.Created = DateTime.Now;
+                        entry.Entity.CreatedBy = "DefaultAppUser";
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.LastModified = DateTime.Now;
+                        entry.Entity.LastModifiedBy = "DefaultAppUser";
+                        break;
+                }
+            }
+            return base.SaveChangesAsync(cancellationToken);
+        }
 
 
         #region DbSets
