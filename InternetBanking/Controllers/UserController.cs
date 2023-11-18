@@ -10,10 +10,12 @@ namespace WebApp.InternetBanking.Controllers
     public class UserController : Controller
     {
         private readonly IUserServices _userService;
+        private readonly IMoneyLoanService _moneyLoanService;
 
-        public UserController(IUserServices userService)
+        public UserController(IUserServices userService, IMoneyLoanService moneyLoanService)
         {
             _userService = userService;
+            _moneyLoanService = moneyLoanService;
         }
         public IActionResult UserAdministrator()
         {
@@ -59,8 +61,24 @@ namespace WebApp.InternetBanking.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUser(EditUserViewModel vm)
         {
+
+            //if (!ModelState.IsValid)
+            //{
+            //    EditUserViewModel editUser = await _userService.GetUserViewModelById(vm.Id);
+            //    ViewBag.NewMoneyLoan = await _moneyLoanService.GetMoneyLoansByUserId(editUser.Id);
+            //    return View("EditUser", editUser);
+            //}
+
+            //if (vm.ErrorMessage)
+            //{
+            //    vm.ErrorMessage = true;
+            //    vm.Error = "El monto del prestamo debe ser mayor $RD 100";
+            //}
+
             await _userService.UpdateUser(vm, vm.Id);
             return RedirectToAction("UserAdministrator");
+
+
         }
 
         public IActionResult ResetPassword()

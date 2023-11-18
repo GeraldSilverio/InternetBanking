@@ -21,7 +21,7 @@
                                 <button type="button" class=" btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         }
-                        <form class=" mb-3" method="post" asp-controller="Transaction" asp-action="AddTransaction">
+                        <form class=" mb-3" method="post" asp-controller="Transaction" asp-action="AddTransaction" id="form" onsubmit="sendForm(event)">
 
                             <div class="mb-3">
                                 <label>Seleccione la cuenta de origen</label>
@@ -87,9 +87,32 @@
 
 </style>
 
+@section Scripts{
 
-<script>
-    document.getElementById('balanceInput').addEventListener('input', function (e) {
-        const value = /^[0-9]*\.?[0-9]{0,2}$/;
-    });
-</script>
+
+
+    <script>
+
+        document.getElementById('balanceInput').addEventListener('input', function (e) {
+            const value = /^[0-9]*\.?[0-9]{0,2}$/;
+        });
+        
+        funtion sendform(e){
+            e.preventDefault();
+
+            Swal.fire({
+                title: "¿Esta seguro de que desea realizar el pago?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: "Confirmar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    conts formAccount = document.getElementById('form');
+                    form.submit();
+                }
+            })
+        })
+
+    </script>
+}
+

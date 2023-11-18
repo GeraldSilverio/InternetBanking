@@ -33,6 +33,7 @@ namespace InternetBanking.Core.Application.ViewModels.User
         public decimal Balance { get; set; }
         public bool HasError { get; set; }
         public string? Error { get; set; }
+        public bool ErrorMessage { get; set; }
         public DateTime CurrentDate { get; set; } = DateTime.Now;
     }
 }
