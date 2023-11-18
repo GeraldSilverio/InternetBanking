@@ -15,8 +15,9 @@ namespace WebApp.InternetBanking.Middlewares
         {            
             if (_validateUserSession.HasUser())
             {
-                var controller = (UserController)context.Controller;
-                context.Result = controller.RedirectToAction("index", "home");
+                var controller = (LoginController)context.Controller;
+
+                context.Result = controller.RedirectToAction("Index", "Home");
             }
             else
             {
