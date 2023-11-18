@@ -16,7 +16,7 @@
                         <h4 class="card-title text-light">@(isExpress ? "¿Está seguro de que desea realizar este pago expreso?" : "¿Está seguro de que desea realizar este pago al beneficiario")</h4>
                     </div>
                     <div class="card-body mt-3">
-                        <form class=" mb-3" method="post" asp-controller="Payment" asp-action="@(isExpress ? "ConfirmExpressPayment" : "ConfirmBeneficiaryPayment")">
+                        <form class=" mb-3" method="post" asp-controller="Payment" asp-action="@(isExpress ? "ConfirmExpressPayment" : "ConfirmBeneficiaryPayment")" id="form" onsubmit="showConfirmAlert(event)">
 
                             <div class="mb-3">
                                 <strong> Titular de la Cuenta:</strong> @Model.FullName
@@ -77,3 +77,4 @@
     }
 
 </style>
+
