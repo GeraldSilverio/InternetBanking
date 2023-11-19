@@ -1,4 +1,6 @@
-﻿namespace InternetBanking.Core.Application.ViewModels.MoneyLoan
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace InternetBanking.Core.Application.ViewModels.MoneyLoan
 {
     public class NewMoneyLoanViewModel
     {
