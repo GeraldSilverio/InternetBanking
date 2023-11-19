@@ -29,11 +29,11 @@ namespace WebApp.InternetBanking.Controllers
         {
             try
             {
+              
                 if (borrowedBalance == decimal.Zero)
                 {
                     borrowedBalance = 0.01m;
                 }
-
                 var model = new NewMoneyLoanViewModel()
                 {
                     IdUser = userId,

@@ -23,8 +23,10 @@
                         
                             <div class="mb-3">
                                 <label>Numero de cuenta del beneficiario</label>
-                                <input type="number" class="form-control" asp-for="AccountCode" autocomplete="off">
+                                <input value="0" type="number" class="form-control" asp-for="AccountCode" autocomplete="off">
+                                <span asp-validation-for="AccountCode" class="text-danger"></span>
                             </div>
+
 
 
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Agregar Beneficiario</button>
