@@ -6,7 +6,7 @@ function showConfirmAlert(e) {
     const form = document.getElementById('form');
 
     Swal.fire({
-        title: 'Operación completada con éxito',
+        title: 'Pago Realizado con Exito',
         icon: 'success',
         confirmButtonText: 'OK',
         customClass: {

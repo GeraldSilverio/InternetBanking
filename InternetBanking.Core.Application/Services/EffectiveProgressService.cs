@@ -37,7 +37,7 @@ namespace InternetBanking.Core.Application.Services
                 var originAccount = await _creditCardsService.GetById(model.OriginAccount);
                 var destinationAccount = await _savingAccountService.GetById(model.DestinationAccount);
 
-                if (model.Amount >= originAccount.Available)
+                if (model.Amount > originAccount.Available)
                 {
                     model.HasError = true;
                     model.Error = "EL MONTO INGRESADO EXCEDE EL LÍMITE DE LA TARJETA SELECCIONADA";

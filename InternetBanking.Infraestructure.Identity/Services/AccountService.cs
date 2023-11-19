@@ -196,7 +196,7 @@ namespace InternetBanking.Infraestructure.Identity.Services
             await _emailService.SendAsync(new EmailRequest()
             {
                 To = account.Email,
-                Body = $"Hemos restablecido tu contraseña.Esta es tu nueva contraseña: {password}, por favor cambiarla cuando vuelvas a ingresar",
+                Body = $"Hemos restablecido tu contraseña.Esta es tu nueva contraseña: {password}, por favor habla con un admin para que te la cambie por una personalizada",
                 Subject = "New Password"
 
             });
