@@ -26,14 +26,12 @@ namespace InternetBanking.Core.Application.ViewModels.User
         public string? Phone { get; set; }
         public List<string> Roles { get; set; }
 
-        [Required(ErrorMessage = "Debe ingresar una cedula")]
-        //[RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "El formato de la  debe ser 809-400-0050")]
+        [Required(ErrorMessage = "Debe ingresar una cedula")]     
         [DataType(DataType.Text)]
         public string IdentityCard { get; set; } = null!;
         public decimal Balance { get; set; }
         public bool HasError { get; set; }
         public string? Error { get; set; }
-        public bool ErrorMessage { get; set; }
         public DateTime CurrentDate { get; set; } = DateTime.Now;
     }
 }

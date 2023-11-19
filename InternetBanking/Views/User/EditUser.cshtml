@@ -65,7 +65,7 @@
                         {
                             <div class="mb-3">
                                 <label>Agregar balance a cuenta principal</label>
-                                <input type="text" id="balanceInput" class="form-control" asp-for="Balance">
+                                <input type="text" id="balanceInput" class="form-control" asp-for="Balance" oninput="validateBalanceInput(this)">
                                 <span asp-validation-for="Balance" class="text-danger"></span>
                             </div>
                         }
@@ -92,7 +92,7 @@
                         <form id="formAccount" class="mb-3" method="post" asp-controller="SavingAccount" asp-action="NewAccount">
                             <div class="mb-3">
                                 <label>BALANCE DE LA CUENTA</label>
-                                <input type="text" class="form-control" id="balanceInput" name="balance" placeholder="0.00">
+                                <input type="text" class="form-control" id="balanceInput" oninput="validateBalanceInput(this)" name="balance" placeholder="0.00">
                             </div>
                             <input type="hidden" name="userId" value="@Model.Id">
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Crear cuenta</button>
@@ -114,18 +114,10 @@
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Asignar Tarjeta</button>
                         </form>
 
-                        @if (Model.HasError)
-                        {
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <p>@Model.Error</p>
-                                <button type="button" class=" btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        }
-
                         <form id="formMoneyloan" class="mb-3" method="post" asp-controller="MoneyLoan" asp-action="NewMoneyLoan">
                             <div class="mb-3">
                                 <label>Monto a Prestar</label>
-                                <input type="text" id="balanceInput" class="form-control" name="borrowedBalance" placeholder="0.01">
+                                <input type="text" id="balanceInput" oninput="validateBalanceInput(this)" class="form-control" name="borrowedBalance" placeholder="0.01" required>
                             </div>
                             <input type="hidden" name="userId" value="@Model.Id">
                             <button type="submit" class="btn btn-outline-primary float-end ms-2">Asignar Prestamo</button>
@@ -174,9 +166,22 @@
 
 <script>
 
-    document.getElementById('balanceInput').addEventListener('input', function (e) {
-        const value = /^[0-9]*\.?[0-9]{0,2}$/;
-    });
+    function validateBalanceInput(input) {
+        input.value = input.value.replace(/[^0-9.]/g, '');
+
+        var decimalCount = (input.value.match(/\./g) || []).length;
+        if (decimalCount > 1) {
+            input.value = input.value.replace(/\.+$/, '');
+        }
+
+        var decimalIndex = input.value.indexOf('.');
+        if (decimalIndex !== -1) {
+            var decimalPart = input.value.substring(decimalIndex + 1);
+            if (decimalPart.length > 2) {
+                input.value = input.value.slice(0, decimalIndex + 3);
+            }
+        }
+    }
 
     const btnAccount = document.getElementById('btnAccount');
     const btnCreditCard = document.getElementById('btnCreditCard');

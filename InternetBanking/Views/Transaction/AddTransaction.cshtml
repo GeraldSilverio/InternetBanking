@@ -26,6 +26,7 @@
                             <div class="mb-3">
                                 <label>Seleccione la cuenta de origen</label>
                                 <select class="form-select" asp-for="OriginAccount">
+                                    <option value="0" selected>Seleccione una de sus cuentas</option>
                                     @foreach (SavingAccountViewModel account in ViewBag.Account)
                                     {
                                         <option asp-for="OriginAccount" value="@account.Id">Cuenta: @account.AccountCode Balance: @account.Balance</option>
@@ -35,12 +36,13 @@
 
                             <div class="mb-3">
                                 <label>Monto a Pagar</label>
-                                <input type="text" id="balanceInput" class="form-control" asp-for="Amount" autocomplete="off">
+                                <input type="text" id="balanceInput" class="form-control" asp-for="Amount" autocomplete="off" oninput="validateBalanceInput(this)">
                             </div>
 
                             <div class="mb-3">
                                 <label>Seleccione la cuenta a depositar</label>
                                 <select class="form-select" asp-for="DestinationAccount">
+                                    <option value="0" selected>Seleccione una de sus cuentas</option>
                                     @foreach (SavingAccountViewModel account in ViewBag.Account)
                                     {
                                         <option asp-for="DestinationAccount" value="@account.Id">Cuenta: @account.AccountCode Balance: @account.Balance</option>
@@ -93,9 +95,22 @@
 
     <script>
 
-        document.getElementById('balanceInput').addEventListener('input', function (e) {
-            const value = /^[0-9]*\.?[0-9]{0,2}$/;
-        });
+        function validateBalanceInput(input) {
+            input.value = input.value.replace(/[^0-9.]/g, '');
+
+            var decimalCount = (input.value.match(/\./g) || []).length;
+            if (decimalCount > 1) {
+                input.value = input.value.replace(/\.+$/, '');
+            }
+
+            var decimalIndex = input.value.indexOf('.');
+            if (decimalIndex !== -1) {
+                var decimalPart = input.value.substring(decimalIndex + 1);
+                if (decimalPart.length > 2) {
+                    input.value = input.value.slice(0, decimalIndex + 3);
+                }
+            }
+        }
         
         funtion sendform(e){
             e.preventDefault();

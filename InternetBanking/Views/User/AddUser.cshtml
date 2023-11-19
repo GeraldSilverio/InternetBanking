@@ -53,10 +53,10 @@
 
                             <div class="mb-3">
                                 <label>Numero Telefonico</label>
-                                <input type="text" class="form-control" asp-for="Phone" placeholder="809-000-0000" autocomplete="off" maxlength="12">
+                                <input type="text" class="form-control" asp-for="Phone" autocomplete="off" maxlength="10">
                                 <span asp-validation-for="Phone" class="text-danger"></span>
                                 <small class="form-text text-muted">
-                                    Su número de telefono debe tener este formato: (809/829/849)-000-0000
+                                    Su número no debe contener guiones, debe estar en el siguiente formato 8090090000 !!
                                 </small>
                             </div>
 
@@ -96,7 +96,7 @@
 
                             <div class="mb-3">
                                 <label>BALANCE DE LA CUENTA</label>
-                                <input type="text" name="balanceInput"  class="form-control" asp-for="BalanceAccount" autocomplete="off" disabled id="balancecliente">
+                                <input type="text" class="form-control" asp-for="BalanceAccount" autocomplete="off" disabled id="balancecliente" oninput="validateBalanceInput(this)">
                             </div>
 
                            
@@ -149,8 +149,21 @@
         });
     });
 
+    function validateBalanceInput(input) {
+        input.value = input.value.replace(/[^0-9.]/g, '');
 
-    document.getElementsByName('balanceInput').addEventListener('input', function (e) {
-        const value = /^[0-9]*\.?[0-9]{0,2}$/;
-    });
+        var decimalCount = (input.value.match(/\./g) || []).length;
+        if (decimalCount > 1) {
+            input.value = input.value.replace(/\.+$/, '');
+        }
+
+        var decimalIndex = input.value.indexOf('.');
+        if (decimalIndex !== -1) {
+            var decimalPart = input.value.substring(decimalIndex + 1);
+            if (decimalPart.length > 2) {
+                input.value = input.value.slice(0, decimalIndex + 3);
+            }
+        }
+    }
+
 </script>

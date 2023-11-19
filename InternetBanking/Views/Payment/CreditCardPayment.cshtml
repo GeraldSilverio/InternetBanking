@@ -40,7 +40,8 @@
 
                             <div class="mb-3">
                                 <label asp-for="Amount">Monto a Pagar</label>
-                                <input value="0"type="text" id="balanceInput" class="form-control" placeholder="0.00" asp-for="Amount" autocomplete="off">
+                                <input value="0" type="text" id="balanceInput" oninput="validateBalanceInput(this)"
+                                       class="form-control" placeholder="0.00" asp-for="Amount" autocomplete="off">
                                 <span asp-validation-for="Amount" class="text-danger"></span>
                             </div>
 
@@ -105,7 +106,20 @@
 </style>
 
 <script>
-    document.getElementById('balanceInput').addEventListener('input', function (e) {
-        const value = /^[0-9]*\.?[0-9]{0,2}$/;
-    });
+    function validateBalanceInput(input) {
+        input.value = input.value.replace(/[^0-9.]/g, '');
+
+        var decimalCount = (input.value.match(/\./g) || []).length;
+        if (decimalCount > 1) {
+            input.value = input.value.replace(/\.+$/, '');
+        }
+
+        var decimalIndex = input.value.indexOf('.');
+        if (decimalIndex !== -1) {
+            var decimalPart = input.value.substring(decimalIndex + 1);
+            if (decimalPart.length > 2) {
+                input.value = input.value.slice(0, decimalIndex + 3);
+            }
+        }
+    }
 </script>
