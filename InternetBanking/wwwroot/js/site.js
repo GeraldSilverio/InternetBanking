@@ -1,4 +1,20 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿//Alerta de confirmacion de pagos exitosos.
 
-// Write your JavaScript code.
+function showConfirmAlert(e) {
+    e.preventDefault();
+
+    const form = document.getElementById('form');
+
+    Swal.fire({
+        title: 'Operación completada con éxito',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        customClass: {
+            confirmButton: 'btn btn-secondary'
+        }
+    }).then(() => {
+        setTimeout(() => {
+            form.submit();
+        }, 0);
+    });
+}
