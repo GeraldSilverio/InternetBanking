@@ -34,6 +34,8 @@ namespace InternetBanking.Core.Application.Services.ValidatePayment
                 return model;
             }
 
+          
+
             model.FullName = ownerDestinationAccount.FirstName + " " + ownerDestinationAccount.LastName;
             model.TypeOfPayment = TypeOfPayment.Beneficiary.ToString();
             return model;
@@ -58,6 +60,13 @@ namespace InternetBanking.Core.Application.Services.ValidatePayment
             {
                 model.HasError = true;
                 model.Error = "LA CUENTA DE ORIGEN NO POSEE EL DINERO SUFICIENTE PARA ESTE PAGO";
+                return model;
+            }
+
+            if(originAccount.AccountCode  == destinationAccount.AccountCode)
+            {
+                model.HasError = true;
+                model.Error = "NO PUEDES HACERTE UN PAGO EXPRESO A LA MISMA CUENTA";
                 return model;
             }
             //Validar que la cuenta de destino exista
